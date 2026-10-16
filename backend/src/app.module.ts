@@ -4,6 +4,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AccessModule } from './access/access.module';
 import { AdminCatalogModule } from './admin/admin-catalog.module';
+import { AdminInstitutionsModule } from './admin/admin-institutions.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { EnrollmentsModule } from './enrollments/enrollments.module';
 import { EntitlementsModule } from './entitlements/entitlements.module';
@@ -71,6 +72,7 @@ export class AppModule {
         LearningModule,
         EnrollmentsModule,
         AdminCatalogModule,
+        AdminInstitutionsModule,
       ],
       controllers: [HealthController],
       // Ordem importa: limite de requisições antes da verificação de sessão.

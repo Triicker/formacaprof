@@ -9,11 +9,12 @@ import { PasswordService } from '../auth/password.service';
 import { SessionService } from '../auth/session.service';
 import type { Actor } from '../common/actor';
 import { hashToken, newToken, normalizeEmail } from '../common/tokens';
+import { pageArgs, pageResult } from '../common/pagination';
 import { APP_CONFIG, AppConfig } from '../config/app-config';
 import { MailService } from '../mail/mail.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
-import { AcceptInvitationDto, CreateInvitationDto } from './invitations.dto';
+import { AcceptInvitationDto, CreateInvitationDto, ListInvitationsQuery } from './invitations.dto';
 
 export const CONVITE_INVALIDO = 'Convite inválido, expirado ou já utilizado.';
 
@@ -109,6 +110,40 @@ export class InvitationsService {
       await tx.invitation.update({ where: { id: inv.id }, data: { revokedAt: new Date() } });
       await this.audit.record({ actorUserId: actor.userId, institutionId, action: 'invitation.revoked', entityType: 'invitation', entityId: inv.id }, tx);
     });
+  }
+
+  /** Reenvia: gera um novo token (o anterior deixa de valer) e manda outro e-mail. */
+  async resend(actor: Actor, institutionId: string, invitationId: string) {
+    this.access.assertCanManageMembers(actor, institutionId);
+    const inv = await this.prisma.invitation.findFirst({ where: { id: invitationId, institutionId } });
+    if (!inv) throw new NotFoundException('Convite não encontrado nesta instituição.');
+    this.access.assertCanInvite(actor, institutionId, inv.role);
+    if (inv.acceptedAt) throw new BadRequestException('Este convite já foi aceito.');
+    return this.create(actor, institutionId, { email: inv.email, role: inv.role });
+  }
+
+  /** Visão global (administrador): convites de todas as instituições, com filtros e paginação. */
+  async listAll(q: ListInvitationsQuery) {
+    const now = new Date();
+    const byStatus: Record<string, Prisma.InvitationWhereInput> = {
+      pending: { acceptedAt: null, revokedAt: null, expiresAt: { gt: now } },
+      accepted: { acceptedAt: { not: null } },
+      revoked: { revokedAt: { not: null } },
+      expired: { acceptedAt: null, revokedAt: null, expiresAt: { lte: now } },
+    };
+    const where: Prisma.InvitationWhereInput = {
+      institutionId: q.institutionId, role: q.role,
+      ...(q.status ? byStatus[q.status] : {}),
+      ...(q.q ? { email: { contains: q.q.toLowerCase() } } : {}),
+    };
+    const [rows, total] = await this.prisma.$transaction([
+      this.prisma.invitation.findMany({
+        where, ...pageArgs(q), orderBy: { createdAt: q.order ?? 'desc' },
+        select: { ...INVITATION_SELECT, institution: { select: { id: true, name: true } } },
+      }),
+      this.prisma.invitation.count({ where }),
+    ]);
+    return pageResult(rows.map((r) => ({ ...r, status: statusOf(r) })), total, q);
   }
 
   /** Dados mínimos para a tela de aceite. Mesma resposta para qualquer convite inutilizável. */

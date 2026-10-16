@@ -22,7 +22,7 @@ const Icone = ({ nome }) => <svg viewBox="0 0 24 24" aria-hidden="true">{ICONES[
 // O último botão, "Mais", abre uma folha com as ações secundárias (`extras`) e as opções da conta.
 export default function MobileTabBar({ itens, extras = [], tema = 'orange' }) {
   const [aberto, setAberto] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin, vinculos } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
   const { pathname } = useLocation();
@@ -43,6 +43,8 @@ export default function MobileTabBar({ itens, extras = [], tema = 'orange' }) {
 
   const acoes = [
     ...extras,
+    ...(isAdmin ? [{ onClick: () => navigate('/admin'), label: 'Painel administrativo' }] : []),
+    ...(vinculos.some((v) => v.papel === 'coordinator') ? [{ onClick: () => navigate('/coordenacao'), label: 'Painel da coordenação' }] : []),
     { href: WHATSAPP_URL, label: 'Suporte pelo WhatsApp' },
     { onClick: () => navigate('/boas-vindas'), label: 'Vídeo de boas-vindas' },
     ...(API_MODE === 'mock' ? [{ onClick: resetar, label: 'Resetar dados de demonstração' }] : []),

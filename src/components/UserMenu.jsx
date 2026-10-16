@@ -6,7 +6,8 @@ import { API_MODE, api } from '../services/api';
 
 // Pílula "Olá, Prof. Nome" com menu (sair / rever boas-vindas / resetar demo).
 export default function UserMenu({ tone = 'gold' }) {
-  const { user, logout, vinculos, instituicaoAtiva } = useAuth();
+  const { user, logout, vinculos, instituicaoAtiva, isAdmin } = useAuth();
+  const coordena = vinculos.some((v) => v.papel === 'coordinator');
   const navigate = useNavigate();
   const toast = useToast();
   const [aberto, setAberto] = useState(false);
@@ -35,6 +36,8 @@ export default function UserMenu({ tone = 'gold' }) {
       </button>
       {aberto && (
         <div className="user-menu__dropdown">
+          {isAdmin && <button type="button" onClick={() => navigate('/admin')}>Painel administrativo</button>}
+          {coordena && <button type="button" onClick={() => navigate('/coordenacao')}>Painel da coordenação</button>}
           {vinculos.length > 1 && (
             <button type="button" onClick={() => navigate('/escolher-instituicao')}>
               Trocar instituição{instituicaoAtiva ? ` (${instituicaoAtiva.nome})` : ''}

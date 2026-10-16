@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsEnum, IsOptional, IsString, Length, MaxLength } from 'class-validator';
+import { IsEmail, IsEnum, IsIn, IsOptional, IsString, IsUUID, Length, MaxLength } from 'class-validator';
+import { PageQuery } from '../common/pagination';
 import { toNormalizedEmail } from '../common/tokens';
 import { MembershipRole } from '@prisma/client';
 import { PASSWORD_MESSAGE, PASSWORD_RULE } from '../auth/auth.dto';
@@ -31,4 +32,12 @@ export class AcceptInvitationDto extends InvitationTokenDto {
   @ApiProperty({ description: 'Nova senha (conta nova) ou senha atual (conta já existente).' })
   @IsString() @Length(PASSWORD_RULE.min, PASSWORD_RULE.max, { message: PASSWORD_MESSAGE })
   password!: string;
+}
+
+export class ListInvitationsQuery extends PageQuery {
+  @ApiPropertyOptional() @IsOptional() @IsUUID() institutionId?: string;
+  @ApiPropertyOptional({ enum: MembershipRole }) @IsOptional() @IsEnum(MembershipRole) role?: MembershipRole;
+  @ApiPropertyOptional({ enum: ['pending', 'accepted', 'revoked', 'expired'] })
+  @IsOptional() @IsIn(['pending', 'accepted', 'revoked', 'expired']) status?: 'pending' | 'accepted' | 'revoked' | 'expired';
+  @ApiPropertyOptional({ description: 'Busca por e-mail.' }) @IsOptional() @IsString() @Length(1, 100) q?: string;
 }

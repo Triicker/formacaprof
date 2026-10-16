@@ -260,3 +260,6 @@ export const httpApi = {
 
   resetDemo: async () => {},
 };
+
+// Cliente HTTP base, reutilizado pelos painéis de gestão (src/admin/adminApi.js).
+export { req as apiRequest };

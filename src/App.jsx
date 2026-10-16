@@ -20,6 +20,13 @@ import MinhaFormacao from './pages/basta/MinhaFormacao';
 import Feedback from './pages/basta/Feedback';
 import FeedbackObrigado from './pages/basta/FeedbackObrigado';
 import Certificado from './pages/basta/Certificado';
+import ContentState from './components/ContentState';
+import AdminArea from './admin/pages/AdminArea';
+import AdminDashboard from './admin/pages/AdminDashboard';
+import AdminInstituicoes from './admin/pages/AdminInstituicoes';
+import AdminInstituicao from './admin/pages/AdminInstituicao';
+import AdminUsuarios from './admin/pages/AdminUsuarios';
+import AdminCoordenadores from './admin/pages/AdminCoordenadores';
 
 // Rotas de conteúdo: sessão válida + vínculo ativo (ou administrador geral) + contexto institucional definido.
 // O acesso a cada coleção é conferido pelo layout da coleção (estado efetivo vindo da API).
@@ -82,6 +89,15 @@ export default function App() {
       <Route path="/basta/certificado" element={<Privada><Certificado slug="basta" /></Privada>} />
       <Route path="/colecoes/:slug" element={<Privada><ColecaoGenerica /></Privada>}>{paginasDaColecao}</Route>
       <Route path="/colecoes/:slug/certificado" element={<Privada><CertificadoGenerico /></Privada>} />
+
+      <Route path="/admin" element={<RequireAuth><AdminArea /></RequireAuth>}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="instituicoes" element={<AdminInstituicoes />} />
+        <Route path="instituicoes/:id" element={<AdminInstituicao />} />
+        <Route path="usuarios" element={<AdminUsuarios />} />
+        <Route path="coordenadores" element={<AdminCoordenadores />} />
+        <Route path="*" element={<ContentState tipo="inexistente" voltarPara="/admin" voltarTexto="Voltar à visão geral" />} />
+      </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

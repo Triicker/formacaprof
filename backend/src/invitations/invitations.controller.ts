@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Post, Query, Req, Res } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import type { Actor } from '../common/actor';
-import { CurrentActor, Public } from '../common/decorators';
-import { AcceptInvitationDto, CreateInvitationDto, InvitationTokenDto } from './invitations.dto';
+import { CurrentActor, PlatformAdminOnly, Public } from '../common/decorators';
+import { AcceptInvitationDto, CreateInvitationDto, InvitationTokenDto, ListInvitationsQuery } from './invitations.dto';
 import { InvitationsService } from './invitations.service';
 
 const QUINZE_MIN = 15 * 60_000;
@@ -38,6 +38,21 @@ export class InvitationsController {
     @Param('invitationId', ParseUUIDPipe) invitationId: string,
   ) {
     await this.invitations.revoke(actor, id, invitationId);
+  }
+
+  @Post('institutions/:id/invitations/:invitationId/resend')
+  @ApiCookieAuth()
+  @ApiOperation({ summary: 'Reenvia o convite com um novo link (o anterior deixa de valer)' })
+  resend(@CurrentActor() actor: Actor, @Param('id', ParseUUIDPipe) id: string, @Param('invitationId', ParseUUIDPipe) invitationId: string) {
+    return this.invitations.resend(actor, id, invitationId);
+  }
+
+  @Get('admin/invitations')
+  @ApiCookieAuth()
+  @PlatformAdminOnly()
+  @ApiOperation({ summary: 'Convites de todas as instituições (administrador geral)' })
+  listAll(@Query() q: ListInvitationsQuery) {
+    return this.invitations.listAll(q);
   }
 
   @Public()

@@ -365,3 +365,187 @@
 @media (max-width: 959px) and (max-height: 500px) {
   .basta__main { padding-bottom: calc(var(--wave-h, 0px) + 24px); }
 }
+
+/* ===== Atalhos do início BASTA em HTML/CSS (nítidos em qualquer tamanho; substituem as imagens) ===== */
+.basta-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+.bt {
+  --bt-a: #ff2b8e; --bt-b: #b3127a; --bt-borda: #ff63b4; --bt-glow: rgba(255, 0, 151, .45); --bt-claro: #ffc2e3;
+  position: relative; overflow: hidden; isolation: isolate;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+  aspect-ratio: 185 / 137; padding: 12px 40px 14px 14px; border-radius: 16px;
+  border: 2px solid var(--bt-borda); background: linear-gradient(150deg, var(--bt-a), var(--bt-b));
+  box-shadow: 0 0 16px var(--bt-glow); color: #fff; text-decoration: none; text-align: left;
+  transition: transform .15s ease, filter .15s ease;
+}
+.bt:hover { transform: translateY(-3px); filter: brightness(1.08); }
+.bt::before {
+  content: ''; position: absolute; z-index: -1; right: -28%; top: -60%; width: 85%; aspect-ratio: 1; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .2); box-shadow: 0 0 0 16px rgba(255, 255, 255, .05);
+}
+.bt::after { content: ''; position: absolute; z-index: -1; left: -20%; right: -20%; bottom: -45%; height: 75%; border-radius: 50%; background: rgba(255, 255, 255, .09); }
+.bt--purple { --bt-a: #a12ff5; --bt-b: #5512b5; --bt-borda: #c789ff; --bt-glow: rgba(190, 91, 255, .45); --bt-claro: #e2c2ff; }
+.bt--cyan { --bt-a: #1fb2f2; --bt-b: #0a5bb5; --bt-borda: #6fdcff; --bt-glow: rgba(25, 182, 255, .45); --bt-claro: #b9ecff; }
+.bt--green { --bt-a: #26d462; --bt-b: #0a8236; --bt-borda: #79f7a4; --bt-glow: rgba(1, 194, 71, .45); --bt-claro: #c4ffd8; }
+.bt__icon {
+  position: absolute; top: 12px; left: 14px; width: 34%; aspect-ratio: 1; display: grid; place-items: center;
+  border-radius: 50%; background: rgba(255, 255, 255, .2); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .18);
+}
+.bt__icon svg { width: 56%; height: 56%; fill: #fff; }
+.bt__title { display: grid; font-weight: 800; font-size: clamp(.95rem, 4.3vw, 1.3rem); line-height: 1.08; }
+.bt__title span + span { color: var(--bt-claro); }
+.bt__desc { display: none; }
+.bt__arrow { position: absolute; right: 10px; bottom: 12px; display: grid; place-items: center; width: 28px; height: 28px; }
+.bt__arrow svg { width: 100%; height: 100%; fill: #fff; }
+
+.bt-wide {
+  grid-column: 1 / -1; position: relative; overflow: hidden; isolation: isolate;
+  display: flex; align-items: center; gap: 14px; min-height: 76px; padding: 12px 16px;
+  border-radius: 16px; border: 2px solid #ff4fb8; color: #fff; text-align: left;
+  background: linear-gradient(90deg, #44083f, #7a0f62 55%, #44083f); box-shadow: 0 0 16px rgba(255, 0, 151, .4);
+  transition: filter .15s ease;
+}
+.bt-wide:hover { filter: brightness(1.1); }
+.bt-wide::after { content: ''; position: absolute; z-index: -1; left: 0; right: 0; bottom: -60%; height: 90%; border-radius: 50%; background: rgba(255, 0, 151, .14); }
+.bt-wide__icon { flex: none; display: grid; place-items: center; width: 52px; aspect-ratio: 1; border-radius: 50%; border: 2px solid #ff4fb8; background: rgba(255, 0, 151, .15); }
+.bt-wide__icon svg { width: 52%; height: 52%; fill: #ff63b4; }
+.bt-wide__title { display: grid; font-weight: 800; font-size: 1.2rem; line-height: 1.1; }
+.bt-wide__title small { color: #ff63b4; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; }
+.bt-wide__desc { display: none; }
+.bt-wide .bt__arrow { position: static; margin-left: auto; flex: none; }
+
+/* Faixa "Continuar de onde parou" */
+.continue-btn { display: flex; align-items: center; gap: 12px; }
+.continue-btn__icon svg { width: 46%; height: 46%; fill: #fff; margin-left: 8%; }
+.continue-btn__text { min-width: 0; display: grid; }
+.continue-btn__chev { margin-left: auto; flex: none; display: grid; width: 22px; height: 22px; }
+.continue-btn__chev svg { width: 100%; height: 100%; fill: #fff; }
+
+/* ===== Desktop: telas da coleção em altura fixa (sem rolagem da página) =====
+   Tudo é dimensionado pela altura da janela (vh); listas longas rolam dentro do próprio painel. */
+@media (min-width: 960px) {
+  .basta {
+    --wave-h: 15vh;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    grid-template-columns: clamp(220px, 17vw, 300px) minmax(0, 1fr);
+    background-size: 100% var(--wave-h), auto;
+  }
+
+  /* Barra lateral (img1) */
+  .basta__sidebar { height: 100%; gap: 1.8vh; padding: 3.6vh 1.2vw 3.2vh; overflow-y: auto; }
+  .basta__sidebar-logo img { width: auto; height: 11vh; max-width: 100%; }
+  .basta__nav { gap: .7vh; margin-top: 1.4vh; }
+  .basta__nav-link {
+    display: flex; align-items: center; gap: .9vw; min-height: 5.8vh; padding: .8vh 1vw;
+    font-size: clamp(.78rem, 1.75vh, 1.02rem); line-height: 1.25; color: #e3e6f2;
+  }
+  .basta__nav-icon { flex: none; width: 2.7vh; height: 2.7vh; fill: currentColor; opacity: .9; }
+  .basta__nav-ext { margin-left: auto; font-size: 1.3em; }
+  .basta__nav-link.active { background: rgba(255, 255, 255, .07); border-left-color: var(--pink); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); }
+  .basta__nav-link.active .basta__nav-icon { fill: var(--pink); opacity: 1; }
+  .basta__sidebar-progress { margin-top: 1.4vh; gap: 1vh; padding: 2vh 1vw; font-size: 1.85vh; font-weight: 600; border: 1px solid rgba(255, 255, 255, .08); }
+  .basta__sidebar-progress small { font-size: 1.6vh; }
+  .basta__sidebar-progress small b { color: #fff; }
+  .basta__all { font-size: 1.85vh; }
+
+  .basta__main { height: 100%; max-width: none; display: flex; flex-direction: column; padding: 3vh 3vw; overflow: hidden auto; }
+  .basta__main > :not(.basta__topbar) { flex: 1 1 auto; min-height: 0; }
+  .basta__topbar { top: 3vh; right: 3vw; }
+
+  /* Início BASTA (img1): hero 40vh · continuar 9.5vh · atalhos 25.5vh · instituto 9.5vh */
+  .basta-home { max-width: none; width: 100%; padding-top: 0; display: grid; grid-template-rows: 40vh 9.5vh 25.5vh 9.5vh; row-gap: 2vh; align-content: start; }
+  .basta-hero { height: 100%; min-height: 0; padding: 0; align-items: center; }
+  .basta-hero__text { gap: .6vh; padding-top: 3vh; }
+  .basta-hero__logo { width: auto; height: 14vh; margin-left: -.8vw; }
+  .basta-hero__text .brand-title__top { font-size: 5vh; }
+  .basta-hero__text .brand-title__bottom { font-size: 9.8vh; }
+  .basta-hero__progress { margin-top: 1.4vh; font-size: 2.35vh; color: #e8e8f4; }
+  .basta-hero__progress b { color: var(--pink); }
+  .basta-hero__img { width: auto; height: 100%; max-width: 46%; object-fit: contain; margin-right: 2vw; }
+
+  .continue-btn {
+    height: 100%; max-width: none; margin: 0; padding: 0 2vw; gap: 1.4vw; border-radius: 1.8vh;
+    border: 2px solid rgba(255, 0, 151, .75); background: linear-gradient(90deg, rgba(45, 8, 60, .92), rgba(80, 12, 85, .8));
+    box-shadow: 0 0 2vh rgba(255, 0, 151, .25); font-size: 2.5vh;
+  }
+  .continue-btn small { font-size: 1.45vh; }
+  .continue-btn__icon { width: 6.4vh; height: 6.4vh; }
+  .continue-btn__chev { width: 3.4vh; height: 3.4vh; }
+
+  .basta-tiles { grid-row: 3 / 5; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: 25.5vh 9.5vh; gap: 2vh 1.5vw; margin: 0; }
+  .bt { aspect-ratio: auto; height: 100%; gap: .8vh; padding: 2.4vh 5.5vh 2.4vh 1.5vw; border-radius: 2vh; }
+  .bt__icon { top: 2.4vh; left: 1.5vw; width: 8.4vh; }
+  .bt__title { font-size: 3.1vh; }
+  .bt__desc { display: block; font-size: 1.55vh; line-height: 1.35; opacity: .95; }
+  .bt__arrow { right: 1.1vw; bottom: 2.4vh; width: 4.6vh; height: 4.6vh; border-radius: 50%; background: #fff; }
+  .bt__arrow svg { width: 60%; height: 60%; fill: var(--bt-b); }
+
+  .bt-wide { height: 100%; min-height: 0; padding: 0 2vw 0 14%; gap: 2vw; border-radius: 2vh; }
+  .bt-wide__icon { width: 7.4vh; }
+  .bt-wide__title { font-size: 3.3vh; }
+  .bt-wide__title small { font-size: 1.5vh; }
+  .bt-wide__desc { display: block; max-width: 42%; padding-left: 2vw; border-left: 2px solid rgba(255, 255, 255, .35); font-size: 1.7vh; line-height: 1.4; color: #f3d9ea; }
+  .bt-wide .bt__arrow { width: 4.6vh; height: 4.6vh; border-radius: 50%; background: rgba(255, 0, 151, .25); border: 2px solid #ff63b4; }
+  .bt-wide .bt__arrow svg { fill: #fff; }
+
+  /* Páginas internas: coluna flexível que ocupa a altura disponível */
+  .basta-page { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+  .basta-header { flex: none; margin-bottom: 1.4vh; }
+  .basta-header .back-btn { width: 5.4vh; height: 5.4vh; }
+  .section-title { flex: none; align-self: flex-start; margin-bottom: 2.4vh; font-size: 3.1vh; }
+  .neon-select { flex: none; }
+  .module-progress { flex: none; }
+
+  /* Grade de vídeos: 2 fileiras que cabem na altura; as capas 3:4 encolhem com a janela */
+  .video-grid {
+    flex: 1 1 auto; min-height: 0; align-content: stretch;
+    grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 2.4vh 1.4vw;
+  }
+  .video-card { min-width: 0; min-height: 0; gap: .9vh; }
+  .video-card__frame { flex: 1 1 0; min-height: 0; aspect-ratio: 3 / 4; width: auto; max-width: 100%; align-self: flex-start; }
+  .video-card__title {
+    flex: none; font-size: 1.75vh; line-height: 1.3; min-height: 2.6em;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  /* Materiais: livros numa fileira limitada pela altura */
+  .book-grid { flex: none; max-width: min(100%, 140vh); gap: 2.4vw; }
+  .book-card__frame { max-height: 46vh; }
+
+  /* Vídeo aberto: player na altura disponível; informações e playlist rolam por dentro */
+  .video-layout {
+    flex: 1 1 auto; min-height: 0; align-items: stretch;
+    grid-template-columns: auto minmax(0, 1fr) clamp(230px, 19vw, 320px); grid-template-rows: minmax(0, 1fr); gap: 2vw;
+  }
+  .video-layout .player { height: calc(100dvh - 6vh - 7vh - 64px); min-height: 0; max-height: none; }
+  .video-layout__info { min-height: 0; overflow-y: auto; padding-right: .4vw; }
+  .video-layout__playlist { grid-column: auto; position: static; min-height: 0; overflow-y: auto; }
+  .playlist { grid-template-columns: 1fr; }
+
+  /* Minha formação e feedback */
+  .formacao { flex: 1 1 auto; min-height: 0; align-content: center; gap: 4vw; }
+  .ring { width: min(260px, 34vh); }
+  .feedback { gap: 1.8vh; }
+  .feedback__q legend, .feedback__label { font-size: 1.85vh; margin-bottom: .6vh; }
+  .stars__btn img { width: 3.6vh; }
+  .feedback__text { height: 10vh; }
+  .thanks__icon { width: auto; height: 30vh; }
+}
+
+/* Desktop estreito: playlist abaixo das informações, na mesma coluna */
+@media (min-width: 960px) and (max-width: 1199px) {
+  .video-layout { grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "player info" "player list"; }
+  .video-layout__player { grid-area: player; }
+  .video-layout__info { grid-area: info; overflow: visible; }
+  .video-layout__playlist { grid-area: list; }
+}
+
+/* Tablet: quatro atalhos numa fileira (como antes), sem descrições */
+@media (min-width: 600px) and (max-width: 959px) {
+  .basta-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+  .bt { padding: 10px 30px 12px 12px; }
+  .bt__title { font-size: 1rem; }
+  .bt__arrow { width: 22px; height: 22px; right: 8px; bottom: 10px; }
+}

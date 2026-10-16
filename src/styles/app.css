@@ -65,6 +65,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, .4);
 }
 .collection-card__lock svg { width: 50%; height: 50%; fill: #fff; }
+.collection-card__lock--open { background: #18b84a; border-color: rgba(255, 255, 255, .7); box-shadow: 0 0 10px rgba(1, 194, 71, .6); }
 /* Progresso da formação dentro da capa (coleções liberadas) */
 .collection-card__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(0, 0, 0, .5); }
 .collection-card__bar span { display: block; height: 100%; background: linear-gradient(90deg, #04f777, var(--green)); }
@@ -102,4 +103,38 @@
 /* Viewport baixo (paisagem ou zoom alto): a barra inferior deixa de ser fixa */
 @media (max-width: 959px) and (max-height: 500px) {
   .home { padding-bottom: calc(var(--wave-h) + 24px); }
+}
+
+/* ===== Desktop: tela de altura fixa (sem rolagem), proporções guiadas pela altura da janela =====
+   Composição: cabeçalho 10vh · hero 37vh (sobe 7vh ao lado do logo) · título 5vh · 2 fileiras de capas
+   (16vh cada) · ondas 14vh. O "palco" tem largura de até 150vh para manter a mesma proporção em 16:9 e 16:10. */
+@media (min-width: 960px) {
+  .home {
+    --stage: min(92vw, 150vh);
+    --wave-h: 14vh;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    padding: 3vh 0 var(--wave-h);
+    background-size: 100% calc(var(--wave-h) + 2vh), auto;
+  }
+  .home__header, .home__main { width: var(--stage); max-width: var(--stage); }
+  .home__header { position: relative; z-index: 2; height: 10vh; align-items: flex-start; }
+  .home__logo { width: auto; height: 10vh; }
+  .home__header-right .user-menu { margin-top: 1.2vh; }
+  .home__main { flex: 1; min-height: 0; justify-content: flex-start; gap: 0; padding: 0; }
+  .home__hero { height: 36vh; margin-top: -3.5vh; gap: 2vw; }
+  .home__hero-text .brand-title--lg .brand-title__top { font-size: 5.4vh; }
+  .home__hero-text .brand-title--lg .brand-title__bottom { font-size: 10.6vh; }
+  .home__hero-sub { margin-top: 1.2vh; font-size: 2.4vh; }
+  .home__hero-img { width: auto; height: 36vh; margin-right: 0; }
+  .home__collections { margin-top: 1.6vh; }
+  .home__section-title { margin-bottom: 2.2vh; font-size: 3vh; }
+  .home__section-title::after { height: .5vh; }
+  .collection-grid { --gap: 2.2vh; gap: 2vh var(--gap); }
+  /* Largura da capa limitada pela altura disponível (16vh de altura → 28vh de largura). */
+  .collection-card { flex: 0 0 min(calc((100% - 4 * var(--gap)) / 5), 27.4vh); }
+  .collection-card__lock { width: 4.2vh; right: 1vh; top: 1vh; }
+  .collection-card__bar { height: .7vh; }
 }

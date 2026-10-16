@@ -36,7 +36,7 @@ export default function MateriaisModulo() {
           <span>{p.assistidos} de {p.total} aulas assistidas</span>
         </div>
       )}
-      <div className="video-grid">
+      <div className="video-grid" style={{ "--cols": Math.min(5, Math.max(1, Math.ceil((modulo?.videos.length ?? 8) / 2))) }}>
         {modulo?.videos.map((v) => (
           <VideoCard key={v.id} video={v} to={`${base}/materiais/${moduloSlug}/${v.id}`} assistido={progresso?.assistidos.includes(v.id)} />
         ))}

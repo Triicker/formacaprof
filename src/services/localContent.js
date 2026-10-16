@@ -19,7 +19,8 @@ const modulosDemo = () => MODULOS.map((m) => ({
   subtitulo: m.subtitulo,
   livro: m.livro,
   // Na demonstração os capítulos reaproveitam os vídeos de apresentação: conteúdo provisório.
-  documentos: [{ id: 'plano-de-aula', titulo: `Plano de aula – ${m.titulo}`, url: m.planoDeAula, provisorio: true }],
+  // Planos de aula só existem no modo http (PDF protegido servido pela API); a demonstração não publica PDFs.
+  documentos: [],
   videos: m.videos.map((v) => paraVideo(v, true)),
 }));
 

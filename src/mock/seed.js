@@ -89,7 +89,6 @@ export const MODULOS = [
   { slug: 'eja', titulo: 'EJA', subtitulo: 'EJA (Educação de Jovens e Adultos)', livro: '/img/livro-eja.png' },
 ].map((m, mi) => ({
   ...m,
-  planoDeAula: `/docs/plano-de-aula-${m.slug}.pdf`,
   // Enquanto não há vídeos próprios por capítulo, cada módulo usa uma sequência diferente dos 10 vídeos.
   videos: CAPITULOS.map((c, i) => {
     const { titulo, ...midia } = MIDIAS[(mi * 3 + i) % MIDIAS.length];

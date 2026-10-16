@@ -1,0 +1,121 @@
+/* ===== Área geral: login, cadastro, recuperar senha, boas-vindas, sucesso ===== */
+.auth {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 20px calc(120px + env(safe-area-inset-bottom));
+  background-color: var(--navy-800);
+  background-position: center top;
+  background-size: cover;
+}
+.auth--bg-login { background-image: url('/img/bg-login.png'); }
+.auth--bg-boasvindas { background-image: url('/img/bg-boasvindas.png'); }
+.auth--bg-sucesso { background-image: url('/img/bg-sucesso.png'); }
+.auth--center { justify-content: center; }
+
+.auth__logo { width: 88px; }
+.auth__brand { margin-top: -6px; }
+.auth__brand .brand-title--lg .brand-title__top { font-size: 1.3rem; }
+.auth__brand .brand-title--lg .brand-title__bottom { font-size: 2.6rem; }
+.auth__hero { display: none; }
+.auth__hero--mobile { display: block; margin: -8px 0 -12px; }
+.auth__prof { width: min(250px, 66vw); }
+
+.auth__panel { width: 100%; max-width: 400px; }
+
+.auth__footer { margin-top: auto; padding-top: 14px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.auth__footer-label { width: 116px; opacity: .85; }
+.auth__footer-logos { width: 210px; }
+
+.auth-form { display: flex; flex-direction: column; gap: 14px; align-items: stretch; text-align: center; }
+.auth-form__title { display: none; }
+.auth-form__alt { margin: 0; font-size: .85rem; color: #e6e6f0; }
+.auth-form__info { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.5; }
+.form-grid { display: grid; gap: 12px; text-align: left; }
+
+/* Sucesso do cadastro */
+.success-card {
+  position: relative;
+  width: min(100%, 360px);
+  margin-top: 60px;
+  padding: 90px 26px 28px;
+  border-radius: 18px;
+  border: 2px solid var(--orange);
+  background: #ffe6ce;
+  color: #333;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.success-card__icon { position: absolute; top: -70px; left: 50%; transform: translateX(-50%); width: 150px; }
+.success-card__title { margin: 0; font-size: 2rem; font-weight: 800; color: #57b236; }
+.success-card__text { margin: 0 0 6px; font-weight: 700; color: var(--orange); }
+
+/* Boas-vindas */
+.welcome { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+.welcome__title { margin: 0; font-weight: 700; letter-spacing: .03em; color: #e3dcf6; line-height: 1.3; }
+.welcome .player { height: min(56vh, 460px); box-shadow: 0 0 0 2px rgba(255, 128, 0, .6), 0 0 26px rgba(255, 128, 0, .3); }
+.welcome .btn { max-width: 340px; }
+
+/* ===== Desktop ===== */
+@media (min-width: 960px) {
+  .auth {
+    display: grid;
+    grid-template-columns: minmax(0, 520px) minmax(0, 520px);
+    grid-template-rows: auto 1fr auto auto 1fr auto;
+    grid-template-areas:
+      "logo   logo"
+      "hero   ."
+      "hero   brand"
+      "hero   panel"
+      "hero   ."
+      "footer footer";
+    justify-content: center;
+    column-gap: clamp(24px, 3vw, 56px);
+    padding: 26px clamp(140px, 12vw, 220px) 22px;
+    background-color: #0b1a3a;
+    background-image:
+      url('/img/deco-left.svg'),
+      url('/img/deco-right-top.svg'),
+      url('/img/deco-right-bottom.svg'),
+      url('/img/topo.svg'),
+      radial-gradient(900px 600px at 30% 45%, #13285a 0%, transparent 65%);
+    background-size: auto 100%, 170px auto, 190px auto, cover, auto;
+    background-position: left top, right top, right bottom, center, center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  .auth--center { display: flex; }
+
+  .auth__logo { grid-area: logo; justify-self: center; width: 104px; }
+  .auth__hero, .auth__hero--mobile { grid-area: hero; display: grid; place-items: center; align-self: center; margin: 0; }
+  .auth__prof { width: min(420px, 100%); }
+  .auth__brand { grid-area: brand; justify-self: center; margin: 0 0 18px; }
+  .auth__brand .brand-title--lg .brand-title__top { font-size: 1.75rem; }
+  .auth__brand .brand-title--lg .brand-title__bottom { font-size: 3.5rem; }
+
+  .auth__panel {
+    grid-area: panel;
+    justify-self: center;
+    max-width: 400px;
+    padding: 30px 28px 24px;
+    border-radius: 20px;
+    background: rgba(12, 24, 50, .9);
+    border: 1px solid rgba(255, 255, 255, .1);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, .45);
+    backdrop-filter: blur(6px);
+  }
+  .auth__panel:has(.auth-form--wide) { max-width: 560px; }
+  .auth__panel:has(.welcome) { max-width: 440px; }
+  .auth-form__title { display: block; margin: 0 0 4px; font-size: 1.2rem; }
+  .auth-form--wide .form-grid { grid-template-columns: 1fr 1fr; }
+
+  .auth__footer { grid-area: footer; flex-direction: row; justify-content: center; gap: 22px; padding-top: 28px; }
+  .auth__footer-label { width: 104px; }
+  .auth__footer-logos { width: 196px; }
+
+  .welcome { gap: 14px; }
+  .welcome .player { height: clamp(230px, 36vh, 420px); }
+}

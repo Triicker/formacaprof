@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: formacao-professores
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_MODE
+        value: mock
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

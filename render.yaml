@@ -50,3 +50,17 @@ services:
         sync: false
       - key: SMTP_PASS
         sync: false
+      # Limites de upload pelo painel (MB). Vídeo pela API fica desligado (0): vídeos são
+      # registrados como URL externa na biblioteca de mídia.
+      - key: MEDIA_MAX_IMAGE_MB
+        value: "5"
+      - key: MEDIA_MAX_PDF_MB
+        value: "25"
+      - key: MEDIA_MAX_VIDEO_MB
+        value: "0"
+    # Disco persistente só para os uploads feitos pelo painel (capas, PDFs). Sem ele, os arquivos
+    # enviados somem a cada deploy. Os arquivos que já vêm na imagem (storage/basta) não são afetados.
+    disk:
+      name: formacaprof-uploads
+      mountPath: /app/storage/uploads
+      sizeGB: 1

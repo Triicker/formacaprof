@@ -220,16 +220,65 @@ npm run seed:content -- --update  # também atualiza itens existentes com o cont
 | GET | `/admin/institutions/:id/collection-access` | administrador geral |
 | PUT | `/admin/institutions/:id/collections/:collectionId/access` | administrador geral (`active`/`suspended`/`revoked`, `expiresAt`) |
 
-### Preparação para a Etapa 4 (painel administrativo)
+## Etapa 4: painéis de administração e coordenação
 
-A API do painel já existe e está testada. Falta só a interface:
-- publicar coleções;
-- conceder, suspender e revogar direitos institucionais;
-- listar pedidos de liberação: `GET /audit-logs?action=collection_access.requested`;
-- matricular e revogar;
-- acompanhar progresso individual e consolidado.
+Interfaces em `/admin` (só administrador geral) e `/coordenacao` (vínculo ativo de coordenação; com mais de um, o topo mostra um seletor de instituição). A checagem de papel no React só organiza a interface: cada chamada é autorizada no backend.
 
-Para editar conteúdo pelo painel ainda faltam endpoints de escrita de coleções/módulos/aulas/mídias e upload para um storage com URLs assinadas (S3/R2). O enum `storage_provider` já está preparado para um novo provedor.
+### Regras importantes
+
+- **Versionamento curricular:** certificados são retratos imutáveis. Uma matrícula com certificado válido mantém `completedAt` mesmo que a coleção ganhe aulas obrigatórias novas. Alterações que afetam pessoas matriculadas (despublicar, arquivar, mudar aula obrigatória, suspender ou revogar acesso com matrículas ativas) retornam `409 IMPACT_CONFIRMATION_REQUIRED` com o objeto `impact`. Para prosseguir, a chamada é repetida com `confirmImpact: true` e `justification`.
+- **Auditoria somente-inclusão:** o trigger `audit_logs_append_only` bloqueia `UPDATE` e `DELETE` em `audit_logs`, inclusive para o próprio usuário da aplicação. Usuários e instituições nunca são apagados, só desativados.
+- **Correções de progresso:** só o administrador geral faz, por aula, com justificativa obrigatória. A origem fica como `admin_correction` e a auditoria guarda o antes e o depois. O percentual é sempre recalculado pelo servidor.
+- **Papel global:** conceder ou remover administrador geral exige a senha atual de quem faz e uma justificativa. Não é possível remover o próprio papel nem o último administrador.
+- **Mídia:**
+  - Os uploads são validados pelo conteúdo real do arquivo (magic bytes), não pela extensão: PNG, JPEG, WebP, PDF, MP4 e WebM. SVG é recusado.
+  - Os arquivos são gravados em `STORAGE_DIR/uploads/AAAA/MM/<uuid>` e servidos por `/api/v1/media/:id`, com autorização.
+  - Vídeos são registrados como **URL externa**. O upload de vídeo pela API vem desligado (`MEDIA_MAX_VIDEO_MB=0`), e o upload direto para R2 (`POST /admin/media/direct-upload`) responde 501 até ser configurado.
+  - Uma mídia em uso não pode ser excluída. "Substituir" mantém o histórico nos metadados.
+- **CSV:** sai com BOM UTF-8 e CRLF (abre direto no Excel). Células que começam com `= + - @` recebem `'` para evitar injeção de fórmula. O limite é de 50 mil linhas, e cada exportação gera `report.exported` na auditoria.
+
+### Endpoints da Etapa 4 (`/api/v1`)
+
+| Área | Endpoints |
+|---|---|
+| Painel | `GET /admin/dashboard` (`institutionId`, `from`, `to`) |
+| Instituições | `GET /admin/institutions`, `GET /admin/institutions/:id`, `POST /admin/institutions/:id/coordinators`, `GET /admin/coordinators`, `GET /admin/invitations`, `POST /institutions/:id/invitations/:invitationId/resend` |
+| Usuários | `GET /users`, `GET/PATCH /users/:id`, `POST /users/:id/sessions/revoke`, `PUT /users/:id/platform-role` |
+| Coleções | `GET/POST /admin/collections`, `GET/PATCH /admin/collections/:id`, `GET /admin/collections/:id/impact` |
+| Módulos e aulas | `POST /admin/collections/:id/modules`, `PUT /admin/collections/:id/modules/order`, `PATCH/DELETE /admin/modules/:id`, `POST /admin/modules/:id/lessons`, `PUT /admin/modules/:id/lessons/order`, `PATCH/DELETE /admin/lessons/:id` |
+| Mídia | `GET /admin/media`, `POST /admin/media/upload` (multipart), `POST /admin/media/external`, `POST /admin/media/direct-upload` (501), `PATCH/DELETE /admin/media/:id`, `POST /admin/media/:id/replace` |
+| Liberação | `GET /admin/institutions/:id/collection-access`, `PUT /admin/institutions/:id/collections/:collectionId/access` (`status`, `expiresAt`, `justification`, `confirmImpact`) |
+| Relatórios (admin) | `GET /admin/reports/enrollments` (`format=csv`), `GET /admin/reports/certificates`, `GET /admin/reports/participation` |
+| Matrículas (admin) | `GET /admin/enrollments/:id`, `POST /admin/enrollments/:id/progress-corrections`, `POST /admin/certificates/:id/revoke` |
+| Coordenação | `GET /institutions/:id/dashboard`, `GET /institutions/:id/teachers`, `GET /institutions/:id/reports/{enrollments,certificates,participation}` (+ os endpoints de matrícula da Etapa 3) |
+| Auditoria | `GET /audit-logs` (`action`, `actionPrefix`, `institutionId`, `actorUserId`, `entityType`, `entityId`, `subjectUserId`, `from`, `to`, paginação) |
+
+Listas paginadas aceitam `page`, `pageSize` (até 100) e devolvem `{ items, total, page, pageSize, pages }`.
+
+### Migrations da Etapa 4
+
+- `20261016194850_audit_append_only_and_corrections`: adiciona `admin_correction` ao enum `completion_source` e cria o trigger somente-inclusão em `audit_logs`.
+
+### Variáveis novas
+
+| Variável | Padrão | Uso |
+|---|---|---|
+| `STORAGE_DIR` | `./storage` | raiz dos arquivos locais. Os uploads vão para `uploads/`. No Render, um disco persistente montado em `/app/storage/uploads` (já no `render.yaml`) |
+| `MEDIA_MAX_IMAGE_MB` | `5` | limite de imagem |
+| `MEDIA_MAX_PDF_MB` | `25` | limite de PDF |
+| `MEDIA_MAX_VIDEO_MB` | `0` | `0` desliga upload de vídeo pela API |
+| `MEDIA_DIRECT_UPLOAD` | `none` | `r2` reservado para upload direto (ainda não implementado) |
+
+### Como usar o painel administrativo
+
+1. **Instituições → Nova instituição.** Depois, em "Coordenação", convide a coordenação por e-mail ou vincule uma pessoa já cadastrada.
+2. **Instituição → Coleções.** Libere a coleção (com validade opcional). Suspender ou revogar com matrículas ativas pede justificativa.
+3. **Coleções → editor.** Edite dados e tema, módulos e aulas (com reordenação) e a mídia de cada aula (escolhida na biblioteca). Use "Pré-visualizar" antes de publicar.
+4. **Biblioteca de mídia.** Envie capas e PDFs, ou registre um vídeo por URL. Para trocar um vídeo, registre a URL nova e escolha essa mídia na aula. A referência antiga fica no histórico.
+5. **Relatórios.** Filtre, exporte CSV e clique no nome para abrir o histórico da matrícula, onde ficam as correções e a revogação de certificado.
+6. **Auditoria.** Filtre por tipo de evento, ação, instituição e período. Os pedidos de liberação feitos pela coordenação aparecem como "Liberação solicitada".
+
+A coordenação, em `/coordenacao`, convida professores, matricula nas coleções liberadas, acompanha o progresso (com as aulas pendentes), revoga ou reativa matrículas, pede liberação de coleções e exporta os relatórios da própria instituição.
 
 ## Segurança: decisões principais
 
@@ -270,6 +319,17 @@ Para editar conteúdo pelo painel ainda faltam endpoints de escrita de coleçõe
    ADMIN_EMAIL=admin@eticaeditora.com.br ADMIN_NAME="Administração Ética" ADMIN_PASSWORD='<senha forte, 12+>' npm run admin:bootstrap
    ```
    O script recusa executar se já existir um administrador. A senha não fica salva em lugar nenhum além do hash.
+6. Ainda no Shell, carregue o catálogo (coleção BASTA, módulos, aulas e as referências dos vídeos atuais):
+   ```bash
+   npm run seed:content
+   ```
+   O comando só cria o que falta, então pode ser repetido sem risco. Ele nunca apaga nem sobrescreve. A coleção é importada como está em `content/catalog.json`. Confira no painel se ela está publicada.
+7. Teste de ponta a ponta:
+   1. Entre como administrador em `/admin`.
+   2. Crie uma instituição, libere a coleção para ela e convide uma coordenação (o e-mail precisa chegar pelo SMTP).
+   3. A coordenação aceita o convite, convida um professor e o matricula.
+   4. O professor assiste e conclui; confira o certificado.
+   5. Exporte o CSV e veja os eventos em Auditoria.
 
 Confira no painel se os nomes de plano do `render.yaml` (`starter`, `basic-256mb`) existem na sua conta.
 
@@ -295,7 +355,11 @@ Enquanto `VITE_API_MODE=mock`, o site segue funcionando como demonstração, sem
 - **PDFs de exemplo ainda estão em `public/docs`** no frontend, usados pelo modo de demonstração. No modo `http` eles vêm da API com autorização. Antes de subir PDFs reais, remova os de `public/docs`, ou o Cloudflare Pages continuará servindo os arquivos publicamente.
 - **Conteúdo provisório:** os 32 capítulos do BASTA e os planos de aula são placeholders (ver acima). Precisam de validação editorial e dos arquivos definitivos.
 - **Coleções além do BASTA:** a estrutura é genérica (`/colecoes/:slug`, mesmas páginas e serviços), mas só existe o tema/layout `basta`. Uma coleção publicada com outro `theme_config.layout` mostra "Coleção em preparação" até ganhar o próprio tema.
-- **Não há telas de gestão.** Instituições, convites, direitos, matrículas e progresso consolidado são administrados pela API (Swagger em homologação, ou cliente HTTP). O pedido de liberação feito pela coordenação aparece na auditoria. As telas são a Etapa 4.
+- **Uploads no disco do Render:**
+  - O disco é de uma única instância e impede deploy sem interrupção (zero-downtime).
+  - Para escalar horizontalmente ou proteger vídeos com URL assinada, migre para R2/S3. O provedor já está previsto em `storage_provider`, e o endpoint `direct-upload` está reservado.
+  - Depois do primeiro deploy, faça um upload de teste pelo painel. Se ele falhar com erro de permissão (a imagem roda como usuário `node`), ajuste o dono do diretório montado.
+- **Pedidos de liberação** chegam ao administrador pela auditoria e pela atividade recente. Ainda não há notificação por e-mail.
 - **Conclusão por sinal do cliente:** o servidor valida pertencimento, matrícula e tempo assistido, mas não tem como provar que o vídeo foi realmente visto. A conclusão híbrida (botão ou fim do player) é uma decisão de produto registrada.
 - **Desempenho:** `/me/collections` e as listas de coordenação calculam o progresso por matrícula. Para turmas grandes (centenas de matrículas por coleção), convém agregar em SQL ou guardar um resumo.
 - **Envio de e-mail sem fila:** se o SMTP falhar, o convite fica criado e a resposta traz `emailSent: false`. Basta criar o convite de novo, o que invalida o anterior.

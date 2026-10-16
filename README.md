@@ -31,6 +31,8 @@ Para voltar ao estado inicial, use o menu "Olá, Prof. …" → **Resetar dados 
 | 08/09/10 Materiais → nível → vídeo | `/basta/materiais`, `/basta/materiais/:nivel`, `/basta/materiais/:nivel/:id` |
 | 11 Minha formação + certificado | `/basta/minha-formacao`, `/basta/certificado` |
 | 12 Feedback + obrigado | `/basta/feedback`, `/basta/feedback/obrigado` |
+| Painel administrativo (modo `http`) | `/admin`: instituições, usuários, coordenadores, coleções, mídia, relatórios, auditoria |
+| Painel da coordenação (modo `http`) | `/coordenacao`: professores, coleções, relatórios |
 
 ## Estrutura
 
@@ -43,6 +45,8 @@ src/
   mock/seed.js          ← coleções, módulos, vídeos, escolas, usuária demo
   layouts/BastaLayout   ← sidebar no desktop / header no mobile
   pages/                ← uma página por tela
+  admin/                ← painéis /admin e /coordenacao (ui.jsx, adminApi.js, pages/)
+  styles/admin.css      ← design system dos painéis (escopo .adm)
 public/img              ← assets copiados de ASSETS/ com nomes limpos
 public/docs             ← PDFs de exemplo dos planos de aula
 ```

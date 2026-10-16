@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useToast } from '../../context/ToastContext';
 import { adminApi } from '../adminApi';
-import { InviteModal, UserPickerModal } from '../shared';
+import { InviteModal, UserPickerModal, VincularModal } from '../shared';
 import { Async, Badge, Confirm, fmtData, fmtDataHora, PageHeader, Table, Tabs, useAsync } from '../ui';
 import { InstitutionForm } from './AdminInstituicoes';
 import { AcessosColecoes } from './AdminAcessos';
@@ -86,6 +86,14 @@ export default function AdminInstituicao() {
           {aba === 'membros' && (
             <Async state={membros}>
               {(d) => (
+                <section className="adm-card">
+                <div className="adm-card__head">
+                  <h2>Membros</h2>
+                  <div className="adm-header__actions">
+                    <button type="button" className="adm-btn" onClick={() => setModal({ tipo: 'vincular' })}>Vincular usuário existente</button>
+                    <button type="button" className="adm-btn adm-btn--primary" onClick={() => setModal({ tipo: 'convidar', roles: ['professor', 'coordinator'] })}>Convidar por e-mail</button>
+                  </div>
+                </div>
                 <Table
                   caption="Membros"
                   rows={d.items}
@@ -105,6 +113,8 @@ export default function AdminInstituicao() {
                     ) },
                   ]}
                 />
+                {!d.items.length && <p className="adm-empty">Nenhum membro ainda. Vincule uma pessoa já cadastrada ou envie um convite.</p>}
+                </section>
               )}
             </Async>
           )}
@@ -166,6 +176,7 @@ export default function AdminInstituicao() {
             <Confirm title="Revogar convite" message={`O link enviado para ${modal.i.email} deixará de funcionar.`} danger confirmLabel="Revogar"
               onConfirm={() => acao(() => adminApi.revokeInvitation(id, modal.i.id), 'Convite revogado.')} onClose={() => setModal(null)} />
           )}
+          {modal?.tipo === 'vincular' && <VincularModal institutionId={id} onClose={() => setModal(null)} onDone={recarregar} />}
           {modal?.tipo === 'convidar' && <InviteModal institutionId={id} roles={modal.roles} onClose={() => setModal(null)} onDone={recarregar} />}
           {modal?.tipo === 'designar' && (
             <UserPickerModal

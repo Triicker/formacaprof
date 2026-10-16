@@ -41,6 +41,11 @@ export function AuthProvider({ children }) {
     return u;
   }, []);
 
+  /** Recarrega a sessão (ex.: depois que o administrador se vincula a uma instituição). */
+  const recarregarUsuario = useCallback(async () => {
+    setUser(await api.me());
+  }, []);
+
   const logout = useCallback(async () => {
     try { await api.logout(); } finally { setUser(null); }
   }, []);
@@ -74,7 +79,7 @@ export function AuthProvider({ children }) {
   }, [user, instituicaoId]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, aceitarConvite, marcarBoasVindasVisto, escolherInstituicao, ...perfil }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, recarregarUsuario, aceitarConvite, marcarBoasVindasVisto, escolherInstituicao, ...perfil }}>
       {children}
     </AuthContext.Provider>
   );

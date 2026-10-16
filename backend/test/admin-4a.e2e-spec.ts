@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { API, client, createApp, createInstitution, createUser, Ctx, loginAs, PASSWORD, resetDb, tokenFromMail } from './helpers';
+import { loadCatalogContent, seedCatalog } from '../src/catalog/content-seed';
 
 let ctx: Ctx;
 beforeAll(async () => { ctx = await createApp(); });
@@ -52,6 +53,19 @@ describe('Dashboard global', () => {
 });
 
 describe('Instituições', () => {
+  it('região do IBGE obrigatória no formato oficial e UF coerente com a região', async () => {
+    const c = await loginAs(ctx, 'admin@etica.br');
+    const ok = await c.post('/institutions', { name: 'Escola Feira', region: 'Nordeste', state: 'BA', city: 'Feira de Santana' });
+    expect(ok.status).toBe(201);
+    expect((await c.post('/institutions', { name: 'Escola X', region: 'Bahia', state: 'BA' })).status).toBe(400);
+    const errada = await c.post('/institutions', { name: 'Escola Y', region: 'Sul', state: 'BA' });
+    expect(errada.status).toBe(400);
+    expect(errada.body.message).toContain('não pertence à região Sul');
+    // Troca só a UF: confere contra a região já gravada.
+    expect((await c.patch(`/institutions/${ok.body.id}`, { state: 'SP' })).status).toBe(400);
+    expect((await c.patch(`/institutions/${ok.body.id}`, { region: 'Sudeste', state: 'SP', city: 'Campinas' })).status).toBe(200);
+  });
+
   it('lista com contagens, busca e paginação; detalhe com coordenadores e direitos', async () => {
     const c = await loginAs(ctx, 'admin@etica.br');
     const lista = await c.get('/admin/institutions?pageSize=1&sort=name');
@@ -200,5 +214,49 @@ describe('Convites: reenvio e visão global', () => {
     expect(pend.body.items.map((i: { email: string }) => i.email)).toEqual(['c2@a.br']);
     expect(pend.body.items[0].institution.name).toBe('Escola A');
     expect(JSON.stringify(pend.body)).not.toMatch(/token/i);
+  });
+});
+
+describe('Vínculo direto pelo administrador', () => {
+  it('admin se vincula à instituição, é matriculado nas coleções liberadas e acessa; o acesso segue a liberação', async () => {
+    await seedCatalog(ctx.prisma, loadCatalogContent());
+    const basta = await ctx.prisma.collection.findUniqueOrThrow({ where: { slug: 'basta' } });
+    const c = await loginAs(ctx, 'admin@etica.br');
+    const bastaCard = async (inst = A.id) => ((await c.get(`/me/collections${inst ? `?institutionId=${inst}` : ''}`)).body.items as { slug: string; state: string; reason?: string }[])
+      .find((i) => i.slug === 'basta')!;
+
+    // Sem vínculo: bloqueado, mesmo sendo administrador; e não pode usar o contexto de uma instituição alheia.
+    expect((await bastaCard('')).state).toBe('locked');
+    expect((await c.get(`/me/collections?institutionId=${A.id}`)).status).toBe(403);
+
+    expect((await c.put(`/admin/institutions/${A.id}/collections/${basta.id}/access`, { status: 'active' })).status).toBe(200);
+    const r = await c.post(`/admin/institutions/${A.id}/members`, { userId: ids.admin, role: 'professor', enrollInCollections: true });
+    expect(r.status).toBe(201);
+    expect(r.body.enrolledCollections).toEqual([basta.id]);
+    expect((await bastaCard()).state).toBe('available');
+
+    // Repetir não duplica matrícula; papel pode ser trocado.
+    const r2 = await c.post(`/admin/institutions/${A.id}/members`, { userId: ids.admin, role: 'coordinator', enrollInCollections: true });
+    expect(r2.body.enrolledCollections).toEqual([]);
+    expect(r2.body.membership.role).toBe('coordinator');
+
+    // Liberação suspensa: o acesso cai junto.
+    await c.put(`/admin/institutions/${A.id}/collections/${basta.id}/access`, { status: 'suspended', justification: 'teste de suspensão', confirmImpact: true });
+    expect((await bastaCard()).state).toBe('locked');
+
+    const audit = (await c.get(`/audit-logs?institutionId=${A.id}&actionPrefix=membership.`)).body.items.map((a: { action: string }) => a.action);
+    expect(audit).toContain('membership.assigned');
+  });
+
+  it('sem matrícula quando não pedida; só administrador; usuário desativado recusado', async () => {
+    const c = await loginAs(ctx, 'admin@etica.br');
+    const r = await c.post(`/admin/institutions/${B.id}/members`, { userId: ids.profA, role: 'professor' });
+    expect(r.status).toBe(201);
+    expect(r.body.enrolledCollections).toEqual([]);
+    expect((await c.post(`/admin/institutions/${B.id}/members`, { userId: ids.profA, role: 'platform_admin' })).status).toBe(400);
+    const coord = await loginAs(ctx, 'coord.a@a.br');
+    expect((await coord.post(`/admin/institutions/${A.id}/members`, { userId: ids.coordA, role: 'professor' })).status).toBe(403);
+    await ctx.prisma.user.update({ where: { id: ids.profB }, data: { status: 'disabled' } });
+    expect((await c.post(`/admin/institutions/${A.id}/members`, { userId: ids.profB, role: 'professor' })).status).toBe(400);
   });
 });

@@ -26,6 +26,7 @@ export const adminApi = {
 
   coordinators: (p) => req('GET', `/admin/coordinators${qs(p)}`),
   assignCoordinator: (instId, userId) => req('POST', `/admin/institutions/${instId}/coordinators`, { userId }),
+  addMember: (instId, d) => req('POST', `/admin/institutions/${instId}/members`, d),
 
   users: (p) => req('GET', `/users${qs(p)}`),
   user: (id) => req('GET', `/users/${id}`),

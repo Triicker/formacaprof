@@ -3,7 +3,7 @@ import {
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate, IsEnum, IsIn, IsOptional, IsString, IsUUID, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsIn, IsOptional, IsString, IsUUID, Length } from 'class-validator';
 import { AccessStatus, ContentStatus, EnrollmentStatus, MembershipRole, Prisma, RecordStatus, UserStatus } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
 import type { Actor } from '../common/actor';
@@ -27,6 +27,13 @@ export class CoordinatorsQuery extends PageQuery {
 
 export class AssignCoordinatorDto {
   @ApiProperty({ description: 'Usuário já cadastrado que passará a coordenar a instituição.' }) @IsUUID() userId!: string;
+}
+
+export class AddMemberDto {
+  @ApiProperty({ description: 'Usuário já cadastrado (pode ser o próprio administrador).' }) @IsUUID() userId!: string;
+  @ApiProperty({ enum: MembershipRole }) @IsEnum(MembershipRole) role!: MembershipRole;
+  @ApiPropertyOptional({ description: 'Matricular nas coleções publicadas com direito ativo da instituição.' })
+  @IsOptional() @IsBoolean() enrollInCollections?: boolean;
 }
 
 export class DashboardQuery {
@@ -131,6 +138,58 @@ export class AdminInstitutionsService {
   }
 
   /** Designa um usuário existente como coordenador (cria o vínculo ou promove o existente). */
+  /**
+   * Vínculo feito pelo administrador (sem convite): papel escolhido e, opcionalmente, matrícula em todas as
+   * coleções publicadas com direito ativo da instituição. Vínculo e matrículas ficam na auditoria.
+   * O acesso continua sujeito às 4 condições: se o direito for suspenso depois, o acesso cai junto.
+   */
+  async addMember(actor: Actor, institutionId: string, dto: { userId: string; role: MembershipRole; enrollInCollections?: boolean }) {
+    const { userId, role } = dto;
+    await this.assertAssignable(institutionId, userId);
+    const acessos = dto.enrollInCollections
+      ? (await this.prisma.institutionCollectionAccess.findMany({
+          where: { institutionId, collection: { status: ContentStatus.published } }, select: { collectionId: true, status: true, expiresAt: true },
+        })).filter((a) => this.entitlements.accessState(a) === 'active')
+      : [];
+    return this.prisma.$transaction(async (tx) => {
+      const before = await tx.membership.findUnique({ where: { userId_institutionId: { userId, institutionId } } });
+      const m = await tx.membership.upsert({
+        where: { userId_institutionId: { userId, institutionId } },
+        create: { userId, institutionId, role },
+        update: { role, status: RecordStatus.active },
+      });
+      await this.audit.record({
+        actorUserId: actor.userId, institutionId, action: 'membership.assigned', entityType: 'membership', entityId: m.id,
+        metadata: { userId, role, from: before ? { role: before.role, status: before.status } : null },
+      }, tx);
+      const matriculadas: string[] = [];
+      for (const a of acessos) {
+        const e = await tx.enrollment.findUnique({ where: { institutionId_userId_collectionId: { institutionId, userId, collectionId: a.collectionId } } });
+        if (e?.status === EnrollmentStatus.active) continue;
+        const r = e
+          ? await tx.enrollment.update({ where: { id: e.id }, data: { status: EnrollmentStatus.active, revokedAt: null, assignedById: actor.userId } })
+          : await tx.enrollment.create({ data: { institutionId, userId, collectionId: a.collectionId, assignedById: actor.userId } });
+        await this.audit.record({
+          actorUserId: actor.userId, institutionId, action: e ? 'enrollment.reactivated' : 'enrollment.created',
+          entityType: 'enrollment', entityId: r.id, metadata: { userId, collectionId: a.collectionId },
+        }, tx);
+        matriculadas.push(a.collectionId);
+      }
+      return { membership: m, enrolledCollections: matriculadas };
+    });
+  }
+
+  private async assertAssignable(institutionId: string, userId: string) {
+    const [inst, user] = await Promise.all([
+      this.prisma.institution.findUnique({ where: { id: institutionId }, select: { status: true } }),
+      this.prisma.user.findUnique({ where: { id: userId }, select: { status: true } }),
+    ]);
+    if (!inst) throw new NotFoundException('Instituição não encontrada.');
+    if (!user) throw new NotFoundException('Usuário não encontrado.');
+    if (inst.status !== RecordStatus.active) throw new BadRequestException('Instituição inativa.');
+    if (user.status !== UserStatus.active) throw new BadRequestException('A conta do usuário está desativada.');
+  }
+
   async assignCoordinator(actor: Actor, institutionId: string, userId: string) {
     const [inst, user] = await Promise.all([
       this.prisma.institution.findUnique({ where: { id: institutionId }, select: { status: true } }),
@@ -204,6 +263,12 @@ export class AdminInstitutionsController {
   @ApiOperation({ summary: 'Designa um usuário existente como coordenador da instituição' })
   assign(@CurrentActor() actor: Actor, @Param('id', ParseUUIDPipe) id: string, @Body() dto: AssignCoordinatorDto) {
     return this.admin.assignCoordinator(actor, id, dto.userId);
+  }
+
+  @Post('institutions/:id/members')
+  @ApiOperation({ summary: 'Vincula um usuário existente (inclusive o próprio administrador) e, se pedido, matricula nas coleções liberadas' })
+  addMember(@CurrentActor() actor: Actor, @Param('id', ParseUUIDPipe) id: string, @Body() dto: AddMemberDto) {
+    return this.admin.addMember(actor, id, dto);
   }
 
   @Get('coordinators')

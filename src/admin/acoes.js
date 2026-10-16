@@ -13,6 +13,7 @@ const ACOES = {
   'institution.updated': 'Instituição alterada',
   'membership.updated': 'Vínculo alterado',
   'membership.coordinator_assigned': 'Coordenador designado',
+  'membership.assigned': 'Vínculo criado pela administração',
   'invitation.created': 'Convite enviado',
   'invitation.revoked': 'Convite revogado',
   'invitation.accepted': 'Convite aceito',

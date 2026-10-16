@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { descreverAcao } from '../acoes';
 import { adminApi } from '../adminApi';
-import { InstitutionSelect, InviteModal, MembershipBadges, useInstitutionOptions } from '../shared';
+import { InstitutionSelect, InviteModal, MembershipBadges, useInstitutionOptions, VincularModal } from '../shared';
 import {
   Async, Badge, Confirm, Field, Filters, fmtData, fmtDataHora, Modal, PageHeader, Pager, Table, Tabs, useAsync, useFilters,
 } from '../ui';
@@ -50,7 +50,7 @@ function PapelGlobal({ usuario, onDone, onClose }) {
 }
 
 /** Painel de detalhe do usuário (abre sobre a lista; `?id=` na URL). */
-function UsuarioModal({ id, onClose, onChanged }) {
+function UsuarioModal({ id, institutions, onClose, onChanged }) {
   const toast = useToast();
   const { user: eu } = useAuth();
   const [aba, setAba] = useState('dados');
@@ -104,6 +104,8 @@ function UsuarioModal({ id, onClose, onChanged }) {
             )}
 
             {aba === 'vinculos' && (
+              <div className="adm-grid">
+              <div><button type="button" className="adm-btn adm-btn--primary" onClick={() => setModal('vincular')}>Vincular a uma instituição</button></div>
               <Table
                 rows={u.memberships}
                 columns={[
@@ -124,6 +126,8 @@ function UsuarioModal({ id, onClose, onChanged }) {
                   ) },
                 ]}
               />
+              {!u.memberships.length && <p className="adm-empty">Sem vínculo com instituições: a pessoa não acessa conteúdos até ser vinculada e matriculada.</p>}
+              </div>
             )}
 
             {aba === 'historico' && (
@@ -146,6 +150,7 @@ function UsuarioModal({ id, onClose, onChanged }) {
             {modal === 'sessoes' && <Confirm title="Encerrar sessões" message={`${u.name} precisará entrar novamente em todos os dispositivos.`} onConfirm={() => acao(() => adminApi.revokeSessions(id), 'Sessões encerradas.')} onClose={() => setModal(null)} />}
             {modal === 'desativar' && <Confirm title="Desativar conta" message="A pessoa perde o acesso imediatamente (todas as sessões são encerradas). Matrículas, progresso e certificados são preservados." danger confirmLabel="Desativar" onConfirm={() => acao(() => adminApi.updateUser(id, { status: 'disabled' }), 'Conta desativada.')} onClose={() => setModal(null)} />}
             {modal === 'reativar' && <Confirm title="Reativar conta" message="A pessoa poderá entrar novamente." onConfirm={() => acao(() => adminApi.updateUser(id, { status: 'active' }), 'Conta reativada.')} onClose={() => setModal(null)} />}
+            {modal === 'vincular' && <VincularModal user={u} institutions={institutions} onClose={() => setModal(null)} onDone={recarregar} />}
             {modal === 'papel' && <PapelGlobal usuario={u} onDone={recarregar} onClose={() => setModal(null)} />}
           </>
         )}
@@ -201,7 +206,7 @@ export default function AdminUsuarios() {
           />
         )}
       </Async>
-      {f.id && <UsuarioModal id={f.id} onClose={() => setF({ id: '', page: f.page })} onChanged={state.reload} />}
+      {f.id && <UsuarioModal id={f.id} institutions={instituicoes} onClose={() => setF({ id: '', page: f.page })} onChanged={state.reload} />}
       {convidar && <InviteModal institutions={instituicoes} onClose={() => setConvidar(false)} />}
     </>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { adminApi } from './adminApi';
 import { Badge, Field, Loading, Modal } from './ui';
@@ -103,6 +104,69 @@ export function UserPickerModal({ title = 'Escolher usuário', onPick, onClose }
           </ul>
         ) : <p className="adm-empty">Nenhum usuário ativo encontrado. Use “Convidar por e-mail”.</p>
       )}
+    </Modal>
+  );
+}
+
+/**
+ * Vínculo direto pelo administrador (sem convite): pessoa já cadastrada + instituição + papel e, se marcado,
+ * matrícula nas coleções liberadas da instituição. Recebe `user` ou `institutionId` fixos e pede o que faltar.
+ */
+export function VincularModal({ user, institutionId, institutions = [], onClose, onDone }) {
+  const toast = useToast();
+  const { user: eu, recarregarUsuario } = useAuth();
+  const [pessoa, setPessoa] = useState(user ?? null);
+  const [form, setForm] = useState({ institutionId: institutionId ?? '', role: 'professor', matricular: true });
+  const [erro, setErro] = useState('');
+  const [enviando, setEnviando] = useState(false);
+
+  if (!pessoa) return <UserPickerModal title="Vincular usuário existente" onClose={onClose} onPick={setPessoa} />;
+
+  async function enviar(e) {
+    e.preventDefault();
+    if (!form.institutionId) return setErro('Selecione a instituição.');
+    setEnviando(true);
+    try {
+      const r = await adminApi.addMember(form.institutionId, { userId: pessoa.id, role: form.role, enrollInCollections: form.matricular });
+      const n = r.enrolledCollections.length;
+      toast(`${pessoa.name} vinculado(a)${n ? ` e matriculado(a) em ${n} coleç${n > 1 ? 'ões' : 'ão'}` : ''}.`, 'success');
+      // Vinculou a si mesmo: atualiza a sessão para a área de formação já enxergar a instituição.
+      if (pessoa.id === eu?.id) await recarregarUsuario();
+      onDone?.(r);
+      onClose();
+    } catch (err) {
+      setErro(err.message);
+      setEnviando(false);
+    }
+  }
+
+  return (
+    <Modal title={`Vincular ${pessoa.name}`} onClose={onClose}>
+      <form className="adm-form" onSubmit={enviar}>
+        {!institutionId && (
+          <Field label="Instituição">
+            <InstitutionSelect value={form.institutionId} onChange={(v) => setForm((f) => ({ ...f, institutionId: v }))} options={institutions.filter((i) => i.status === 'active')} required />
+          </Field>
+        )}
+        <Field label="Papel">
+          <select value={form.role} onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))}>
+            <option value="professor">Professor(a)</option>
+            <option value="coordinator">Coordenação pedagógica</option>
+          </select>
+        </Field>
+        <label className="adm-check">
+          <input type="checkbox" checked={form.matricular} onChange={(e) => setForm((f) => ({ ...f, matricular: e.target.checked }))} />
+          <span>Matricular nas coleções liberadas para a instituição (acesso aos conteúdos)</span>
+        </label>
+        <p className="adm-notice adm-notice--info" style={{ margin: 0 }}>
+          O acesso segue a liberação da instituição: se uma coleção for suspensa ou expirar, o acesso por este vínculo também cai. Tudo fica na auditoria.
+        </p>
+        {erro && <p className="adm-field__error" role="alert" style={{ margin: 0 }}>{erro}</p>}
+        <div className="adm-modal__foot">
+          <button type="button" className="adm-btn" onClick={onClose}>Cancelar</button>
+          <button className="adm-btn adm-btn--primary" disabled={enviando}>{enviando ? 'Vinculando…' : 'Vincular'}</button>
+        </div>
+      </form>
     </Modal>
   );
 }

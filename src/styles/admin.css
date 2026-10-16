@@ -64,6 +64,8 @@
 .adm-top__menu svg { width: 20px; height: 20px; fill: currentColor; }
 .adm-top__context { display: flex; align-items: center; gap: 10px; min-width: 0; color: var(--adm-muted); font-size: .85rem; }
 .adm-top__context select { max-width: 280px; }
+.adm-top__select { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.adm-top__select select { min-width: 0; padding: 6px 10px; border: 1px solid var(--adm-border); border-radius: 8px; background: var(--adm-surface); color: var(--adm-text); font: inherit; }
 .adm-top__user { display: flex; align-items: center; gap: 10px; font-size: .85rem; white-space: nowrap; }
 .adm-top__user b { color: var(--adm-text); }
 .adm-content { padding: 24px 28px 48px; display: grid; gap: 20px; align-content: start; max-width: 1400px; width: 100%; }
@@ -81,6 +83,7 @@
 .adm-card__head h2 { margin: 0; font-size: 1.05rem; }
 .adm-grid { display: grid; gap: 16px; }
 .adm-grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
+.adm-grid-cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
 
 .adm-stats { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); }
 .adm-stat { background: var(--adm-surface); border: 1px solid var(--adm-border); border-radius: var(--adm-radius); padding: 14px 16px; border-top: 3px solid var(--adm-accent); }
@@ -100,7 +103,7 @@
 }
 .adm-btn:hover:not(:disabled) { border-color: #aab3c8; background: #f7f8fc; }
 .adm-btn:disabled { opacity: .55; cursor: not-allowed; }
-.adm-btn--primary { background: var(--adm-primary); border-color: var(--adm-primary); color: #fff; }
+.adm-btn--primary, .adm a.adm-btn--primary { background: var(--adm-primary); border-color: var(--adm-primary); color: #fff; }
 .adm-btn--primary:hover:not(:disabled) { background: var(--adm-primary-hover); border-color: var(--adm-primary-hover); }
 .adm-btn--danger { color: var(--adm-danger); border-color: #f0b8b3; }
 .adm-btn--danger-solid { background: var(--adm-danger); border-color: var(--adm-danger); color: #fff; }

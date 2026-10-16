@@ -247,6 +247,8 @@ enum LessonProgressStatus {
 enum CompletionSource {
   manual
   player
+  /// Correção manual feita pela administração (com justificativa na auditoria).
+  admin_correction
 }
 
 /// Referência a um arquivo; o binário nunca é gravado no PostgreSQL.

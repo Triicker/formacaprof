@@ -57,7 +57,54 @@ export const adminApi = {
   deleteMedia: (id) => req('DELETE', `/admin/media/${id}`),
   uploadMedia: (file, fields, onProgress) => enviarArquivo('/admin/media/upload', file, fields, onProgress),
   replaceMedia: (id, file, onProgress) => enviarArquivo(`/admin/media/${id}/replace`, file, {}, onProgress),
+
+  // ---------- 4C: relatórios, histórico e correções (administração) ----------
+  reportEnrollments: (p) => req('GET', `/admin/reports/enrollments${qs(p)}`),
+  reportCertificates: (p) => req('GET', `/admin/reports/certificates${qs(p)}`),
+  reportParticipation: (p) => req('GET', `/admin/reports/participation${qs(p)}`),
+  exportEnrollments: (p) => baixar(`/admin/reports/enrollments${qs({ ...p, format: 'csv' })}`),
+  enrollment: (id) => req('GET', `/admin/enrollments/${id}`),
+  correctProgress: (id, d) => req('POST', `/admin/enrollments/${id}/progress-corrections`, d),
+  revokeCertificate: (id, justification) => req('POST', `/admin/certificates/${id}/revoke`, { justification }),
 };
+
+/** Chamadas da coordenação: sempre na instituição da URL (o backend confere o vínculo). */
+export const coordApi = {
+  dashboard: (inst) => req('GET', `/institutions/${inst}/dashboard`),
+  teachers: (inst, p) => req('GET', `/institutions/${inst}/teachers${qs(p)}`),
+  collections: (inst) => req('GET', `/institutions/${inst}/collections`),
+  catalog: () => req('GET', '/collections'),
+  collectionEnrollments: (inst, colId) => req('GET', `/institutions/${inst}/collections/${colId}/enrollments`),
+  enroll: (inst, d) => req('POST', `/institutions/${inst}/enrollments`, d),
+  setEnrollment: (inst, id, status) => req('PATCH', `/institutions/${inst}/enrollments/${id}`, { status }),
+  enrollmentProgress: (inst, id) => req('GET', `/institutions/${inst}/enrollments/${id}/progress`),
+  requestAccess: (inst, colId, message) => req('POST', `/institutions/${inst}/collections/${colId}/access-requests`, message ? { message } : {}),
+  members: (inst, p) => req('GET', `/institutions/${inst}/members${qs(p)}`),
+  updateMember: (inst, id, d) => req('PATCH', `/institutions/${inst}/members/${id}`, d),
+  invitations: (inst) => req('GET', `/institutions/${inst}/invitations`),
+  resendInvitation: (inst, id) => req('POST', `/institutions/${inst}/invitations/${id}/resend`),
+  revokeInvitation: (inst, id) => req('DELETE', `/institutions/${inst}/invitations/${id}`),
+  reportEnrollments: (inst, p) => req('GET', `/institutions/${inst}/reports/enrollments${qs(p)}`),
+  reportCertificates: (inst, p) => req('GET', `/institutions/${inst}/reports/certificates${qs(p)}`),
+  reportParticipation: (inst, p) => req('GET', `/institutions/${inst}/reports/participation${qs(p)}`),
+  exportEnrollments: (inst, p) => baixar(`/institutions/${inst}/reports/enrollments${qs({ ...p, format: 'csv' })}`),
+};
+
+/** Download autenticado (cookie de sessão) de um arquivo gerado pela API, ex.: CSV. */
+async function baixar(path) {
+  const res = await fetch(`${(import.meta.env.VITE_API_URL || '/api/v1').replace(/\/$/, '')}${path}`, { credentials: 'same-origin' });
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new Error(data?.message || 'Não foi possível gerar o arquivo.');
+  }
+  const nome = /filename="([^"]+)"/.exec(res.headers.get('content-disposition') ?? '')?.[1] ?? 'relatorio.csv';
+  const url = URL.createObjectURL(await res.blob());
+  const a = Object.assign(document.createElement('a'), { href: url, download: nome });
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 /** Upload multipart com progresso (XHR). Mesma sessão em cookie e o cabeçalho CSRF exigido pela API. */
 function enviarArquivo(path, file, fields, onProgress) {

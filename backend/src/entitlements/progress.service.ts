@@ -77,6 +77,31 @@ export class ProgressService {
     };
   }
 
+  /** Percentuais de muitas matrículas com duas consultas (relatórios e exportações). */
+  async bulk(enrollments: Pick<Enrollment, 'id' | 'collectionId'>[]) {
+    const out = new Map<string, { requiredTotal: number; requiredCompleted: number; percent: number }>();
+    if (!enrollments.length) return out;
+    const colecoes = [...new Set(enrollments.map((e) => e.collectionId))];
+    const obrigatorias = await this.prisma.lesson.findMany({
+      where: { status: ContentStatus.published, requiredForCompletion: true, module: { collectionId: { in: colecoes }, status: ContentStatus.published } },
+      select: { id: true, module: { select: { collectionId: true } } },
+    });
+    const totalPorColecao = new Map<string, number>();
+    for (const l of obrigatorias) totalPorColecao.set(l.module.collectionId, (totalPorColecao.get(l.module.collectionId) ?? 0) + 1);
+    const feitas = await this.prisma.lessonProgress.groupBy({
+      by: ['enrollmentId'],
+      where: { enrollmentId: { in: enrollments.map((e) => e.id) }, status: LessonProgressStatus.completed, lessonId: { in: obrigatorias.map((l) => l.id) } },
+      _count: { _all: true },
+    });
+    const feitasPor = new Map(feitas.map((f) => [f.enrollmentId, f._count._all]));
+    for (const e of enrollments) {
+      const total = totalPorColecao.get(e.collectionId) ?? 0;
+      const concl = feitasPor.get(e.id) ?? 0;
+      out.set(e.id, { requiredTotal: total, requiredCompleted: concl, percent: total ? Math.round((concl / total) * 100) : 0 });
+    }
+    return out;
+  }
+
   async summary(enrollment: Pick<Enrollment, 'id' | 'collectionId'>, db: Db = this.prisma): Promise<ProgressSummary> {
     return (await this.detail(enrollment, db)).summary;
   }

@@ -31,6 +31,14 @@ import AdminColecoes from './admin/pages/AdminColecoes';
 import AdminColecao from './admin/pages/AdminColecao';
 import AdminPrevia from './admin/pages/AdminPrevia';
 import AdminMidias from './admin/pages/AdminMidias';
+import AdminRelatorios from './admin/pages/AdminRelatorios';
+import AdminAuditoria from './admin/pages/AdminAuditoria';
+import AdminMatricula from './admin/pages/AdminMatricula';
+import CoordArea from './admin/pages/CoordArea';
+import CoordDashboard from './admin/pages/CoordDashboard';
+import CoordProfessores from './admin/pages/CoordProfessores';
+import CoordColecoes from './admin/pages/CoordColecoes';
+import CoordRelatorios from './admin/pages/CoordRelatorios';
 
 // Rotas de conteúdo: sessão válida + vínculo ativo (ou administrador geral) + contexto institucional definido.
 // O acesso a cada coleção é conferido pelo layout da coleção (estado efetivo vindo da API).
@@ -104,7 +112,18 @@ export default function App() {
         <Route path="colecoes/:id" element={<AdminColecao />} />
         <Route path="colecoes/:id/previa" element={<AdminPrevia />} />
         <Route path="midias" element={<AdminMidias />} />
+        <Route path="relatorios" element={<AdminRelatorios />} />
+        <Route path="auditoria" element={<AdminAuditoria />} />
+        <Route path="matriculas/:id" element={<AdminMatricula />} />
         <Route path="*" element={<ContentState tipo="inexistente" voltarPara="/admin" voltarTexto="Voltar à visão geral" />} />
+      </Route>
+
+      <Route path="/coordenacao" element={<RequireAuth><CoordArea /></RequireAuth>}>
+        <Route index element={<CoordDashboard />} />
+        <Route path="professores" element={<CoordProfessores />} />
+        <Route path="colecoes" element={<CoordColecoes />} />
+        <Route path="relatorios" element={<CoordRelatorios />} />
+        <Route path="*" element={<ContentState tipo="inexistente" voltarPara="/coordenacao" voltarTexto="Voltar à visão geral" />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

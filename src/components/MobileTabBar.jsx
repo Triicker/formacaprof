@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { api } from '../services/api';
+import { API_MODE, api } from '../services/api';
 import { WHATSAPP_URL } from './WhatsAppButton';
 
 const ICONES = {
@@ -45,7 +45,7 @@ export default function MobileTabBar({ itens, extras = [], tema = 'orange' }) {
     ...extras,
     { href: WHATSAPP_URL, label: 'Suporte pelo WhatsApp' },
     { onClick: () => navigate('/boas-vindas'), label: 'Vídeo de boas-vindas' },
-    { onClick: resetar, label: 'Resetar dados de demonstração' },
+    ...(API_MODE === 'mock' ? [{ onClick: resetar, label: 'Resetar dados de demonstração' }] : []),
     { onClick: async () => { await logout(); navigate('/login'); }, label: 'Sair', perigo: true },
   ];
 

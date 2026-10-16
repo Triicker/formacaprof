@@ -1,30 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BrandTitle from '../components/BrandTitle';
+import CollectionCard, { CollectionCardSkeleton } from '../components/CollectionCard';
+import ContentState from '../components/ContentState';
 import MobileTabBar from '../components/MobileTabBar';
 import UserMenu from '../components/UserMenu';
 import WhatsAppButton, { WHATSAPP_URL } from '../components/WhatsAppButton';
+import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { api } from '../services/api';
+import { baseDaColecao, linkContinuar } from '../utils/colecoes';
 
 export default function Inicio() {
   const [colecoes, setColecoes] = useState(null);
+  const [erro, setErro] = useState('');
   const navigate = useNavigate();
   const toast = useToast();
+  const { instituicaoAtiva, isCoordenador } = useAuth();
 
-  const [progresso, setProgresso] = useState(null);
-
-  useEffect(() => {
-    api.getColecoes().then(setColecoes);
-    api.getProgresso().then(setProgresso).catch(() => {});
+  const carregar = useCallback(() => {
+    setErro('');
+    setColecoes(null);
+    api.getColecoes().then(setColecoes).catch((e) => setErro(e.message));
   }, []);
 
-  const proximo = progresso?.proximo;
-  const continuar = proximo ? `/basta/materiais/${proximo.modulo}/${proximo.videoId}` : '/basta/minha-formacao';
+  useEffect(carregar, [carregar, instituicaoAtiva?.id]);
 
-  function abrir(c) {
-    if (c.disponivel) navigate(`/${c.slug}`);
-    else toast(`A coleção "${c.titulo}" estará disponível em breve.`);
+  const primeiraLiberada = colecoes?.find((c) => c.status === 'available');
+  const formacao = primeiraLiberada ? `${baseDaColecao(primeiraLiberada.slug)}/minha-formacao` : null;
+  const continuar = linkContinuar(colecoes) ?? formacao;
+  // Sem coleção liberada, as abas avisam em vez de apontar para a própria tela (evita abas "ativas" duplicadas).
+  const semFormacao = () => toast(colecoes
+    ? 'Você ainda não tem uma formação liberada. Procure a coordenação da sua escola.'
+    : 'Carregando sua formação…');
+
+  async function abrir(c) {
+    if (c.status === 'available') return navigate(baseDaColecao(c.slug));
+    if (c.status === 'coming_soon') return toast(`A coleção "${c.titulo}" estará disponível em breve.`);
+    if (isCoordenador && c.instituicao) {
+      if (c.instituicao.temAcesso) {
+        return toast(`Sua instituição tem acesso a "${c.titulo}". A matrícula é feita pela coordenação.`);
+      }
+      // O coordenador não libera coleções: só pede ao administrador.
+      if (window.confirm(`Sua instituição ainda não tem acesso a "${c.titulo}". Deseja solicitar a liberação ao administrador?`)) {
+        try {
+          await api.solicitarLiberacao(c.slug);
+          toast('Pedido de liberação enviado ao administrador.', 'success');
+        } catch (e) {
+          toast(e.message);
+        }
+      }
+      return undefined;
+    }
+    return toast(c.mensagem || `Você ainda não tem acesso à coleção "${c.titulo}". Procure a coordenação da sua escola.`);
   }
 
   return (
@@ -37,32 +65,33 @@ export default function Inicio() {
         </div>
       </header>
 
-      <section className="home__hero">
-        <div className="home__hero-text">
-          <BrandTitle size="lg" />
-          <p className="home__hero-sub">Escolha uma coleção para começar sua formação.</p>
-        </div>
-        <img className="home__hero-img" src="/img/prof-inicio.png" alt="" />
-      </section>
+      <main className="home__main">
+        <section className="home__hero">
+          <div className="home__hero-text">
+            <BrandTitle size="lg" />
+            <p className="home__hero-sub">Escolha uma coleção para começar sua formação.</p>
+          </div>
+          <img className="home__hero-img" src="/img/prof-inicio.png" alt="" />
+        </section>
 
-      <section className="home__collections">
-        <h2 className="home__section-title">Acessar coleções</h2>
-        <div className="collection-grid">
-          {(colecoes || Array.from({ length: 10 })).map((c, i) =>
-            c ? (
-              <button key={c.slug} type="button" className={`collection-card ${c.disponivel ? '' : 'collection-card--soon'}`} onClick={() => abrir(c)}>
-                <img src={c.capa} alt={c.titulo} />
-                {!c.disponivel && <span className="collection-card__tag">Em breve</span>}
-              </button>
-            ) : <div key={i} className="collection-card collection-card--skeleton" />,
+        <section className="home__collections" aria-labelledby="titulo-colecoes" aria-busy={!colecoes && !erro}>
+          <h2 className="home__section-title" id="titulo-colecoes">Acessar coleções</h2>
+          {erro ? (
+            <ContentState tipo="erro" mensagem={erro} onTentarNovamente={carregar} voltarPara="/inicio" voltarTexto="Recarregar página" />
+          ) : (
+            <div className="collection-grid">
+              {colecoes
+                ? colecoes.map((c) => <CollectionCard key={c.slug} colecao={c} onOpen={abrir} />)
+                : Array.from({ length: 10 }, (_, i) => <CollectionCardSkeleton key={i} />)}
+            </div>
           )}
-        </div>
-      </section>
+        </section>
+      </main>
 
       <MobileTabBar itens={[
-        { to: '/inicio', label: 'Coleções', icone: 'grid' },
-        { to: continuar, label: 'Continuar', icone: 'resume' },
-        { to: '/basta/minha-formacao', label: 'Formação', icone: 'cap' },
+        { to: '/inicio', label: 'Coleções', icone: 'grid', end: true },
+        continuar ? { to: continuar, label: 'Continuar', icone: 'resume' } : { onClick: semFormacao, label: 'Continuar', icone: 'resume' },
+        formacao ? { to: formacao, label: 'Formação', icone: 'cap' } : { onClick: semFormacao, label: 'Formação', icone: 'cap' },
         { href: WHATSAPP_URL, label: 'Suporte', icone: 'chat' },
       ]} />
     </div>

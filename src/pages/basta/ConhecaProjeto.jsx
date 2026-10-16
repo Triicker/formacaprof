@@ -6,10 +6,10 @@ import { useBasta } from '../../layouts/BastaLayout';
 import { api } from '../../services/api';
 
 export default function ConhecaProjeto() {
-  const { progresso } = useBasta();
+  const { progresso, slug, base } = useBasta();
   const [videos, setVideos] = useState(null);
 
-  useEffect(() => { api.getVideosProjeto().then(setVideos); }, []);
+  useEffect(() => { api.getVideosProjeto(slug).then(setVideos); }, [slug]);
 
   return (
     <div className="basta-page">
@@ -17,7 +17,7 @@ export default function ConhecaProjeto() {
       <SectionTitle color="pink">Conheça o projeto</SectionTitle>
       <div className="video-grid">
         {videos?.map((v) => (
-          <VideoCard key={v.id} video={v} to={`/basta/conheca/${v.id}`} assistido={progresso?.assistidos.includes(v.id)} />
+          <VideoCard key={v.id} video={v} to={`${base}/conheca/${v.id}`} assistido={progresso?.assistidos.includes(v.id)} />
         ))}
       </div>
     </div>

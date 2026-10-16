@@ -5,14 +5,14 @@ import WhatsAppButton from '../../components/WhatsAppButton';
 import { useBasta } from '../../layouts/BastaLayout';
 
 const TILES = [
-  { to: '/basta/conheca', img: '/img/tile-conheca.png', label: 'Conheça o Projeto' },
-  { to: '/basta/materiais', img: '/img/tile-materiais.png', label: 'Materiais Pedagógicos' },
-  { to: '/basta/minha-formacao', img: '/img/tile-formacao.png', label: 'Minha Formação' },
-  { to: '/basta/feedback', img: '/img/tile-feedback.png', label: 'Feedback' },
+  { to: 'conheca', img: '/img/tile-conheca.png', label: 'Conheça o Projeto' },
+  { to: 'materiais', img: '/img/tile-materiais.png', label: 'Materiais Pedagógicos' },
+  { to: 'minha-formacao', img: '/img/tile-formacao.png', label: 'Minha Formação' },
+  { to: 'feedback', img: '/img/tile-feedback.png', label: 'Feedback' },
 ];
 
 export default function BastaHome() {
-  const { abrirInstituto, progresso } = useBasta();
+  const { abrirInstituto, progresso, base } = useBasta();
 
   return (
     <div className="basta-home">
@@ -41,7 +41,7 @@ export default function BastaHome() {
       </section>
 
       {progresso?.proximo && (
-        <Link className="continue-btn" to={`/basta/materiais/${progresso.proximo.modulo}/${progresso.proximo.videoId}`}>
+        <Link className="continue-btn" to={`${base}/materiais/${progresso.proximo.modulo}/${progresso.proximo.videoId}`}>
           <span className="continue-btn__icon" aria-hidden="true">▶</span>
           <span><small>Continuar de onde parou</small>{progresso.proximo.titulo}</span>
         </Link>
@@ -49,7 +49,7 @@ export default function BastaHome() {
 
       <nav className="basta-tiles" aria-label="Seções do projeto BASTA!">
         {TILES.map((t) => (
-          <Link key={t.to} to={t.to} className="basta-tile">
+          <Link key={t.to} to={`${base}/${t.to}`} className="basta-tile">
             <img src={t.img} alt={t.label} />
           </Link>
         ))}

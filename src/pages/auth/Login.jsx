@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/AuthLayout';
 import { Input } from '../../components/Field';
 import { useAuth } from '../../context/AuthContext';
+import { API_MODE } from '../../services/api';
 
 export default function Login() {
   const { login } = useAuth();
@@ -41,7 +42,7 @@ export default function Login() {
         </button>
         <Link to="/recuperar-senha" className="link link--cyan">Esqueceu a senha?</Link>
         <p className="auth-form__alt">Não tem login? <Link to="/cadastro" className="link link--orange">Faça o seu cadastro</Link></p>
-        <p className="demo-hint">Demo: <b>ana@etica.com</b> / <b>123456</b></p>
+        {API_MODE === 'mock' && <p className="demo-hint">Demo: <b>ana@etica.com</b> / <b>123456</b></p>}
       </form>
     </AuthLayout>
   );

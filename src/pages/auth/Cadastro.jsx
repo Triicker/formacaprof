@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/AuthLayout';
 import { Input, Select } from '../../components/Field';
-import { api } from '../../services/api';
+import { API_MODE, api } from '../../services/api';
 
 const VAZIO = { nome: '', email: '', regiaoId: '', escolaId: '', nivelAcesso: '', senha: '', confirmarSenha: '', codigoAcesso: '' };
 
@@ -19,7 +19,7 @@ function validar(f) {
   return e;
 }
 
-export default function Cadastro() {
+function CadastroDemo() {
   const navigate = useNavigate();
   const [form, setForm] = useState(VAZIO);
   const [erros, setErros] = useState({});
@@ -63,7 +63,7 @@ export default function Cadastro() {
   }
 
   return (
-    <AuthLayout bg="login">
+    <AuthLayout bg="login" fit={false}>
       <form className="auth-form auth-form--wide" onSubmit={onSubmit} noValidate>
         <h2 className="auth-form__title">Crie seu cadastro</h2>
         <div className="form-grid">
@@ -83,4 +83,24 @@ export default function Cadastro() {
       </form>
     </AuthLayout>
   );
+}
+
+// Com a API real não há autocadastro: escola e papel vêm do convite enviado pela instituição.
+function CadastroPorConvite() {
+  return (
+    <AuthLayout bg="login" heroMobile>
+      <div className="auth-form">
+        <h2 className="auth-form__title">Cadastro por convite</h2>
+        <p className="auth-form__info">
+          O acesso à plataforma é criado pela sua instituição. Peça à coordenação pedagógica da sua escola
+          o convite: você receberá um e-mail com o link para criar sua senha.
+        </p>
+        <p className="auth-form__alt">Já tem acesso? <Link to="/login" className="link link--orange">Faça login</Link></p>
+      </div>
+    </AuthLayout>
+  );
+}
+
+export default function Cadastro() {
+  return API_MODE === 'http' ? <CadastroPorConvite /> : <CadastroDemo />;
 }

@@ -1,13 +1,52 @@
+# Render Blueprint — API + PostgreSQL (produção).
+# O frontend é publicado no Cloudflare Pages; ele encaminha /api/* para este serviço
+# (functions/api/[[path]].js). Homologação: deploy/render.staging.yaml.
+# Confira no painel os planos disponíveis na sua conta antes de aplicar.
+
+databases:
+  - name: formacaprof-db
+    databaseName: formacaprof
+    user: formacaprof
+    plan: basic-256mb
+    postgresMajorVersion: "17"
+    # Sem acesso externo: só serviços da mesma conta/região conectam pela rede privada.
+    ipAllowList: []
+
 services:
   - type: web
-    name: formacao-professores
-    runtime: static
-    buildCommand: npm ci && npm run build
-    staticPublishPath: ./dist
+    name: formacaprof-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: starter
+    healthCheckPath: /api/v1/health
+    # Migrations versionadas, aplicadas antes de cada deploy (nunca `prisma db push`).
+    preDeployCommand: npx prisma migrate deploy
     envVars:
-      - key: VITE_API_MODE
-        value: mock
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: formacaprof-db
+          property: connectionString
+      - key: APP_URL
+        sync: false
+      - key: TRUST_PROXY
+        value: "2"
+      - key: PROXY_SECRET
+        generateValue: true
+      - key: SWAGGER_ENABLED
+        value: "false"
+      - key: MAIL_DRIVER
+        value: smtp
+      - key: MAIL_FROM
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false

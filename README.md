@@ -1,7 +1,10 @@
 # Formação para Professores (portal web)
 
 Versão web responsiva (mobile + desktop) do app de formação da Ética Editora, com a coleção **BASTA!**.
-Esta é a **versão mockada**: todos os dados ficam no `localStorage` do navegador, sem backend.
+O frontend funciona em dois modos (`VITE_API_MODE`):
+
+- **`mock`** (padrão): demonstração sem backend. Os dados ficam no `localStorage` do navegador.
+- **`http`**: usa a API real em [`backend/`](backend/README.md) (NestJS + PostgreSQL), com login, sessão, convites e instituições.
 
 ## Rodar
 
@@ -35,7 +38,8 @@ Para voltar ao estado inicial, use o menu "Olá, Prof. …" → **Resetar dados 
 src/
   services/api.js       ← único ponto de acesso a dados (troca mock ↔ http)
   services/mockApi.js   ← implementação local (localStorage)
-  services/httpApi.js   ← contrato de endpoints para o backend real
+  services/httpApi.js   ← cliente da API real (/api/v1, cookie HttpOnly, CSRF)
+  services/localContent.js ← catálogo + progresso (locais até a Etapa 3)
   mock/seed.js          ← coleções, módulos, vídeos, escolas, usuária demo
   layouts/BastaLayout   ← sidebar no desktop / header no mobile
   pages/                ← uma página por tela
@@ -47,14 +51,14 @@ Os vídeos (verticais 9:16) vêm de `https://midiasave-5c064.web.app/video1.mp4`
 
 No mobile, a navegação principal fica numa barra inferior (`MobileTabBar`); o botão "Mais" abre as ações secundárias.
 
-## Próximo passo: backend
+## Backend e deploy
 
-1. Implementar os endpoints listados em `src/services/httpApi.js`.
-2. Definir `VITE_API_MODE=http` e `VITE_API_URL` no Render.
-3. As tabelas sugeridas seguem o `seed.js`: `usuarios`, `regioes`, `escolas`, `colecoes`, `modulos`, `videos`, `progresso`, `curtidas`, `feedbacks`.
+A API, o banco, os testes e o passo a passo de deploy (Render + Cloudflare Pages) estão em [backend/README.md](backend/README.md).
 
-## Deploy no Render
-
-O `render.yaml` publica o site como Static Site, com rewrite de SPA (`/* → /index.html`).
+- `functions/api/[[path]].js`: proxy do Cloudflare Pages que encaminha `/api/*` para a API no Render. Como fica no mesmo domínio, o cookie de sessão é first-party.
+- `render.yaml`: Blueprint da API + PostgreSQL de produção. Homologação: `deploy/render.staging.yaml`.
+- No modo `http`, o cadastro é feito **por convite** (`/convite`). Também existem `/redefinir-senha` e `/sem-vinculo`.
+- No modo `http`, catálogo, estados dos cards, progresso, feedback e certificado vêm da API e do PostgreSQL. O `src/mock/seed.js` e o `src/services/localContent.js` são usados só no modo `mock`.
+- As páginas de coleção são genéricas (`BastaLayout` recebe `slug` e `base`). `/basta/*` continua funcionando e `/colecoes/:slug/*` usa as mesmas páginas; `/colecoes/basta/*` redireciona para `/basta/*`.
 
 Veja também [docs/VALIDACAO-USERFLOW.md](docs/VALIDACAO-USERFLOW.md).

@@ -1,9 +1,13 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { PAPEIS_CONTEUDO, PublicOnly, RequireAuth, RequireInstitutionContext, RequireRole } from './components/RouteGuards';
 import Login from './pages/auth/Login';
 import Cadastro from './pages/auth/Cadastro';
 import CadastroSucesso from './pages/auth/CadastroSucesso';
 import RecuperarSenha from './pages/auth/RecuperarSenha';
+import RedefinirSenha from './pages/auth/RedefinirSenha';
+import AceitarConvite from './pages/auth/AceitarConvite';
+import SemVinculo from './pages/SemVinculo';
+import EscolherInstituicao from './pages/EscolherInstituicao';
 import BoasVindas from './pages/BoasVindas';
 import Inicio from './pages/Inicio';
 import BastaLayout from './layouts/BastaLayout';
@@ -17,42 +21,67 @@ import Feedback from './pages/basta/Feedback';
 import FeedbackObrigado from './pages/basta/FeedbackObrigado';
 import Certificado from './pages/basta/Certificado';
 
+// Rotas de conteúdo: sessão válida + vínculo ativo (ou administrador geral) + contexto institucional definido.
+// O acesso a cada coleção é conferido pelo layout da coleção (estado efetivo vindo da API).
 function Privada({ children }) {
-  const { user, loading } = useAuth();
-  if (loading) return <div className="page-loading" />;
-  return user ? children : <Navigate to="/login" replace />;
+  return (
+    <RequireAuth>
+      <RequireRole roles={PAPEIS_CONTEUDO}>
+        <RequireInstitutionContext>{children}</RequireInstitutionContext>
+      </RequireRole>
+    </RequireAuth>
+  );
 }
 
-function Publica({ children }) {
-  const { user, loading } = useAuth();
-  if (loading) return <div className="page-loading" />;
-  return user ? <Navigate to="/inicio" replace /> : children;
+// Páginas de uma coleção: as mesmas para /basta (compatibilidade) e /colecoes/:slug.
+const paginasDaColecao = (
+  <>
+    <Route index element={<BastaHome />} />
+    <Route path="conheca" element={<ConhecaProjeto />} />
+    <Route path="conheca/:videoId" element={<VideoPage origem="projeto" />} />
+    <Route path="materiais" element={<Materiais />} />
+    <Route path="materiais/:modulo" element={<MateriaisModulo />} />
+    <Route path="materiais/:modulo/:videoId" element={<VideoPage origem="materiais" />} />
+    <Route path="minha-formacao" element={<MinhaFormacao />} />
+    <Route path="feedback" element={<Feedback />} />
+    <Route path="feedback/obrigado" element={<FeedbackObrigado />} />
+  </>
+);
+
+/** /colecoes/basta/... redireciona para o endereço canônico /basta/...; outras coleções usam a rota genérica. */
+function ColecaoGenerica() {
+  const { slug } = useParams();
+  const { pathname } = useLocation();
+  if (slug === 'basta') return <Navigate to={pathname.replace(/^\/colecoes\/basta/, '/basta')} replace />;
+  return <BastaLayout key={slug} slug={slug} base={`/colecoes/${slug}`} />;
+}
+
+function CertificadoGenerico() {
+  const { slug } = useParams();
+  return slug === 'basta' ? <Navigate to="/basta/certificado" replace /> : <Certificado slug={slug} />;
 }
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/inicio" replace />} />
-      <Route path="/login" element={<Publica><Login /></Publica>} />
-      <Route path="/cadastro" element={<Publica><Cadastro /></Publica>} />
+      <Route path="/login" element={<PublicOnly><Login /></PublicOnly>} />
+      <Route path="/cadastro" element={<PublicOnly><Cadastro /></PublicOnly>} />
       <Route path="/cadastro/sucesso" element={<CadastroSucesso />} />
-      <Route path="/recuperar-senha" element={<Publica><RecuperarSenha /></Publica>} />
+      <Route path="/recuperar-senha" element={<PublicOnly><RecuperarSenha /></PublicOnly>} />
+      <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+      <Route path="/convite" element={<AceitarConvite />} />
+      <Route path="/sem-vinculo" element={<RequireAuth><SemVinculo /></RequireAuth>} />
 
       <Route path="/boas-vindas" element={<Privada><BoasVindas /></Privada>} />
       <Route path="/inicio" element={<Privada><Inicio /></Privada>} />
 
-      <Route path="/basta" element={<Privada><BastaLayout /></Privada>}>
-        <Route index element={<BastaHome />} />
-        <Route path="conheca" element={<ConhecaProjeto />} />
-        <Route path="conheca/:videoId" element={<VideoPage origem="projeto" />} />
-        <Route path="materiais" element={<Materiais />} />
-        <Route path="materiais/:modulo" element={<MateriaisModulo />} />
-        <Route path="materiais/:modulo/:videoId" element={<VideoPage origem="materiais" />} />
-        <Route path="minha-formacao" element={<MinhaFormacao />} />
-        <Route path="feedback" element={<Feedback />} />
-        <Route path="feedback/obrigado" element={<FeedbackObrigado />} />
-      </Route>
-      <Route path="/basta/certificado" element={<Privada><Certificado /></Privada>} />
+      <Route path="/escolher-instituicao" element={<RequireAuth><EscolherInstituicao /></RequireAuth>} />
+
+      <Route path="/basta" element={<Privada><BastaLayout slug="basta" base="/basta" /></Privada>}>{paginasDaColecao}</Route>
+      <Route path="/basta/certificado" element={<Privada><Certificado slug="basta" /></Privada>} />
+      <Route path="/colecoes/:slug" element={<Privada><ColecaoGenerica /></Privada>}>{paginasDaColecao}</Route>
+      <Route path="/colecoes/:slug/certificado" element={<Privada><CertificadoGenerico /></Privada>} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

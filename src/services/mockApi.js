@@ -1,12 +1,12 @@
 // Implementação mockada da API: persiste tudo no localStorage do navegador.
-// Cada função tem a mesma assinatura que a versão HTTP (httpApi.js) terá.
-import {
-  REGIOES, ESCOLAS, NIVEIS_ACESSO, COLECOES, VIDEOS_PROJETO, VIDEO_BOAS_VINDAS, MODULOS, BASTA,
-  USUARIO_DEMO, PROGRESSO_DEMO,
-} from '../mock/seed';
+// Só para demonstração/desenvolvimento (VITE_API_MODE=mock): senhas ficam em texto puro aqui
+// e esse modelo NUNCA é usado com a API real.
+import { ESCOLAS, NIVEIS_ACESSO, PROGRESSO_DEMO, REGIOES, USUARIO_DEMO, VIDEO_BOAS_VINDAS } from '../mock/seed';
+import { ApiError, createContentApi } from './localContent';
 
 const KEY = 'formacaprof:db:v1';
 const delay = (ms = 250) => new Promise((r) => setTimeout(r, ms));
+const SEM_CONVITE = 'Convites e redefinição de senha só funcionam com a API real (VITE_API_MODE=http).';
 
 function freshDb() {
   return {
@@ -30,17 +30,27 @@ function save() {
   try { localStorage.setItem(KEY, JSON.stringify(db)); } catch { /* ignora */ }
 }
 
-class ApiError extends Error {}
-
+// Mesmo formato de usuário entregue pelo httpApi.
 function publicUser(u) {
   if (!u) return null;
-  const { senha, ...rest } = u;
-  return rest;
+  const escola = ESCOLAS.find((e) => e.id === u.escolaId);
+  return {
+    id: u.id,
+    nome: u.nome,
+    email: u.email,
+    viuBoasVindas: !!u.viuBoasVindas,
+    admin: false,
+    vinculos: escola ? [{
+      id: `m-${u.id}`,
+      papel: u.nivelAcesso === 'coordenador' ? 'coordinator' : 'professor',
+      instituicao: { id: escola.id, nome: escola.nome },
+    }] : [],
+  };
 }
 
 function currentUser() {
   const u = db.usuarios.find((x) => x.id === db.sessao);
-  if (!u) throw new ApiError('Sessão expirada. Faça login novamente.');
+  if (!u) throw new ApiError('Sessão expirada. Faça login novamente.', 401);
   return u;
 }
 
@@ -49,15 +59,15 @@ function userProgress(uid) {
   return db.progresso[uid];
 }
 
-const allMaterialVideos = () => MODULOS.flatMap((m) => m.videos.map((v) => ({ ...v, modulo: m.slug })));
-
 export const mockApi = {
+  modo: 'mock',
+
   // ---------- Autenticação ----------
   async login({ usuario, senha }) {
     await delay();
     const id = usuario.trim().toLowerCase();
     const u = db.usuarios.find((x) => x.email.toLowerCase() === id);
-    if (!u || u.senha !== senha) throw new ApiError('Usuário ou senha inválidos.');
+    if (!u || u.senha !== senha) throw new ApiError('Usuário ou senha inválidos.', 401);
     db.sessao = u.id;
     save();
     return publicUser(u);
@@ -67,7 +77,7 @@ export const mockApi = {
     await delay(400);
     const email = dados.email.trim().toLowerCase();
     if (db.usuarios.some((x) => x.email.toLowerCase() === email)) {
-      throw new ApiError('Já existe um cadastro com este e-mail.');
+      throw new ApiError('Já existe um cadastro com este e-mail.', 409);
     }
     const u = {
       id: `u-${Date.now()}`,
@@ -87,8 +97,7 @@ export const mockApi = {
 
   async me() {
     await delay(50);
-    const u = db.usuarios.find((x) => x.id === db.sessao);
-    return publicUser(u);
+    return publicUser(db.usuarios.find((x) => x.id === db.sessao));
   },
 
   async logout() {
@@ -109,82 +118,25 @@ export const mockApi = {
     return { ok: true, email };
   },
 
+  async redefinirSenha() { throw new ApiError(SEM_CONVITE, 400); },
+  async previewConvite() { throw new ApiError(SEM_CONVITE, 400); },
+  async aceitarConvite() { throw new ApiError(SEM_CONVITE, 400); },
+
   // ---------- Cadastros auxiliares ----------
   async getRegioes() { return REGIOES; },
   async getEscolas(regiaoId) { return ESCOLAS.filter((e) => e.regiaoId === regiaoId); },
   async getNiveisAcesso() { return NIVEIS_ACESSO; },
 
-  // ---------- Conteúdo ----------
-  async getColecoes() { await delay(150); return COLECOES; },
-  async getBasta() { return BASTA; },
+  setInstituicaoAtiva() {},
   async getVideoBoasVindas() { return VIDEO_BOAS_VINDAS; },
-  async getVideosProjeto() { await delay(150); return VIDEOS_PROJETO; },
-  async getModulos() { await delay(150); return MODULOS; },
-  async getModulo(slug) {
-    await delay(150);
-    const m = MODULOS.find((x) => x.slug === slug);
-    if (!m) throw new ApiError('Módulo não encontrado.');
-    return m;
-  },
 
-  // ---------- Progresso ----------
-  async getProgresso() {
-    await delay(100);
-    const p = userProgress(currentUser().id);
-    const videos = allMaterialVideos();
-    const total = videos.length;
-    const assistidosMateriais = videos.filter((v) => p.assistidos.includes(v.id)).length;
-    const modulosConcluidos = MODULOS.filter((m) => m.videos.every((v) => p.assistidos.includes(v.id))).length;
-    const proximo = videos.find((v) => !p.assistidos.includes(v.id));
-    return {
-      assistidos: p.assistidos,
-      curtidos: p.curtidos,
-      totalVideos: total,
-      videosAssistidos: assistidosMateriais,
-      totalModulos: MODULOS.length,
-      modulosConcluidos,
-      percentual: Math.round((assistidosMateriais / total) * 100),
-      // Próxima aula não assistida ("Continuar de onde parou").
-      proximo: proximo ? { modulo: proximo.modulo, videoId: proximo.id, titulo: proximo.titulo } : null,
-      porModulo: MODULOS.map((m) => ({
-        slug: m.slug,
-        titulo: m.titulo,
-        total: m.videos.length,
-        assistidos: m.videos.filter((v) => p.assistidos.includes(v.id)).length,
-      })),
-    };
-  },
-
-  async setAssistido(videoId, assistido) {
-    await delay(120);
-    const p = userProgress(currentUser().id);
-    p.assistidos = assistido
-      ? [...new Set([...p.assistidos, videoId])]
-      : p.assistidos.filter((id) => id !== videoId);
-    save();
-    return p.assistidos;
-  },
-
-  async setCurtido(videoId, curtido) {
-    const p = userProgress(currentUser().id);
-    p.curtidos = curtido
-      ? [...new Set([...p.curtidos, videoId])]
-      : p.curtidos.filter((id) => id !== videoId);
-    save();
-    return p.curtidos;
-  },
-
-  // ---------- Feedback ----------
-  async enviarFeedback({ experiencia, utilidade, navegacao, comentario }) {
-    await delay(400);
-    const u = currentUser();
-    db.feedbacks.push({
-      id: `f-${Date.now()}`, usuarioId: u.id, colecao: 'basta',
-      experiencia, utilidade, navegacao, comentario, criadoEm: new Date().toISOString(),
-    });
-    save();
-    return { ok: true };
-  },
+  // ---------- Conteúdo e progresso ----------
+  ...createContentApi({
+    progressFor: () => userProgress(currentUser().id),
+    persist: save,
+    saveFeedback: (f) => db.feedbacks.push({ id: `f-${Date.now()}`, usuarioId: db.sessao, ...f }),
+    delay,
+  }),
 
   // ---------- Utilitário de testes ----------
   async resetDemo() {

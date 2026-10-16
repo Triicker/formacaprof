@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BastaHeader from '../../components/BastaHeader';
 import SectionTitle from '../../components/SectionTitle';
+import { useBasta } from '../../layouts/BastaLayout';
 import { api } from '../../services/api';
 
 const PERGUNTAS = [
@@ -25,6 +26,7 @@ function Estrelas({ valor, onChange, nome }) {
 
 export default function Feedback() {
   const navigate = useNavigate();
+  const { slug, base } = useBasta();
   const [notas, setNotas] = useState({ experiencia: 0, utilidade: 0, navegacao: 0 });
   const [comentario, setComentario] = useState('');
   const [erro, setErro] = useState('');
@@ -34,8 +36,13 @@ export default function Feedback() {
     e.preventDefault();
     if (Object.values(notas).some((n) => !n)) return setErro('Responda às três perguntas para enviar.');
     setEnviando(true);
-    await api.enviarFeedback({ ...notas, comentario });
-    navigate('/basta/feedback/obrigado');
+    try {
+      await api.enviarFeedback(slug, { ...notas, comentario });
+      navigate(`${base}/feedback/obrigado`);
+    } catch (err) {
+      setErro(err.message);
+      setEnviando(false);
+    }
   }
 
   return (

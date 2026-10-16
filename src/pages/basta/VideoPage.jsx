@@ -11,34 +11,35 @@ import { formatarDuracao } from '../../utils/tempo';
 
 // Tela de vídeo aberto — usada por "Conheça o projeto" e "Materiais pedagógicos".
 export default function VideoPage({ origem }) {
-  const { modulo: slug, videoId } = useParams();
+  const { modulo: moduloSlug, videoId } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-  const { progresso, setAssistido, setCurtido } = useBasta();
+  const { slug, base, progresso, setAssistido, setCurtido } = useBasta();
   const [lista, setLista] = useState(null);
   const [modulo, setModulo] = useState(null);
   const [modulos, setModulos] = useState([]);
 
-  useEffect(() => {
-    if (origem === 'projeto') {
-      api.getVideosProjeto().then(setLista);
-    } else {
-      api.getModulos().then(setModulos);
-      api.getModulo(slug).then((m) => { setModulo(m); setLista(m.videos); })
-        .catch((e) => { toast(e.message); navigate('/basta/materiais'); });
-    }
-  }, [origem, slug, navigate, toast]);
+  const voltar = origem === 'projeto' ? `${base}/conheca` : `${base}/materiais/${moduloSlug}`;
 
-  const base = origem === 'projeto' ? '/basta/conheca' : `/basta/materiais/${slug}`;
+  useEffect(() => {
+    const falhou = (e) => { toast(e.message); navigate(origem === 'projeto' ? base : `${base}/materiais`, { replace: true }); };
+    if (origem === 'projeto') {
+      api.getVideosProjeto(slug).then(setLista).catch(falhou);
+    } else {
+      api.getModulos(slug).then(setModulos).catch(() => {});
+      api.getModulo(slug, moduloSlug).then((m) => { setModulo(m); setLista(m.videos); }).catch(falhou);
+    }
+  }, [origem, slug, moduloSlug, base, navigate, toast]);
+
   const video = lista?.find((v) => v.id === videoId);
   const idx = lista?.findIndex((v) => v.id === videoId) ?? -1;
   const proximo = idx >= 0 ? lista[idx + 1] : null;
 
   useEffect(() => {
-    if (lista && !video) navigate(base, { replace: true });
-  }, [lista, video, base, navigate]);
+    if (lista && !video) navigate(voltar, { replace: true });
+  }, [lista, video, voltar, navigate]);
 
-  if (!video) return <div className="basta-page"><BastaHeader back={base} /></div>;
+  if (!video) return <div className="basta-page"><BastaHeader back={voltar} /></div>;
 
   const assistido = progresso?.assistidos.includes(video.id);
   const curtido = progresso?.curtidos.includes(video.id);
@@ -55,20 +56,21 @@ export default function VideoPage({ origem }) {
 
   return (
     <div className="basta-page">
-      <BastaHeader back={base} />
+      <BastaHeader back={voltar} />
       {origem === 'projeto' ? (
         <SectionTitle color="pink">Conheça o projeto</SectionTitle>
       ) : (
         <NeonSelect
-          value={slug}
+          value={moduloSlug}
           options={modulos.map((m) => ({ value: m.slug, label: m.subtitulo }))}
-          onChange={(v) => navigate(`/basta/materiais/${v}`)}
+          onChange={(v) => navigate(`${base}/materiais/${v}`)}
         />
       )}
 
       <div className="video-layout">
         <div className="video-layout__player">
-          <VideoPlayer video={video} onEnded={() => !assistido && setAssistido(video.id, true)} />
+          {/* Conclusão híbrida: fim da reprodução (player) ou botão (manual), ambos validados no servidor. */}
+          <VideoPlayer video={video} onEnded={() => !assistido && setAssistido(video.id, true, 'player')} />
         </div>
 
         <div className="video-layout__info">
@@ -85,24 +87,29 @@ export default function VideoPage({ origem }) {
             </div>
           </div>
           <p className="video-meta__sub">Aula {idx + 1} de {lista.length}{video.duracao ? ` · ${formatarDuracao(video.duracao)}` : ''}</p>
+          {video.provisorio && (
+            <p className="video-meta__notice">Vídeo provisório: o conteúdo definitivo deste capítulo está em produção.</p>
+          )}
 
-          <button type="button" className={`watched-btn ${assistido ? 'watched-btn--on' : ''}`} onClick={() => setAssistido(video.id, !assistido)}>
+          <button type="button" className={`watched-btn ${assistido ? 'watched-btn--on' : ''}`} onClick={() => setAssistido(video.id, !assistido, 'manual')}>
             <span className="watched-btn__check">✓</span>
             {assistido ? 'Aula assistida' : 'Marcar como aula assistida'}
           </button>
 
-          {modulo && (
+          {modulo?.documentos.length > 0 && (
             <section className="support">
               <SectionTitle color="pink" as="h3">{modulo.titulo}</SectionTitle>
-              <a className="support__item" href={modulo.planoDeAula} download>
-                <span>Plano de aula – {modulo.titulo}</span>
-                <img src="/img/icon-download.png" alt="Baixar" />
-              </a>
+              {modulo.documentos.map((d) => (
+                <a key={d.id} className="support__item" href={d.url} download>
+                  <span>{d.titulo}{d.provisorio ? ' (versão provisória)' : ''}</span>
+                  <img src="/img/icon-download.png" alt="Baixar" />
+                </a>
+              ))}
             </section>
           )}
 
           {proximo && (
-            <Link to={`${base}/${proximo.id}`} className="next-btn">
+            <Link to={`${voltar}/${proximo.id}`} className="next-btn">
               <small>Próxima aula</small>
               <span>{proximo.titulo}</span>
               <b aria-hidden="true">→</b>
@@ -115,7 +122,7 @@ export default function VideoPage({ origem }) {
           <ol className="playlist">
             {lista.map((v) => (
               <li key={v.id}>
-                <Link to={`${base}/${v.id}`} className={`playlist__item ${v.id === video.id ? 'playlist__item--active' : ''}`}>
+                <Link to={`${voltar}/${v.id}`} className={`playlist__item ${v.id === video.id ? 'playlist__item--active' : ''}`}>
                   <span className={`playlist__dot ${progresso?.assistidos.includes(v.id) ? 'playlist__dot--done' : ''}`} />
                   {v.titulo}
                 </Link>

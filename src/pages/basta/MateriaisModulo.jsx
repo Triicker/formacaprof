@@ -8,27 +8,27 @@ import { useToast } from '../../context/ToastContext';
 import { api } from '../../services/api';
 
 export default function MateriaisModulo() {
-  const { modulo: slug } = useParams();
+  const { modulo: moduloSlug } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-  const { progresso } = useBasta();
+  const { progresso, slug, base } = useBasta();
   const [modulos, setModulos] = useState([]);
   const [modulo, setModulo] = useState(null);
 
-  useEffect(() => { api.getModulos().then(setModulos); }, []);
+  useEffect(() => { api.getModulos(slug).then(setModulos); }, [slug]);
   useEffect(() => {
-    api.getModulo(slug).then(setModulo).catch((e) => { toast(e.message); navigate('/basta/materiais'); });
-  }, [slug, navigate, toast]);
+    api.getModulo(slug, moduloSlug).then(setModulo).catch((e) => { toast(e.message); navigate(`${base}/materiais`); });
+  }, [slug, moduloSlug, base, navigate, toast]);
 
-  const p = progresso?.porModulo.find((x) => x.slug === slug);
+  const p = progresso?.porModulo.find((x) => x.slug === moduloSlug);
 
   return (
     <div className="basta-page">
-      <BastaHeader back="/basta/materiais" />
+      <BastaHeader back={`${base}/materiais`} />
       <NeonSelect
-        value={slug}
+        value={moduloSlug}
         options={modulos.map((m) => ({ value: m.slug, label: m.subtitulo }))}
-        onChange={(v) => navigate(`/basta/materiais/${v}`)}
+        onChange={(v) => navigate(`${base}/materiais/${v}`)}
       />
       {p && (
         <div className="module-progress">
@@ -38,7 +38,7 @@ export default function MateriaisModulo() {
       )}
       <div className="video-grid">
         {modulo?.videos.map((v) => (
-          <VideoCard key={v.id} video={v} to={`/basta/materiais/${slug}/${v.id}`} assistido={progresso?.assistidos.includes(v.id)} />
+          <VideoCard key={v.id} video={v} to={`${base}/materiais/${moduloSlug}/${v.id}`} assistido={progresso?.assistidos.includes(v.id)} />
         ))}
       </div>
     </div>

@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { api } from '../services/api';
+import { API_MODE, api } from '../services/api';
 
 // Pílula "Olá, Prof. Nome" com menu (sair / rever boas-vindas / resetar demo).
 export default function UserMenu({ tone = 'gold' }) {
-  const { user, logout } = useAuth();
+  const { user, logout, vinculos, instituicaoAtiva } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
   const [aberto, setAberto] = useState(false);
@@ -35,8 +35,13 @@ export default function UserMenu({ tone = 'gold' }) {
       </button>
       {aberto && (
         <div className="user-menu__dropdown">
+          {vinculos.length > 1 && (
+            <button type="button" onClick={() => navigate('/escolher-instituicao')}>
+              Trocar instituição{instituicaoAtiva ? ` (${instituicaoAtiva.nome})` : ''}
+            </button>
+          )}
           <button type="button" onClick={() => navigate('/boas-vindas')}>Vídeo de boas-vindas</button>
-          <button type="button" onClick={resetar}>Resetar dados de demonstração</button>
+          {API_MODE === 'mock' && <button type="button" onClick={resetar}>Resetar dados de demonstração</button>}
           <button type="button" onClick={async () => { await logout(); navigate('/login'); }}>Sair</button>
         </div>
       )}

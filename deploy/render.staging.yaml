@@ -1,0 +1,52 @@
+# Render Blueprint — API + PostgreSQL (HOMOLOGAÇÃO). Banco e serviço separados da produção.
+# O frontend é publicado no Cloudflare Pages; ele encaminha /api/* para este serviço
+# (functions/api/[[path]].js).
+# Confira no painel os planos disponíveis na sua conta antes de aplicar.
+
+databases:
+  - name: formacaprof-staging-db
+    databaseName: formacaprof_staging
+    user: formacaprof
+    plan: basic-256mb
+    postgresMajorVersion: "17"
+    # Sem acesso externo: só serviços da mesma conta/região conectam pela rede privada.
+    ipAllowList: []
+
+services:
+  - type: web
+    name: formacaprof-api-staging
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: starter
+    healthCheckPath: /api/v1/health
+    # Migrations versionadas, aplicadas antes de cada deploy (nunca `prisma db push`).
+    preDeployCommand: npx prisma migrate deploy
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: DATABASE_URL
+        fromDatabase:
+          name: formacaprof-staging-db
+          property: connectionString
+      - key: APP_URL
+        sync: false
+      - key: TRUST_PROXY
+        value: "2"
+      - key: PROXY_SECRET
+        generateValue: true
+      - key: SWAGGER_ENABLED
+        value: "true"
+      - key: MAIL_DRIVER
+        value: smtp
+      - key: MAIL_FROM
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false

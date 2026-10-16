@@ -1,0 +1,1090 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "key": "video.1",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video1.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 68,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.1",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video1.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.2",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video2.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 75,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.2",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video2.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.3",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video3.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 72,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.3",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video3.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.4",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video4.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 69,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.4",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video4.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.5",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video5.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 79,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.5",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video5.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.6",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video6.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 89,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.6",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video6.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.7",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video7.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 74,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.7",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video7.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.8",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video8.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 65,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.8",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video8.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.9",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video9.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 68,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.9",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video9.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.10",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video10.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 69,
+        "orientation": "portrait"
+      }
+    },
+    {
+      "key": "thumb.10",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/video10.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "platform.welcome-video",
+      "storageProvider": "external",
+      "externalUrl": "https://midiasave-5c064.web.app/video1.mp4",
+      "mimeType": "video/mp4",
+      "visibility": "protected",
+      "metadata": {
+        "title": "Boas-vindas",
+        "durationSeconds": 68,
+        "posterKey": "thumb.1"
+      }
+    },
+    {
+      "key": "cover.reforco-escolar",
+      "storageProvider": "static",
+      "storageKey": "/img/col-reforco-escolar.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.paz-nas-escolas",
+      "storageProvider": "static",
+      "storageKey": "/img/col-paz-nas-escolas.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.basta",
+      "storageProvider": "static",
+      "storageKey": "/img/col-basta.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.feminicidio-zero",
+      "storageProvider": "static",
+      "storageKey": "/img/col-feminicidio-zero.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.afro-indigena",
+      "storageProvider": "static",
+      "storageKey": "/img/col-afro-indigena.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.transito",
+      "storageProvider": "static",
+      "storageKey": "/img/col-transito.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.energia-eletrica",
+      "storageProvider": "static",
+      "storageKey": "/img/col-energia-eletrica.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.dengue",
+      "storageProvider": "static",
+      "storageKey": "/img/col-dengue.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.empreendedorismo",
+      "storageProvider": "static",
+      "storageKey": "/img/col-empreendedorismo.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "cover.educacao-ambiental",
+      "storageProvider": "static",
+      "storageKey": "/img/col-educacao-ambiental.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "book.anos-iniciais",
+      "storageProvider": "static",
+      "storageKey": "/img/livro-anos-iniciais.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "doc.plano-de-aula.anos-iniciais",
+      "storageProvider": "local",
+      "storageKey": "basta/plano-de-aula-anos-iniciais.pdf",
+      "mimeType": "application/pdf",
+      "fileSize": 900,
+      "visibility": "protected",
+      "metadata": {
+        "editorial": "placeholder",
+        "fileName": "plano-de-aula-anos-iniciais.pdf"
+      }
+    },
+    {
+      "key": "book.anos-finais",
+      "storageProvider": "static",
+      "storageKey": "/img/livro-anos-finais.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "doc.plano-de-aula.anos-finais",
+      "storageProvider": "local",
+      "storageKey": "basta/plano-de-aula-anos-finais.pdf",
+      "mimeType": "application/pdf",
+      "fileSize": 898,
+      "visibility": "protected",
+      "metadata": {
+        "editorial": "placeholder",
+        "fileName": "plano-de-aula-anos-finais.pdf"
+      }
+    },
+    {
+      "key": "book.ensino-medio",
+      "storageProvider": "static",
+      "storageKey": "/img/livro-ensino-medio.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "doc.plano-de-aula.ensino-medio",
+      "storageProvider": "local",
+      "storageKey": "basta/plano-de-aula-ensino-medio.pdf",
+      "mimeType": "application/pdf",
+      "fileSize": 899,
+      "visibility": "protected",
+      "metadata": {
+        "editorial": "placeholder",
+        "fileName": "plano-de-aula-ensino-medio.pdf"
+      }
+    },
+    {
+      "key": "book.eja",
+      "storageProvider": "static",
+      "storageKey": "/img/livro-eja.png",
+      "mimeType": "image/png",
+      "visibility": "public"
+    },
+    {
+      "key": "doc.plano-de-aula.eja",
+      "storageProvider": "local",
+      "storageKey": "basta/plano-de-aula-eja.pdf",
+      "mimeType": "application/pdf",
+      "fileSize": 890,
+      "visibility": "protected",
+      "metadata": {
+        "editorial": "placeholder",
+        "fileName": "plano-de-aula-eja.pdf"
+      }
+    }
+  ],
+  "collections": [
+    {
+      "slug": "reforco-escolar",
+      "title": "Reforço Escolar Gamificado",
+      "status": "draft",
+      "displayOrder": 10,
+      "cover": "cover.reforco-escolar",
+      "modules": []
+    },
+    {
+      "slug": "paz-nas-escolas",
+      "title": "Paz nas Escolas",
+      "status": "draft",
+      "displayOrder": 20,
+      "cover": "cover.paz-nas-escolas",
+      "modules": []
+    },
+    {
+      "slug": "basta",
+      "title": "BASTA! De violência contra a mulher",
+      "status": "published",
+      "displayOrder": 30,
+      "cover": "cover.basta",
+      "modules": [
+        {
+          "slug": "conheca",
+          "title": "Conheça o projeto",
+          "kind": "presentation",
+          "status": "published",
+          "displayOrder": 0,
+          "lessons": [
+            {
+              "slug": "p1",
+              "title": "01 – O maior clamor social",
+              "lessonType": "video",
+              "media": "video.1",
+              "thumbnail": "thumb.1",
+              "durationSeconds": 68,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 1
+            },
+            {
+              "slug": "p2",
+              "title": "02 – Objetivo principal",
+              "lessonType": "video",
+              "media": "video.2",
+              "thumbnail": "thumb.2",
+              "durationSeconds": 75,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 2
+            },
+            {
+              "slug": "p3",
+              "title": "03 – Metas fundamentais",
+              "lessonType": "video",
+              "media": "video.3",
+              "thumbnail": "thumb.3",
+              "durationSeconds": 72,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 3
+            },
+            {
+              "slug": "p4",
+              "title": "04 – Ecossistema BASTA!",
+              "lessonType": "video",
+              "media": "video.4",
+              "thumbnail": "thumb.4",
+              "durationSeconds": 69,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 4
+            },
+            {
+              "slug": "p5",
+              "title": "05 – Os três pilares",
+              "lessonType": "video",
+              "media": "video.5",
+              "thumbnail": "thumb.5",
+              "durationSeconds": 79,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 5
+            },
+            {
+              "slug": "p6",
+              "title": "06 – A base legal",
+              "lessonType": "video",
+              "media": "video.6",
+              "thumbnail": "thumb.6",
+              "durationSeconds": 89,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 6
+            },
+            {
+              "slug": "p7",
+              "title": "07 – A metodologia",
+              "lessonType": "video",
+              "media": "video.7",
+              "thumbnail": "thumb.7",
+              "durationSeconds": 74,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 7
+            },
+            {
+              "slug": "p8",
+              "title": "08 – Professor mediador",
+              "lessonType": "video",
+              "media": "video.8",
+              "thumbnail": "thumb.8",
+              "durationSeconds": 65,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 8
+            },
+            {
+              "slug": "p9",
+              "title": "09 – Adaptado à idade",
+              "lessonType": "video",
+              "media": "video.9",
+              "thumbnail": "thumb.9",
+              "durationSeconds": 68,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 9
+            },
+            {
+              "slug": "p10",
+              "title": "10 – Meninas e meninos",
+              "lessonType": "video",
+              "media": "video.10",
+              "thumbnail": "thumb.10",
+              "durationSeconds": 69,
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 10
+            }
+          ]
+        },
+        {
+          "slug": "anos-iniciais",
+          "title": "Anos iniciais",
+          "subtitle": "Anos iniciais (1º ao 5º ano)",
+          "kind": "curriculum",
+          "cover": "book.anos-iniciais",
+          "status": "published",
+          "displayOrder": 1,
+          "lessons": [
+            {
+              "slug": "anos-iniciais-1",
+              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "lessonType": "video",
+              "media": "video.1",
+              "thumbnail": "thumb.1",
+              "durationSeconds": 68,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 1,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-iniciais-2",
+              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "lessonType": "video",
+              "media": "video.2",
+              "thumbnail": "thumb.2",
+              "durationSeconds": 75,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 2,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-iniciais-3",
+              "title": "Capítulo 3 – Ser sensível é normal",
+              "lessonType": "video",
+              "media": "video.3",
+              "thumbnail": "thumb.3",
+              "durationSeconds": 72,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 3,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-iniciais-4",
+              "title": "Capítulo 4 – E quem é o normal?",
+              "lessonType": "video",
+              "media": "video.4",
+              "thumbnail": "thumb.4",
+              "durationSeconds": 69,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 4,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-iniciais-5",
+              "title": "Capítulo 5 – O silêncio também fala",
+              "lessonType": "video",
+              "media": "video.5",
+              "thumbnail": "thumb.5",
+              "durationSeconds": 79,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 5,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-iniciais-6",
+              "title": "Capítulo 6 – Rede de apoio",
+              "lessonType": "video",
+              "media": "video.6",
+              "thumbnail": "thumb.6",
+              "durationSeconds": 89,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 6,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-iniciais-7",
+              "title": "Capítulo 7 – Construindo respeito",
+              "lessonType": "video",
+              "media": "video.7",
+              "thumbnail": "thumb.7",
+              "durationSeconds": 74,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 7,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-iniciais-8",
+              "title": "Capítulo 8 – Basta! Um novo começo",
+              "lessonType": "video",
+              "media": "video.8",
+              "thumbnail": "thumb.8",
+              "durationSeconds": 65,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 8,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "plano-de-aula",
+              "title": "Plano de aula – Anos iniciais",
+              "lessonType": "document",
+              "media": "doc.plano-de-aula.anos-iniciais",
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 100,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            }
+          ]
+        },
+        {
+          "slug": "anos-finais",
+          "title": "Anos finais",
+          "subtitle": "Anos finais (6º ao 9º ano)",
+          "kind": "curriculum",
+          "cover": "book.anos-finais",
+          "status": "published",
+          "displayOrder": 2,
+          "lessons": [
+            {
+              "slug": "anos-finais-1",
+              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "lessonType": "video",
+              "media": "video.4",
+              "thumbnail": "thumb.4",
+              "durationSeconds": 69,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 1,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-finais-2",
+              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "lessonType": "video",
+              "media": "video.5",
+              "thumbnail": "thumb.5",
+              "durationSeconds": 79,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 2,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-finais-3",
+              "title": "Capítulo 3 – Ser sensível é normal",
+              "lessonType": "video",
+              "media": "video.6",
+              "thumbnail": "thumb.6",
+              "durationSeconds": 89,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 3,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-finais-4",
+              "title": "Capítulo 4 – E quem é o normal?",
+              "lessonType": "video",
+              "media": "video.7",
+              "thumbnail": "thumb.7",
+              "durationSeconds": 74,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 4,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-finais-5",
+              "title": "Capítulo 5 – O silêncio também fala",
+              "lessonType": "video",
+              "media": "video.8",
+              "thumbnail": "thumb.8",
+              "durationSeconds": 65,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 5,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-finais-6",
+              "title": "Capítulo 6 – Rede de apoio",
+              "lessonType": "video",
+              "media": "video.9",
+              "thumbnail": "thumb.9",
+              "durationSeconds": 68,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 6,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-finais-7",
+              "title": "Capítulo 7 – Construindo respeito",
+              "lessonType": "video",
+              "media": "video.10",
+              "thumbnail": "thumb.10",
+              "durationSeconds": 69,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 7,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "anos-finais-8",
+              "title": "Capítulo 8 – Basta! Um novo começo",
+              "lessonType": "video",
+              "media": "video.1",
+              "thumbnail": "thumb.1",
+              "durationSeconds": 68,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 8,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "plano-de-aula",
+              "title": "Plano de aula – Anos finais",
+              "lessonType": "document",
+              "media": "doc.plano-de-aula.anos-finais",
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 100,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            }
+          ]
+        },
+        {
+          "slug": "ensino-medio",
+          "title": "Ensino médio",
+          "subtitle": "Ensino médio (1ª à 3ª série)",
+          "kind": "curriculum",
+          "cover": "book.ensino-medio",
+          "status": "published",
+          "displayOrder": 3,
+          "lessons": [
+            {
+              "slug": "ensino-medio-1",
+              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "lessonType": "video",
+              "media": "video.7",
+              "thumbnail": "thumb.7",
+              "durationSeconds": 74,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 1,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "ensino-medio-2",
+              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "lessonType": "video",
+              "media": "video.8",
+              "thumbnail": "thumb.8",
+              "durationSeconds": 65,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 2,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "ensino-medio-3",
+              "title": "Capítulo 3 – Ser sensível é normal",
+              "lessonType": "video",
+              "media": "video.9",
+              "thumbnail": "thumb.9",
+              "durationSeconds": 68,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 3,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "ensino-medio-4",
+              "title": "Capítulo 4 – E quem é o normal?",
+              "lessonType": "video",
+              "media": "video.10",
+              "thumbnail": "thumb.10",
+              "durationSeconds": 69,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 4,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "ensino-medio-5",
+              "title": "Capítulo 5 – O silêncio também fala",
+              "lessonType": "video",
+              "media": "video.1",
+              "thumbnail": "thumb.1",
+              "durationSeconds": 68,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 5,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "ensino-medio-6",
+              "title": "Capítulo 6 – Rede de apoio",
+              "lessonType": "video",
+              "media": "video.2",
+              "thumbnail": "thumb.2",
+              "durationSeconds": 75,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 6,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "ensino-medio-7",
+              "title": "Capítulo 7 – Construindo respeito",
+              "lessonType": "video",
+              "media": "video.3",
+              "thumbnail": "thumb.3",
+              "durationSeconds": 72,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 7,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "ensino-medio-8",
+              "title": "Capítulo 8 – Basta! Um novo começo",
+              "lessonType": "video",
+              "media": "video.4",
+              "thumbnail": "thumb.4",
+              "durationSeconds": 69,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 8,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "plano-de-aula",
+              "title": "Plano de aula – Ensino médio",
+              "lessonType": "document",
+              "media": "doc.plano-de-aula.ensino-medio",
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 100,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            }
+          ]
+        },
+        {
+          "slug": "eja",
+          "title": "EJA",
+          "subtitle": "EJA (Educação de Jovens e Adultos)",
+          "kind": "curriculum",
+          "cover": "book.eja",
+          "status": "published",
+          "displayOrder": 4,
+          "lessons": [
+            {
+              "slug": "eja-1",
+              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "lessonType": "video",
+              "media": "video.10",
+              "thumbnail": "thumb.10",
+              "durationSeconds": 69,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 1,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "eja-2",
+              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "lessonType": "video",
+              "media": "video.1",
+              "thumbnail": "thumb.1",
+              "durationSeconds": 68,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 2,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "eja-3",
+              "title": "Capítulo 3 – Ser sensível é normal",
+              "lessonType": "video",
+              "media": "video.2",
+              "thumbnail": "thumb.2",
+              "durationSeconds": 75,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 3,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "eja-4",
+              "title": "Capítulo 4 – E quem é o normal?",
+              "lessonType": "video",
+              "media": "video.3",
+              "thumbnail": "thumb.3",
+              "durationSeconds": 72,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 4,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "eja-5",
+              "title": "Capítulo 5 – O silêncio também fala",
+              "lessonType": "video",
+              "media": "video.4",
+              "thumbnail": "thumb.4",
+              "durationSeconds": 69,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 5,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "eja-6",
+              "title": "Capítulo 6 – Rede de apoio",
+              "lessonType": "video",
+              "media": "video.5",
+              "thumbnail": "thumb.5",
+              "durationSeconds": 79,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 6,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "eja-7",
+              "title": "Capítulo 7 – Construindo respeito",
+              "lessonType": "video",
+              "media": "video.6",
+              "thumbnail": "thumb.6",
+              "durationSeconds": 89,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 7,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "eja-8",
+              "title": "Capítulo 8 – Basta! Um novo começo",
+              "lessonType": "video",
+              "media": "video.7",
+              "thumbnail": "thumb.7",
+              "durationSeconds": 74,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 8,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            },
+            {
+              "slug": "plano-de-aula",
+              "title": "Plano de aula – EJA",
+              "lessonType": "document",
+              "media": "doc.plano-de-aula.eja",
+              "requiredForCompletion": false,
+              "status": "published",
+              "displayOrder": 100,
+              "metadata": {
+                "editorial": "placeholder"
+              }
+            }
+          ]
+        }
+      ],
+      "subtitle": "Formação para Professores",
+      "themeConfig": {
+        "layout": "basta",
+        "institutoUrl": null
+      }
+    },
+    {
+      "slug": "feminicidio-zero",
+      "title": "Feminicídio Zero",
+      "status": "draft",
+      "displayOrder": 40,
+      "cover": "cover.feminicidio-zero",
+      "modules": []
+    },
+    {
+      "slug": "afro-indigena",
+      "title": "Vivenciando a Cultura Afro-brasileira e Indígena",
+      "status": "draft",
+      "displayOrder": 50,
+      "cover": "cover.afro-indigena",
+      "modules": []
+    },
+    {
+      "slug": "transito",
+      "title": "Vivenciando a Educação no Trânsito",
+      "status": "draft",
+      "displayOrder": 60,
+      "cover": "cover.transito",
+      "modules": []
+    },
+    {
+      "slug": "energia-eletrica",
+      "title": "Uso Inteligente e Consciente da Energia Elétrica",
+      "status": "draft",
+      "displayOrder": 70,
+      "cover": "cover.energia-eletrica",
+      "modules": []
+    },
+    {
+      "slug": "dengue",
+      "title": "Campanha Nacional de Combate à Dengue",
+      "status": "draft",
+      "displayOrder": 80,
+      "cover": "cover.dengue",
+      "modules": []
+    },
+    {
+      "slug": "empreendedorismo",
+      "title": "Empreendedorismo na Adolescência",
+      "status": "draft",
+      "displayOrder": 90,
+      "cover": "cover.empreendedorismo",
+      "modules": []
+    },
+    {
+      "slug": "educacao-ambiental",
+      "title": "Vivenciando a Educação Ambiental",
+      "status": "draft",
+      "displayOrder": 100,
+      "cover": "cover.educacao-ambiental",
+      "modules": []
+    }
+  ]
+}

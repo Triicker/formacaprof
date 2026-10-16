@@ -3,9 +3,10 @@ import BrandTitle from './BrandTitle';
 // Layout da área geral (login, cadastro, recuperar senha, boas-vindas).
 // Mobile: coluna única (logo, título, professora, formulário, selos).
 // Desktop: logo no topo, professora à esquerda, título + painel à direita e selos no rodapé.
-export default function AuthLayout({ bg = 'login', heroMobile = false, children }) {
+// `fit`: a tela ocupa exatamente a altura do viewport (ilustração/player encolhem em vez de rolar).
+export default function AuthLayout({ bg = 'login', heroMobile = false, fit = true, children }) {
   return (
-    <div className={`auth auth--bg-${bg}`}>
+    <div className={`auth auth--bg-${bg} ${fit ? 'auth--fit' : ''}`}>
       <img className="auth__logo" src="/img/logo-etica.png" alt="Ética Editora" />
       <div className="auth__brand"><BrandTitle size="lg" /></div>
       <div className={`auth__hero ${heroMobile ? 'auth__hero--mobile' : ''}`}>

@@ -1,0 +1,443 @@
+// Modelo multi-instituição: organizações → instituições → vínculos (memberships) de usuários.
+// Papéis por instituição ficam em memberships; o papel global de administrador fica em platform_roles.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RecordStatus {
+  active
+  inactive
+}
+
+enum UserStatus {
+  active
+  disabled
+}
+
+enum MembershipRole {
+  professor
+  coordinator
+}
+
+enum PlatformRole {
+  platform_admin
+}
+
+model Organization {
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String        @db.VarChar(160)
+  slug         String        @unique @db.VarChar(80)
+  status       RecordStatus  @default(active)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  institutions Institution[]
+
+  @@map("organizations")
+}
+
+model Institution {
+  id               String                        @id @default(uuid()) @db.Uuid
+  organizationId   String?                       @map("organization_id") @db.Uuid
+  name             String                        @db.VarChar(160)
+  slug             String                        @unique @db.VarChar(80)
+  externalId       String?                       @unique @map("external_id") @db.VarChar(60)
+  region           String?                       @db.VarChar(80)
+  city             String?                       @db.VarChar(80)
+  state            String?                       @db.Char(2)
+  status           RecordStatus                  @default(active)
+  createdAt        DateTime                      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime                      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  organization     Organization?                 @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  memberships      Membership[]
+  invitations      Invitation[]
+  auditLogs        AuditLog[]
+  collectionAccess InstitutionCollectionAccess[]
+
+  @@index([organizationId])
+  @@map("institutions")
+}
+
+model User {
+  id                  String                        @id @default(uuid()) @db.Uuid
+  name                String                        @db.VarChar(160)
+  /// Sempre minúsculo e sem espaços (garantido também por CHECK na migration).
+  email               String                        @unique @db.VarChar(254)
+  passwordHash        String?                       @map("password_hash") @db.VarChar(255)
+  status              UserStatus                    @default(active)
+  emailVerifiedAt     DateTime?                     @map("email_verified_at") @db.Timestamptz(3)
+  lastLoginAt         DateTime?                     @map("last_login_at") @db.Timestamptz(3)
+  welcomeSeenAt       DateTime?                     @map("welcome_seen_at") @db.Timestamptz(3)
+  failedLoginCount    Int                           @default(0) @map("failed_login_count")
+  lockedUntil         DateTime?                     @map("locked_until") @db.Timestamptz(3)
+  createdAt           DateTime                      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt           DateTime                      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  memberships         Membership[]
+  platformRoles       PlatformRoleGrant[]           @relation("grantee")
+  grantedRoles        PlatformRoleGrant[]           @relation("granter")
+  sessions            Session[]
+  resetTokens         PasswordResetToken[]
+  invitationsSent     Invitation[]                  @relation("inviter")
+  invitationsUsed     Invitation[]                  @relation("acceptedBy")
+  auditLogs           AuditLog[]
+  accessGranted       InstitutionCollectionAccess[]
+  enrollmentsAssigned Enrollment[]                  @relation("assigner")
+
+  @@map("users")
+}
+
+model PlatformRoleGrant {
+  id          String       @id @default(uuid()) @db.Uuid
+  userId      String       @map("user_id") @db.Uuid
+  role        PlatformRole
+  grantedById String?      @map("granted_by") @db.Uuid
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  user        User         @relation("grantee", fields: [userId], references: [id], onDelete: Cascade)
+  grantedBy   User?        @relation("granter", fields: [grantedById], references: [id], onDelete: SetNull)
+
+  @@unique([userId, role])
+  @@map("platform_roles")
+}
+
+model Membership {
+  id            String         @id @default(uuid()) @db.Uuid
+  userId        String         @map("user_id") @db.Uuid
+  institutionId String         @map("institution_id") @db.Uuid
+  role          MembershipRole
+  status        RecordStatus   @default(active)
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution   Institution    @relation(fields: [institutionId], references: [id], onDelete: Restrict)
+  enrollments   Enrollment[]
+
+  /// Um vínculo por usuário e instituição (o papel é um atributo do vínculo).
+  @@unique([userId, institutionId])
+  @@index([institutionId, role, status])
+  @@map("memberships")
+}
+
+model Invitation {
+  id             String         @id @default(uuid()) @db.Uuid
+  institutionId  String         @map("institution_id") @db.Uuid
+  email          String         @db.VarChar(254)
+  role           MembershipRole
+  tokenHash      String         @unique @map("token_hash") @db.Char(64)
+  createdById    String         @map("created_by") @db.Uuid
+  expiresAt      DateTime       @map("expires_at") @db.Timestamptz(3)
+  acceptedAt     DateTime?      @map("accepted_at") @db.Timestamptz(3)
+  acceptedUserId String?        @map("accepted_user_id") @db.Uuid
+  revokedAt      DateTime?      @map("revoked_at") @db.Timestamptz(3)
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  institution    Institution    @relation(fields: [institutionId], references: [id], onDelete: Restrict)
+  createdBy      User           @relation("inviter", fields: [createdById], references: [id], onDelete: Restrict)
+  acceptedUser   User?          @relation("acceptedBy", fields: [acceptedUserId], references: [id], onDelete: SetNull)
+
+  @@index([institutionId, createdAt])
+  @@index([email])
+  @@map("invitations")
+}
+
+model Session {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  /// SHA-256 do token do cookie; o token em si nunca é gravado.
+  tokenHash  String    @unique @map("token_hash") @db.Char(64)
+  expiresAt  DateTime  @map("expires_at") @db.Timestamptz(3)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(3)
+  lastUsedAt DateTime  @default(now()) @map("last_used_at") @db.Timestamptz(3)
+  ip         String?   @db.VarChar(64)
+  userAgent  String?   @map("user_agent") @db.VarChar(400)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash") @db.Char(64)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(3)
+  usedAt    DateTime? @map("used_at") @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model AuditLog {
+  id            String       @id @default(uuid()) @db.Uuid
+  actorUserId   String?      @map("actor_user_id") @db.Uuid
+  institutionId String?      @map("institution_id") @db.Uuid
+  action        String       @db.VarChar(80)
+  entityType    String       @map("entity_type") @db.VarChar(60)
+  entityId      String?      @map("entity_id") @db.VarChar(64)
+  metadata      Json?
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  actor         User?        @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+  institution   Institution? @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+
+  @@index([institutionId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@map("audit_logs")
+}
+
+// ============================================================================
+// Etapa 3 — catálogo, mídias, direito institucional, matrículas e progresso
+// ============================================================================
+
+enum ContentStatus {
+  draft
+  published
+  archived
+}
+
+enum ModuleKind {
+  /// Vídeos de apresentação (ex.: "Conheça o projeto"); em geral não contam para conclusão.
+  presentation
+  /// Conteúdo formativo (ex.: níveis de ensino do BASTA).
+  curriculum
+}
+
+enum LessonType {
+  video
+  reading
+  document
+  activity
+}
+
+enum StorageProvider {
+  /// Arquivo público servido pelo frontend (capas, miniaturas). storage_key = caminho.
+  static
+  /// Arquivo hospedado fora (external_url). Entregue por redirecionamento após autorização.
+  external
+  /// Arquivo no armazenamento da API (storage_key relativo a STORAGE_DIR), servido após autorização.
+  local
+}
+
+enum MediaVisibility {
+  public
+  protected
+}
+
+enum AccessStatus {
+  active
+  suspended
+  revoked
+}
+
+enum EnrollmentStatus {
+  active
+  revoked
+}
+
+enum LessonProgressStatus {
+  in_progress
+  completed
+}
+
+enum CompletionSource {
+  manual
+  player
+}
+
+/// Referência a um arquivo; o binário nunca é gravado no PostgreSQL.
+model MediaAsset {
+  id              String          @id @default(uuid()) @db.Uuid
+  /// Identificador estável usado pelos seeds idempotentes (ex.: "basta.cover").
+  key             String?         @unique @db.VarChar(120)
+  storageProvider StorageProvider @map("storage_provider")
+  storageKey      String?         @map("storage_key") @db.VarChar(500)
+  externalUrl     String?         @map("external_url") @db.VarChar(1000)
+  mimeType        String          @map("mime_type") @db.VarChar(120)
+  fileSize        Int?            @map("file_size")
+  visibility      MediaVisibility @default(protected)
+  /// Ex.: { "editorial": "placeholder" } para conteúdo provisório.
+  metadata        Json?
+  status          RecordStatus    @default(active)
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  collectionCovers     Collection[] @relation("collectionCover")
+  collectionThumbnails Collection[] @relation("collectionThumbnail")
+  moduleCovers         Module[]     @relation("moduleCover")
+  lessonMedia          Lesson[]     @relation("lessonMedia")
+  lessonThumbnails     Lesson[]     @relation("lessonThumbnail")
+
+  @@map("media_assets")
+}
+
+model Collection {
+  id                String                        @id @default(uuid()) @db.Uuid
+  slug              String                        @unique @db.VarChar(80)
+  title             String                        @db.VarChar(200)
+  subtitle          String?                       @db.VarChar(200)
+  description       String?
+  coverAssetId      String?                       @map("cover_asset_id") @db.Uuid
+  thumbnailAssetId  String?                       @map("thumbnail_asset_id") @db.Uuid
+  status            ContentStatus                 @default(draft)
+  displayOrder      Int                           @default(0) @map("display_order")
+  /// Tema/layout da coleção (ex.: { "layout": "basta" }); coleções não são obrigadas a usar o visual BASTA.
+  themeConfig       Json?                         @map("theme_config")
+  createdAt         DateTime                      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime                      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  cover             MediaAsset?                   @relation("collectionCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
+  thumbnail         MediaAsset?                   @relation("collectionThumbnail", fields: [thumbnailAssetId], references: [id], onDelete: SetNull)
+  modules           Module[]
+  institutionAccess InstitutionCollectionAccess[]
+  enrollments       Enrollment[]
+
+  @@index([status, displayOrder])
+  @@map("collections")
+}
+
+model Module {
+  id           String        @id @default(uuid()) @db.Uuid
+  collectionId String        @map("collection_id") @db.Uuid
+  slug         String        @db.VarChar(80)
+  title        String        @db.VarChar(200)
+  subtitle     String?       @db.VarChar(200)
+  description  String?
+  kind         ModuleKind    @default(curriculum)
+  coverAssetId String?       @map("cover_asset_id") @db.Uuid
+  displayOrder Int           @default(0) @map("display_order")
+  status       ContentStatus @default(draft)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  collection   Collection    @relation(fields: [collectionId], references: [id], onDelete: Restrict)
+  cover        MediaAsset?   @relation("moduleCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
+  lessons      Lesson[]
+
+  @@unique([collectionId, slug])
+  @@index([collectionId, status, displayOrder])
+  @@map("modules")
+}
+
+model Lesson {
+  id                    String           @id @default(uuid()) @db.Uuid
+  moduleId              String           @map("module_id") @db.Uuid
+  /// Mantém os identificadores das rotas antigas (ex.: "p1", "anos-finais-5").
+  slug                  String           @db.VarChar(80)
+  title                 String           @db.VarChar(200)
+  description           String?
+  lessonType            LessonType       @default(video) @map("lesson_type")
+  mediaAssetId          String?          @map("media_asset_id") @db.Uuid
+  thumbnailAssetId      String?          @map("thumbnail_asset_id") @db.Uuid
+  displayOrder          Int              @default(0) @map("display_order")
+  durationSeconds       Int?             @map("duration_seconds")
+  requiredForCompletion Boolean          @default(true) @map("required_for_completion")
+  /// Ex.: { "editorial": "placeholder" } quando a aula usa conteúdo provisório, ainda sem validação editorial.
+  metadata              Json?
+  status                ContentStatus    @default(draft)
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+  module                Module           @relation(fields: [moduleId], references: [id], onDelete: Restrict)
+  media                 MediaAsset?      @relation("lessonMedia", fields: [mediaAssetId], references: [id], onDelete: SetNull)
+  thumbnail             MediaAsset?      @relation("lessonThumbnail", fields: [thumbnailAssetId], references: [id], onDelete: SetNull)
+  progress              LessonProgress[]
+
+  @@unique([moduleId, slug])
+  @@index([moduleId, status, displayOrder])
+  @@map("lessons")
+}
+
+/// Direito de uma instituição usar uma coleção. Só o administrador geral concede/remove.
+model InstitutionCollectionAccess {
+  id            String       @id @default(uuid()) @db.Uuid
+  institutionId String       @map("institution_id") @db.Uuid
+  collectionId  String       @map("collection_id") @db.Uuid
+  status        AccessStatus @default(active)
+  grantedById   String?      @map("granted_by") @db.Uuid
+  grantedAt     DateTime     @default(now()) @map("granted_at") @db.Timestamptz(3)
+  expiresAt     DateTime?    @map("expires_at") @db.Timestamptz(3)
+  revokedAt     DateTime?    @map("revoked_at") @db.Timestamptz(3)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+  institution   Institution  @relation(fields: [institutionId], references: [id], onDelete: Restrict)
+  collection    Collection   @relation(fields: [collectionId], references: [id], onDelete: Restrict)
+  grantedBy     User?        @relation(fields: [grantedById], references: [id], onDelete: SetNull)
+
+  @@unique([institutionId, collectionId])
+  @@index([collectionId, status])
+  @@map("institution_collection_access")
+}
+
+/// Autorização individual de um membro da instituição numa coleção.
+/// A FK composta (user_id, institution_id) → memberships garante que só membros sejam matriculados.
+model Enrollment {
+  id            String           @id @default(uuid()) @db.Uuid
+  institutionId String           @map("institution_id") @db.Uuid
+  userId        String           @map("user_id") @db.Uuid
+  collectionId  String           @map("collection_id") @db.Uuid
+  status        EnrollmentStatus @default(active)
+  assignedById  String?          @map("assigned_by") @db.Uuid
+  enrolledAt    DateTime         @default(now()) @map("enrolled_at") @db.Timestamptz(3)
+  completedAt   DateTime?        @map("completed_at") @db.Timestamptz(3)
+  revokedAt     DateTime?        @map("revoked_at") @db.Timestamptz(3)
+  updatedAt     DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+  membership    Membership       @relation(fields: [userId, institutionId], references: [userId, institutionId], onDelete: Restrict)
+  collection    Collection       @relation(fields: [collectionId], references: [id], onDelete: Restrict)
+  assignedBy    User?            @relation("assigner", fields: [assignedById], references: [id], onDelete: SetNull)
+  progress      LessonProgress[]
+  feedbacks     Feedback[]
+  certificate   Certificate?
+
+  @@unique([institutionId, userId, collectionId])
+  @@index([collectionId, institutionId, status])
+  @@index([userId])
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id               String               @id @default(uuid()) @db.Uuid
+  enrollmentId     String               @map("enrollment_id") @db.Uuid
+  lessonId         String               @map("lesson_id") @db.Uuid
+  status           LessonProgressStatus @default(in_progress)
+  /// Maior posição de reprodução informada, limitada pelo servidor à duração da aula.
+  watchedSeconds   Int                  @default(0) @map("watched_seconds")
+  completedAt      DateTime?            @map("completed_at") @db.Timestamptz(3)
+  completionSource CompletionSource?    @map("completion_source")
+  liked            Boolean              @default(false)
+  createdAt        DateTime             @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime             @updatedAt @map("updated_at") @db.Timestamptz(3)
+  enrollment       Enrollment           @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  lesson           Lesson               @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+
+  @@unique([enrollmentId, lessonId])
+  @@map("lesson_progress")
+}
+
+model Feedback {
+  id           String     @id @default(uuid()) @db.Uuid
+  enrollmentId String     @map("enrollment_id") @db.Uuid
+  experience   Int        @db.SmallInt
+  usefulness   Int        @db.SmallInt
+  navigation   Int        @db.SmallInt
+  comment      String?    @db.VarChar(1000)
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@index([enrollmentId])
+  @@map("feedbacks")
+}
+
+model Certificate {
+  id               String     @id @default(uuid()) @db.Uuid
+  enrollmentId     String     @unique @map("enrollment_id") @db.Uuid
+  verificationCode String     @unique @map("verification_code") @db.VarChar(20)
+  issuedAt         DateTime   @default(now()) @map("issued_at") @db.Timestamptz(3)
+  revokedAt        DateTime?  @map("revoked_at") @db.Timestamptz(3)
+  /// Retrato no momento da emissão (nome, coleção, instituição, carga de aulas).
+  metadata         Json
+  enrollment       Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Restrict)
+
+  @@map("certificates")
+}

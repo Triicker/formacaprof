@@ -1,14 +1,31 @@
 # API — Formação para Professores
 
-API da plataforma, em NestJS 11 + Prisma 6 + PostgreSQL 17. Ela cuida de:
-- autenticação, instituições, vínculos e convites (Etapa 2);
-- catálogo de coleções, direito institucional, matrículas, progresso e certificados (Etapa 3).
-O frontend React (raiz do repositório) a consome pelo caminho `/api/v1`, **no mesmo domínio do site**.
+API da plataforma, em NestJS 11 + Prisma 6 + PostgreSQL 17. O frontend React (raiz do repositório) a consome pelo caminho `/api/v1`, **no mesmo domínio do site**, através do proxy do Cloudflare Pages.
+
+Ela cuida de:
+- autenticação, instituições, vínculos e convites;
+- catálogo de coleções, direito institucional, matrículas, progresso e certificados;
+- painéis de administração e coordenação: conteúdo, mídia, liberação, relatórios, correções e auditoria.
 
 ```
 Navegador ──► Cloudflare Pages (React + functions/api/[[path]].js) ──► Render (esta API) ──► PostgreSQL (Render)
               mesmo domínio: cookie de sessão first-party           X-Proxy-Secret        rede privada
 ```
+
+**Deploy:** o passo a passo do Render e do Cloudflare Pages está em [../docs/DEPLOY-RENDER.md](../docs/DEPLOY-RENDER.md).
+
+## Sumário
+
+1. [Rodar localmente](#rodar-localmente)
+2. [Testes](#testes)
+3. [Modelo de dados e migrations](#modelo-de-dados-e-migrations)
+4. [Regras de negócio](#regras-de-negócio)
+5. [Endpoints](#endpoints-apiv1)
+6. [Variáveis de ambiente](#variáveis-de-ambiente)
+7. [Como usar os painéis](#como-usar-os-painéis)
+8. [Segurança](#segurança-decisões-principais)
+9. [Ambientes e deploy](#ambientes-e-deploy)
+10. [Riscos e pendências](#riscos-e-pendências-conhecidos)
 
 ## Rodar localmente
 
@@ -46,7 +63,7 @@ Com `MAIL_DRIVER=log`, os links de convite e de redefinição de senha aparecem 
 npm test
 ```
 
-São 98 testes: unitários e de integração HTTP, todos contra um **PostgreSQL real e descartável**.
+São 125 testes: unitários e de integração HTTP, todos contra um **PostgreSQL real e descartável**.
 
 - O `test/global-setup.ts` sobe um cluster em diretório temporário e porta livre e aplica as migrations do zero.
 - Isso prova que as migrations são reproduzíveis em um banco vazio.
@@ -58,9 +75,22 @@ São 98 testes: unitários e de integração HTTP, todos contra um **PostgreSQL 
 | `authorization.e2e-spec.ts` | professor em endpoint de coordenador/admin, usuário sem instituição, coordenador em outra instituição (inclusive trocando o id na URL), tentativa de redirecionar convite pelo corpo, elevação do próprio papel, desativação de vínculo com efeito imediato, instituição inativa, admin sem acesso a hashes/tokens |
 | `invitations.e2e-spec.ts` | fluxo completo admin → coordenador → professor, convite expirado/revogado/reutilizado, aceites simultâneos, token adulterado, papel/instituição vindos só do convite, convite substituído, conta existente em segunda instituição, duplicidade de e-mail e de vínculo |
 | `catalog.e2e-spec.ts` | Etapa 3: estados dos cards, instituição com e sem direito, professor matriculado e não matriculado, coordenador tentando liberar coleção não contratada, aula/mídia/PDF por URL direta, progresso em matrícula alheia ou com aula de outra coleção, percentual enviado pelo cliente, coordenador em matrícula de outra escola, despublicação, arquivamento, suspensão/revogação/expiração do direito, matrícula revogada, vínculo desativado, certificado antes/depois da conclusão, verificação pública, feedback, contexto com duas instituições, seed idempotente |
+| `admin-4a.e2e-spec.ts` | painel administrativo: listagens com filtros e paginação, detalhe de instituição, coordenadores, reenvio de convite, desativação de conta com revogação de sessões, papel global com reautenticação e proteção do último administrador |
+| `admin-4b.e2e-spec.ts` | editor de conteúdo: coleções, módulos e aulas, reordenação, slug imutável após publicação, confirmação de impacto, biblioteca de mídia (validação por conteúdo, limites, substituição, exclusão só sem uso), liberação por instituição com justificativa |
+| `flows-4c.e2e-spec.ts` | fluxos 1–17 da Etapa 4, escopo dos relatórios por instituição, CSV (BOM, CRLF, injeção de fórmula), correções de progresso com justificativa, revogação de certificado, auditoria somente-inclusão |
 | `unit.spec.ts` | validação de configuração de produção, tokens, `AccessPolicy`, drift entre schema e migrations |
 
-## Modelo de dados
+## Modelo de dados e migrations
+
+| Migration | Conteúdo |
+|---|---|
+| `20261016173741_init` | usuários, instituições, organizações, vínculos, papéis globais, convites, sessões, redefinição de senha, auditoria |
+| `20261016181312_catalog_access_progress` | mídia, coleções, módulos, aulas, direito institucional, matrículas, progresso, feedback, certificados |
+| `20261016194850_audit_append_only_and_corrections` | origem `admin_correction` no progresso e trigger que impede `UPDATE`/`DELETE` em `audit_logs` |
+
+Em produção, as migrations são aplicadas só com `npx prisma migrate deploy` (pre-deploy do Render). Nunca use `db push` nem `migrate reset`.
+
+### Identidade, instituições e acesso
 
 ```mermaid
 erDiagram
@@ -86,45 +116,14 @@ erDiagram
   audit_logs { uuid id PK; uuid actor_user_id FK; uuid institution_id FK; text action; text entity_type; text entity_id; jsonb metadata }
 ```
 
-Migration: `prisma/migrations/20261016173741_init`. Além das tabelas, chaves, índices e FKs, ela cria estes CHECKs:
+A migration `init`, além das tabelas, chaves, índices e FKs, ela cria estes CHECKs:
 - e-mail normalizado (em `users` e `invitations`);
 - UF com 2 letras maiúsculas;
 - formato de slug;
 - convite não pode estar aceito e revogado ao mesmo tempo;
 - contador de falhas de login não negativo.
 
-## Endpoints (`/api/v1`)
-
-A documentação OpenAPI fica em `/api/docs` e `/api/docs/openapi.json`. Ela é desligada em produção por padrão.
-Toda escrita exige o cabeçalho `X-CSRF-Protection: 1`; o Swagger UI já o envia.
-
-| Método | Rota | Quem pode |
-|---|---|---|
-| POST | `/auth/login` | público (10/min por IP + bloqueio da conta após 5 falhas) |
-| POST | `/auth/logout` | autenticado |
-| GET | `/auth/me` | autenticado |
-| POST | `/auth/forgot-password` | público (5 a cada 15 min) |
-| POST | `/auth/reset-password` | público, com token |
-| GET / PATCH | `/users/me` | autenticado (PATCH: só `name` e `welcomeSeen`) |
-| GET | `/users` · PATCH `/users/:id` (status) | administrador geral |
-| GET / POST | `/organizations` | administrador geral |
-| GET | `/institutions` | admin: todas; demais: as próprias |
-| POST | `/institutions` · PATCH `/institutions/:id` | administrador geral |
-| GET | `/institutions/:id` | admin ou membro ativo |
-| GET | `/institutions/:id/members` | admin ou coordenador da instituição |
-| PATCH | `/institutions/:id/members/:membershipId` | admin; coordenador só ativa/desativa **professores** da própria escola |
-| POST / GET | `/institutions/:id/invitations` | admin (professor/coordenador); coordenador (só professor, só a própria escola) |
-| DELETE | `/institutions/:id/invitations/:invitationId` | idem acima |
-| POST | `/invitations/preview` | público, com token |
-| POST | `/invitations/accept` | público, com token; cria conta/vínculo/sessão |
-| GET | `/audit-logs` | administrador geral |
-| GET | `/health` | público (health check do Render) |
-
-Não existe endpoint que conceda o papel `platform_admin`. Ele só é concedido pelo script de bootstrap.
-
-## Etapa 3: catálogo, direito institucional, matrículas e progresso
-
-Migration: `prisma/migrations/20261016181312_catalog_access_progress`.
+### Catálogo, matrículas e progresso
 
 ```mermaid
 erDiagram
@@ -151,13 +150,17 @@ erDiagram
   certificates { uuid id PK; uuid enrollment_id UK; text verification_code UK; jsonb metadata "retrato na emissão" }
 ```
 
-A migration também cria CHECKs de integridade:
+A migration `catalog_access_progress` também cria CHECKs de integridade:
 - formatos de slug;
 - duração positiva e `watched_seconds` não negativo;
 - `completed` se e somente se `completed_at` estiver preenchido;
 - `revoked` se e somente se `revoked_at` estiver preenchido;
 - notas de feedback entre 1 e 5;
 - mídia externa só por `https`; mídia estática sempre pública; `storage_key` sem `..`.
+
+## Regras de negócio
+
+### Acesso, conclusão e certificado
 
 **Regra de acesso de quem estuda.** Exige as quatro condições ao mesmo tempo, conferidas em `src/entitlements/entitlements.service.ts`:
 1. coleção `published`;
@@ -197,7 +200,53 @@ npm run seed:content              # importa o catálogo: só cria o que falta (s
 npm run seed:content -- --update  # também atualiza itens existentes com o conteúdo do arquivo
 ```
 
-### Endpoints da Etapa 3 (`/api/v1`)
+### Painéis (administração e coordenação)
+
+Interfaces em `/admin` (só administrador geral) e `/coordenacao` (vínculo ativo de coordenação; com mais de um, o topo mostra um seletor de instituição). A checagem de papel no React só organiza a interface: cada chamada é autorizada no backend.
+
+- **Versionamento curricular:** certificados são retratos imutáveis. Uma matrícula com certificado válido mantém `completedAt` mesmo que a coleção ganhe aulas obrigatórias novas. Alterações que afetam pessoas matriculadas (despublicar, arquivar, mudar aula obrigatória, suspender ou revogar acesso com matrículas ativas) retornam `409 IMPACT_CONFIRMATION_REQUIRED` com o objeto `impact`. Para prosseguir, a chamada é repetida com `confirmImpact: true` e `justification`.
+- **Auditoria somente-inclusão:** o trigger `audit_logs_append_only` bloqueia `UPDATE` e `DELETE` em `audit_logs`, inclusive para o próprio usuário da aplicação. Usuários e instituições nunca são apagados, só desativados.
+- **Correções de progresso:** só o administrador geral faz, por aula, com justificativa obrigatória. A origem fica como `admin_correction` e a auditoria guarda o antes e o depois. O percentual é sempre recalculado pelo servidor.
+- **Papel global:** conceder ou remover administrador geral exige a senha atual de quem faz e uma justificativa. Não é possível remover o próprio papel nem o último administrador.
+- **Mídia:**
+  - Os uploads são validados pelo conteúdo real do arquivo (magic bytes), não pela extensão: PNG, JPEG, WebP, PDF, MP4 e WebM. SVG é recusado.
+  - Os arquivos são gravados em `STORAGE_DIR/uploads/AAAA/MM/<uuid>` e servidos por `/api/v1/media/:id`, com autorização.
+  - Vídeos são registrados como **URL externa**. O upload de vídeo pela API vem desligado (`MEDIA_MAX_VIDEO_MB=0`), e o upload direto para R2 (`POST /admin/media/direct-upload`) responde 501 até ser configurado.
+  - Uma mídia em uso não pode ser excluída. "Substituir" mantém o histórico nos metadados.
+- **CSV:** sai com BOM UTF-8 e CRLF (abre direto no Excel). Células que começam com `= + - @` recebem `'` para evitar injeção de fórmula. O limite é de 50 mil linhas, e cada exportação gera `report.exported` na auditoria.
+
+## Endpoints (`/api/v1`)
+
+A documentação OpenAPI fica em `/api/docs` e `/api/docs/openapi.json`. Ela é desligada em produção por padrão.
+Toda escrita exige o cabeçalho `X-CSRF-Protection: 1`; o Swagger UI já o envia.
+
+### Autenticação, usuários e instituições
+
+| Método | Rota | Quem pode |
+|---|---|---|
+| POST | `/auth/login` | público (10/min por IP + bloqueio da conta após 5 falhas) |
+| POST | `/auth/logout` | autenticado |
+| GET | `/auth/me` | autenticado |
+| POST | `/auth/forgot-password` | público (5 a cada 15 min) |
+| POST | `/auth/reset-password` | público, com token |
+| GET / PATCH | `/users/me` | autenticado (PATCH: só `name` e `welcomeSeen`) |
+| GET | `/users` · PATCH `/users/:id` (status) | administrador geral |
+| GET / POST | `/organizations` | administrador geral |
+| GET | `/institutions` | admin: todas; demais: as próprias |
+| POST | `/institutions` · PATCH `/institutions/:id` | administrador geral |
+| GET | `/institutions/:id` | admin ou membro ativo |
+| GET | `/institutions/:id/members` | admin ou coordenador da instituição |
+| PATCH | `/institutions/:id/members/:membershipId` | admin; coordenador só ativa/desativa **professores** da própria escola |
+| POST / GET | `/institutions/:id/invitations` | admin (professor/coordenador); coordenador (só professor, só a própria escola) |
+| DELETE | `/institutions/:id/invitations/:invitationId` | idem acima |
+| POST | `/invitations/preview` | público, com token |
+| POST | `/invitations/accept` | público, com token; cria conta/vínculo/sessão |
+| GET | `/audit-logs` | administrador geral |
+| GET | `/health` | público (health check do Render) |
+
+O primeiro administrador geral é criado só pelo script `admin:bootstrap`. Os seguintes são concedidos por outro administrador em `PUT /users/:id/platform-role`, que exige a senha atual e uma justificativa.
+
+### Catálogo, aprendizagem e coordenação
 
 | Método | Rota | Quem pode |
 |---|---|---|
@@ -220,24 +269,7 @@ npm run seed:content -- --update  # também atualiza itens existentes com o cont
 | GET | `/admin/institutions/:id/collection-access` | administrador geral |
 | PUT | `/admin/institutions/:id/collections/:collectionId/access` | administrador geral (`active`/`suspended`/`revoked`, `expiresAt`) |
 
-## Etapa 4: painéis de administração e coordenação
-
-Interfaces em `/admin` (só administrador geral) e `/coordenacao` (vínculo ativo de coordenação; com mais de um, o topo mostra um seletor de instituição). A checagem de papel no React só organiza a interface: cada chamada é autorizada no backend.
-
-### Regras importantes
-
-- **Versionamento curricular:** certificados são retratos imutáveis. Uma matrícula com certificado válido mantém `completedAt` mesmo que a coleção ganhe aulas obrigatórias novas. Alterações que afetam pessoas matriculadas (despublicar, arquivar, mudar aula obrigatória, suspender ou revogar acesso com matrículas ativas) retornam `409 IMPACT_CONFIRMATION_REQUIRED` com o objeto `impact`. Para prosseguir, a chamada é repetida com `confirmImpact: true` e `justification`.
-- **Auditoria somente-inclusão:** o trigger `audit_logs_append_only` bloqueia `UPDATE` e `DELETE` em `audit_logs`, inclusive para o próprio usuário da aplicação. Usuários e instituições nunca são apagados, só desativados.
-- **Correções de progresso:** só o administrador geral faz, por aula, com justificativa obrigatória. A origem fica como `admin_correction` e a auditoria guarda o antes e o depois. O percentual é sempre recalculado pelo servidor.
-- **Papel global:** conceder ou remover administrador geral exige a senha atual de quem faz e uma justificativa. Não é possível remover o próprio papel nem o último administrador.
-- **Mídia:**
-  - Os uploads são validados pelo conteúdo real do arquivo (magic bytes), não pela extensão: PNG, JPEG, WebP, PDF, MP4 e WebM. SVG é recusado.
-  - Os arquivos são gravados em `STORAGE_DIR/uploads/AAAA/MM/<uuid>` e servidos por `/api/v1/media/:id`, com autorização.
-  - Vídeos são registrados como **URL externa**. O upload de vídeo pela API vem desligado (`MEDIA_MAX_VIDEO_MB=0`), e o upload direto para R2 (`POST /admin/media/direct-upload`) responde 501 até ser configurado.
-  - Uma mídia em uso não pode ser excluída. "Substituir" mantém o histórico nos metadados.
-- **CSV:** sai com BOM UTF-8 e CRLF (abre direto no Excel). Células que começam com `= + - @` recebem `'` para evitar injeção de fórmula. O limite é de 50 mil linhas, e cada exportação gera `report.exported` na auditoria.
-
-### Endpoints da Etapa 4 (`/api/v1`)
+### Painéis
 
 | Área | Endpoints |
 |---|---|
@@ -250,26 +282,35 @@ Interfaces em `/admin` (só administrador geral) e `/coordenacao` (vínculo ativ
 | Liberação | `GET /admin/institutions/:id/collection-access`, `PUT /admin/institutions/:id/collections/:collectionId/access` (`status`, `expiresAt`, `justification`, `confirmImpact`) |
 | Relatórios (admin) | `GET /admin/reports/enrollments` (`format=csv`), `GET /admin/reports/certificates`, `GET /admin/reports/participation` |
 | Matrículas (admin) | `GET /admin/enrollments/:id`, `POST /admin/enrollments/:id/progress-corrections`, `POST /admin/certificates/:id/revoke` |
-| Coordenação | `GET /institutions/:id/dashboard`, `GET /institutions/:id/teachers`, `GET /institutions/:id/reports/{enrollments,certificates,participation}` (+ os endpoints de matrícula da Etapa 3) |
+| Coordenação | `GET /institutions/:id/dashboard`, `GET /institutions/:id/teachers`, `GET /institutions/:id/reports/{enrollments,certificates,participation}` (+ os endpoints de matrícula da tabela anterior) |
 | Auditoria | `GET /audit-logs` (`action`, `actionPrefix`, `institutionId`, `actorUserId`, `entityType`, `entityId`, `subjectUserId`, `from`, `to`, paginação) |
 
 Listas paginadas aceitam `page`, `pageSize` (até 100) e devolvem `{ items, total, page, pageSize, pages }`.
 
-### Migrations da Etapa 4
+## Variáveis de ambiente
 
-- `20261016194850_audit_append_only_and_corrections`: adiciona `admin_correction` ao enum `completion_source` e cria o trigger somente-inclusão em `audit_logs`.
+Referência completa e comentada em [`.env.example`](.env.example). Em staging/produção, a API **não sobe** se faltar HTTPS em `APP_URL`, se o cookie não estiver como `Secure` ou se o e-mail não for SMTP.
 
-### Variáveis novas
-
-| Variável | Padrão | Uso |
+| Variável | Obrigatória em produção | Uso |
 |---|---|---|
-| `STORAGE_DIR` | `./storage` | raiz dos arquivos locais. Os uploads vão para `uploads/`. No Render, um disco persistente montado em `/app/storage/uploads` (já no `render.yaml`) |
-| `MEDIA_MAX_IMAGE_MB` | `5` | limite de imagem |
-| `MEDIA_MAX_PDF_MB` | `25` | limite de PDF |
-| `MEDIA_MAX_VIDEO_MB` | `0` | `0` desliga upload de vídeo pela API |
-| `MEDIA_DIRECT_UPLOAD` | `none` | `r2` reservado para upload direto (ainda não implementado) |
+| `NODE_ENV` | sim | `production` ou `staging` |
+| `DATABASE_URL` | sim | conexão do Postgres (no Render, a *Internal Database URL*) |
+| `APP_URL` | sim | URL pública do site (links de convite e de senha) |
+| `APP_ORIGINS` | não | origens extras aceitas nas escritas (domínio próprio). Padrão: a origem de `APP_URL` |
+| `TRUST_PROXY` | sim | `2` atrás do Cloudflare Pages + Render |
+| `PROXY_SECRET` | sim | segredo compartilhado com o proxy do Pages (32+ caracteres) |
+| `MAIL_DRIVER`, `MAIL_FROM`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | sim | envio de e-mails (`smtp`) |
+| `SWAGGER_ENABLED` | não | documentação em `/api/docs` (desligada em produção por padrão) |
+| `SESSION_TTL_HOURS`, `INVITE_TTL_HOURS`, `RESET_TTL_MINUTES` | não | validade de sessão, convite e redefinição |
+| `LOGIN_MAX_ATTEMPTS`, `LOGIN_LOCK_MINUTES`, `RATE_LIMIT_ENABLED` | não | proteção contra força bruta |
+| `CONTENT_FILE` | não | catálogo usado pelo `seed:content` (padrão `content/catalog.json`) |
+| `STORAGE_DIR` | não (padrão `./storage`) | raiz dos arquivos locais. Os uploads vão para `uploads/`. No Render, um disco persistente montado em `/app/storage/uploads` (já no `render.yaml`) |
+| `MEDIA_MAX_IMAGE_MB` | não (padrão `5`) | limite de imagem |
+| `MEDIA_MAX_PDF_MB` | não (padrão `25`) | limite de PDF |
+| `MEDIA_MAX_VIDEO_MB` | não (padrão `0`) | `0` desliga upload de vídeo pela API |
+| `MEDIA_DIRECT_UPLOAD` | não (padrão `none`) | `r2` reservado para upload direto (ainda não implementado) |
 
-### Como usar o painel administrativo
+## Como usar os painéis
 
 1. **Instituições → Nova instituição.** Depois, em "Coordenação", convide a coordenação por e-mail ou vincule uma pessoa já cadastrada.
 2. **Instituição → Coleções.** Libere a coleção (com validade opcional). Suspender ou revogar com matrículas ativas pede justificativa.
@@ -293,7 +334,7 @@ A coordenação, em `/coordenacao`, convida professores, matricula nas coleçõe
 - **Proxy obrigatório:** com `PROXY_SECRET` configurado, a API recusa chamadas que não vêm do proxy do Pages. Isso também impede falsificar `X-Forwarded-For`, que alimenta o limite por IP.
 - **Configuração:** em staging/produção a API **não sobe** se faltar HTTPS em `APP_URL`, se o cookie não estiver como `Secure` ou se o e-mail não for SMTP. O driver `log` imprimiria tokens no log, por isso é bloqueado nesses ambientes.
 
-## Ambientes
+## Ambientes e deploy
 
 | | Desenvolvimento | Homologação | Produção |
 |---|---|---|---|
@@ -303,56 +344,19 @@ A coordenação, em `/coordenacao`, convida professores, matricula nas coleçõe
 | `NODE_ENV` | development | staging | production |
 | E-mail | `log` | `smtp` | `smtp` |
 
-## Deploy
+O passo a passo completo está em [../docs/DEPLOY-RENDER.md](../docs/DEPLOY-RENDER.md). Ele cobre: criar o Postgres e o Web Service no Render, as variáveis, a migration no pre-deploy, o disco de uploads, o primeiro administrador, a carga do catálogo, o Cloudflare Pages e o roteiro de teste. O `render.yaml` da raiz faz o mesmo via **Blueprint**.
 
-### 1. Render (API + banco)
+Comandos de operação, rodados no Shell do serviço:
 
-1. No Render: **New → Blueprint**, escolha o repositório e use o `render.yaml` da raiz (para homologação, aponte para `deploy/render.staging.yaml`).
-2. Preencha as variáveis marcadas como `sync: false`:
-   - `APP_URL`: URL do Pages, ex. `https://formacaprof.pages.dev`;
-   - `MAIL_FROM`, `SMTP_HOST`, `SMTP_USER` e `SMTP_PASS`: de qualquer provedor SMTP (Resend, Brevo, SES…).
-3. O `preDeployCommand` roda `npx prisma migrate deploy` antes de cada deploy, aplicando as migrations versionadas. **Nunca use `prisma db push` em produção.**
-   - No plano gratuito do Render não há pre-deploy. Nesse caso, troque o comando de start por `npm run start:migrate`.
-4. Copie o valor gerado de `PROXY_SECRET` (aba Environment do serviço). Ele vai para o Cloudflare no passo 2.
-5. Crie o primeiro administrador geral pelo **Shell** do serviço:
-   ```bash
-   ADMIN_EMAIL=admin@eticaeditora.com.br ADMIN_NAME="Administração Ética" ADMIN_PASSWORD='<senha forte, 12+>' npm run admin:bootstrap
-   ```
-   O script recusa executar se já existir um administrador. A senha não fica salva em lugar nenhum além do hash.
-6. Ainda no Shell, carregue o catálogo (coleção BASTA, módulos, aulas e as referências dos vídeos atuais):
-   ```bash
-   npm run seed:content
-   ```
-   O comando só cria o que falta, então pode ser repetido sem risco. Ele nunca apaga nem sobrescreve. A coleção é importada como está em `content/catalog.json`. Confira no painel se ela está publicada.
-7. Teste de ponta a ponta:
-   1. Entre como administrador em `/admin`.
-   2. Crie uma instituição, libere a coleção para ela e convide uma coordenação (o e-mail precisa chegar pelo SMTP).
-   3. A coordenação aceita o convite, convida um professor e o matricula.
-   4. O professor assiste e conclui; confira o certificado.
-   5. Exporte o CSV e veja os eventos em Auditoria.
-
-Confira no painel se os nomes de plano do `render.yaml` (`starter`, `basic-256mb`) existem na sua conta.
-
-### 2. Cloudflare Pages (frontend + proxy)
-
-Em **Settings → Variables and Secrets** do projeto Pages:
-
-| Variável | Valor | Tipo |
-|---|---|---|
-| `VITE_API_MODE` | `http` | texto (usado no build) |
-| `API_ORIGIN` | `https://formacaprof-api.onrender.com` (sem barra final) | texto |
-| `PROXY_SECRET` | mesmo valor do Render | **secret** |
-
-Faça um novo deploy. A função `functions/api/[[path]].js` passa a atender `/api/*` (`public/_routes.json`), e o restante continua sendo o SPA.
-
-Isso só funciona em projeto **Pages**. Num projeto **Worker**, a pasta `functions/` é ignorada.
-
-Enquanto `VITE_API_MODE=mock`, o site segue funcionando como demonstração, sem backend.
+```bash
+ADMIN_EMAIL=... ADMIN_NAME="..." ADMIN_PASSWORD='...' npm run admin:bootstrap   # primeiro administrador (recusa se já existir)
+npm run seed:content                                                           # catálogo: só cria o que falta
+```
 
 ## Riscos e pendências conhecidos
 
-- **Vídeos externos não são protegíveis de fato.** A API só revela o endereço a quem tem acesso, mas o arquivo em `midiasave-5c064.web.app` é público para quem já tem o link. Proteção real exige um storage com URLs assinadas e de curta duração (S3/R2), já previsto no modelo.
-- **PDFs de exemplo ainda estão em `public/docs`** no frontend, usados pelo modo de demonstração. No modo `http` eles vêm da API com autorização. Antes de subir PDFs reais, remova os de `public/docs`, ou o Cloudflare Pages continuará servindo os arquivos publicamente.
+- **Vídeos externos não são protegíveis de fato.** A API só revela o endereço a quem tem acesso, mas o arquivo em `midiasave-5c064.web.app` é público para quem já tem o link. Nesta fase, os vídeos continuam no Firebase por decisão de projeto. Proteção real exige um storage com URLs assinadas e de curta duração (Cloudflare R2/S3), já previsto no modelo (`storage_provider`) e no endpoint reservado `direct-upload`.
+- **Planos de aula:** os PDFs de exemplo existem só em `storage/basta` (servidos pela API com autorização). O frontend não publica mais PDFs.
 - **Conteúdo provisório:** os 32 capítulos do BASTA e os planos de aula são placeholders (ver acima). Precisam de validação editorial e dos arquivos definitivos.
 - **Coleções além do BASTA:** a estrutura é genérica (`/colecoes/:slug`, mesmas páginas e serviços), mas só existe o tema/layout `basta`. Uma coleção publicada com outro `theme_config.layout` mostra "Coleção em preparação" até ganhar o próprio tema.
 - **Uploads no disco do Render:**

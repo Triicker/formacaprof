@@ -1,68 +1,111 @@
-# Formação para Professores (portal web)
+# Formação para Professores
 
-Versão web responsiva (mobile + desktop) do app de formação da Ética Editora, com a coleção **BASTA!**.
-O frontend funciona em dois modos (`VITE_API_MODE`):
+Plataforma web de formação de professores da Ética Editora, com a coleção **BASTA!**. Funciona em celular e desktop.
+
+| Parte | Tecnologia | Onde roda |
+|---|---|---|
+| Site (professores, coordenação, administração) | React 18 + Vite + React Router | Cloudflare Pages |
+| Proxy `/api/*` | Cloudflare Pages Function (`functions/api/[[path]].js`) | Cloudflare Pages |
+| API | NestJS 11 + Prisma 6 ([`backend/`](backend/README.md)) | Render (Web Service, Docker) |
+| Banco | PostgreSQL 17 | Render (Postgres) |
+| Vídeos | arquivos externos (Firebase, `midiasave-5c064.web.app`) | entregues pela API só a quem tem acesso |
+
+```
+Navegador ──► Cloudflare Pages (site + /api proxy) ──► Render: API ──► Render: PostgreSQL
+              mesmo domínio: cookie de sessão first-party
+```
+
+## Documentação
+
+| Documento | Conteúdo |
+|---|---|
+| [docs/DEPLOY-RENDER.md](docs/DEPLOY-RENDER.md) | **Passo a passo** para criar o banco e a API no Render, ligar o Cloudflare Pages e testar |
+| [backend/README.md](backend/README.md) | API: rodar localmente, testes, modelo de dados, regras de acesso, endpoints, segurança |
+| [docs/VALIDACAO-USERFLOW.md](docs/VALIDACAO-USERFLOW.md) | Validação das telas contra o userflow original |
+
+## Modos do frontend (`VITE_API_MODE`)
 
 - **`mock`** (padrão): demonstração sem backend. Os dados ficam no `localStorage` do navegador.
-- **`http`**: usa a API real em [`backend/`](backend/README.md) (NestJS + PostgreSQL), com login, sessão, convites e instituições.
+- **`http`**: usa a API real, com login, convites, instituições, catálogo, progresso, certificados e os painéis.
 
-## Rodar
+## Rodar localmente
+
+**Só a demonstração:**
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm run build      # gera dist/
 ```
 
-Login de demonstração: **ana@etica.com / 123456**. Também é possível criar uma conta nova pelo cadastro (qualquer código de acesso é aceito).
-Para voltar ao estado inicial, use o menu "Olá, Prof. …" → **Resetar dados de demonstração**.
+Login: **ana@etica.com / 123456**. Para voltar ao estado inicial, use o menu "Olá, Prof. …" → **Resetar dados de demonstração**.
+
+**Com a API real:** suba o backend como em [backend/README.md](backend/README.md#rodar-localmente) e rode:
+
+```bash
+VITE_API_MODE=http npm run dev    # o Vite encaminha /api para localhost:3000
+```
+
+Usuários do seed local (senha `professor123`): `admin@etica.dev` (administração), `coordenacao@etica.dev` (coordenação) e `ana@etica.com` (professora).
+
+**Build de produção:** `npm run build` gera `dist/`.
+
+## Perfis
+
+| Perfil | O que faz | Onde |
+|---|---|---|
+| Professor(a) | Assiste às aulas das coleções em que está matriculado, acompanha o progresso, envia feedback e emite o certificado | `/inicio`, `/basta`, `/colecoes/:slug` |
+| Coordenação | Convida professores, matricula nas coleções liberadas, acompanha o progresso, pede liberação de coleções, exporta relatórios da instituição | `/coordenacao` |
+| Administração geral | Instituições, usuários, coordenadores, coleções (editor e publicação), biblioteca de mídia, liberação por instituição, relatórios, correções e auditoria | `/admin` |
+
+Os painéis só aparecem no modo `http`. A checagem de papel no site só organiza a interface: **toda autorização é feita pela API**.
 
 ## Telas e rotas
 
-| Userflow | Rota |
+| Tela | Rota |
 |---|---|
-| 01 Login | `/login` |
-| 02 Cadastro + confirmação | `/cadastro`, `/cadastro/sucesso` |
-| Recuperar senha (nova) | `/recuperar-senha` |
-| 03 Boas-vindas | `/boas-vindas` (só no primeiro login) |
-| 04 Início (coleções) | `/inicio` |
-| 05 Início BASTA | `/basta` |
-| 06/07 Conheça o projeto + vídeo | `/basta/conheca`, `/basta/conheca/:id` |
-| 08/09/10 Materiais → nível → vídeo | `/basta/materiais`, `/basta/materiais/:nivel`, `/basta/materiais/:nivel/:id` |
-| 11 Minha formação + certificado | `/basta/minha-formacao`, `/basta/certificado` |
-| 12 Feedback + obrigado | `/basta/feedback`, `/basta/feedback/obrigado` |
-| Painel administrativo (modo `http`) | `/admin`: instituições, usuários, coordenadores, coleções, mídia, relatórios, auditoria |
-| Painel da coordenação (modo `http`) | `/coordenacao`: professores, coleções, relatórios |
+| Login, recuperação e redefinição de senha | `/login`, `/recuperar-senha`, `/redefinir-senha` |
+| Aceite de convite (cadastro no modo `http`) | `/convite` |
+| Cadastro (só no modo demonstração) | `/cadastro`, `/cadastro/sucesso` |
+| Boas-vindas (primeiro acesso) | `/boas-vindas` |
+| Escolha de instituição (mais de um vínculo) / sem vínculo | `/escolher-instituicao`, `/sem-vinculo` |
+| Início (coleções) | `/inicio` |
+| Início da coleção BASTA | `/basta` |
+| Conheça o projeto + vídeo | `/basta/conheca`, `/basta/conheca/:id` |
+| Materiais → nível → vídeo | `/basta/materiais`, `/basta/materiais/:nivel`, `/basta/materiais/:nivel/:id` |
+| Minha formação + certificado | `/basta/minha-formacao`, `/basta/certificado` |
+| Feedback | `/basta/feedback`, `/basta/feedback/obrigado` |
+| Outras coleções (mesmas páginas) | `/colecoes/:slug/*` (`/colecoes/basta/*` redireciona para `/basta/*`) |
+| Painel administrativo | `/admin`, `/admin/instituicoes`, `/admin/usuarios`, `/admin/coordenadores`, `/admin/colecoes`, `/admin/midias`, `/admin/relatorios`, `/admin/auditoria` |
+| Painel da coordenação | `/coordenacao`, `/coordenacao/professores`, `/coordenacao/colecoes`, `/coordenacao/relatorios` |
+
+**Layout:** em telas a partir de 960px de largura, as páginas dos professores ocupam a altura da janela, sem rolagem, nas proporções do layout de referência. No celular, a navegação fica numa barra inferior (`MobileTabBar`).
 
 ## Estrutura
 
 ```
 src/
-  services/api.js       ← único ponto de acesso a dados (troca mock ↔ http)
-  services/mockApi.js   ← implementação local (localStorage)
-  services/httpApi.js   ← cliente da API real (/api/v1, cookie HttpOnly, CSRF)
-  services/localContent.js ← catálogo + progresso (locais até a Etapa 3)
-  mock/seed.js          ← coleções, módulos, vídeos, escolas, usuária demo
-  layouts/BastaLayout   ← sidebar no desktop / header no mobile
-  pages/                ← uma página por tela
-  admin/                ← painéis /admin e /coordenacao (ui.jsx, adminApi.js, pages/)
-  styles/admin.css      ← design system dos painéis (escopo .adm)
-public/img              ← assets copiados de ASSETS/ com nomes limpos
-public/docs             ← PDFs de exemplo dos planos de aula
+  services/api.js          ← único ponto de acesso a dados (troca mock ↔ http)
+  services/httpApi.js      ← cliente da API real (/api/v1, cookie HttpOnly, CSRF)
+  services/mockApi.js      ← implementação da demonstração (localStorage)
+  services/localContent.js ← catálogo e progresso da demonstração
+  mock/seed.js             ← dados da demonstração (coleções, vídeos, escolas, usuária)
+  context/                 ← sessão (AuthContext) e avisos (ToastContext)
+  layouts/BastaLayout.jsx  ← moldura das páginas de coleção
+  pages/                   ← telas dos professores
+  admin/                   ← painéis /admin e /coordenacao (ui.jsx, adminApi.js, pages/)
+  styles/                  ← app.css, basta.css, admin.css (painéis, escopo .adm)
+functions/api/[[path]].js  ← proxy do Cloudflare Pages para a API
+public/img                 ← imagens e capas
+backend/                   ← API, banco, testes (ver backend/README.md)
+render.yaml                ← Blueprint do Render (produção); homologação em deploy/
+docs/                      ← deploy e validação
 ```
 
-Os vídeos (verticais 9:16) vêm de `https://midiasave-5c064.web.app/video1.mp4` … `video10.mp4`, definidos em `MIDIAS` no `src/mock/seed.js`; as capas ficam em `public/img/thumbs/`. "Conheça o projeto" usa os 10; cada módulo de Materiais usa uma sequência diferente deles até existirem vídeos próprios por capítulo. Sem `url`, o player simula a reprodução.
+## Conteúdo e vídeos
 
-No mobile, a navegação principal fica numa barra inferior (`MobileTabBar`); o botão "Mais" abre as ações secundárias.
-
-## Backend e deploy
-
-A API, o banco, os testes e o passo a passo de deploy (Render + Cloudflare Pages) estão em [backend/README.md](backend/README.md).
-
-- `functions/api/[[path]].js`: proxy do Cloudflare Pages que encaminha `/api/*` para a API no Render. Como fica no mesmo domínio, o cookie de sessão é first-party.
-- `render.yaml`: Blueprint da API + PostgreSQL de produção. Homologação: `deploy/render.staging.yaml`.
-- No modo `http`, o cadastro é feito **por convite** (`/convite`). Também existem `/redefinir-senha` e `/sem-vinculo`.
-- No modo `http`, catálogo, estados dos cards, progresso, feedback e certificado vêm da API e do PostgreSQL. O `src/mock/seed.js` e o `src/services/localContent.js` são usados só no modo `mock`.
-- As páginas de coleção são genéricas (`BastaLayout` recebe `slug` e `base`). `/basta/*` continua funcionando e `/colecoes/:slug/*` usa as mesmas páginas; `/colecoes/basta/*` redireciona para `/basta/*`.
-
-Veja também [docs/VALIDACAO-USERFLOW.md](docs/VALIDACAO-USERFLOW.md).
+- O catálogo real fica em `backend/content/catalog.json` e é carregado no banco com `npm run seed:content`.
+- Os vídeos são os arquivos atuais do Firebase (`video1.mp4` … `video10.mp4`). Os 32 capítulos dos níveis de ensino ainda os reaproveitam e aparecem como "Vídeo provisório".
+- Para trocar pelos definitivos não é preciso mexer em código:
+  1. Painel → **Biblioteca de mídia** → registrar a URL nova.
+  2. **Coleções → BASTA** → editar a aula → escolher a mídia nova.
+- Os planos de aula (PDF) existem só na API (`backend/storage/basta`) e são entregues apenas a quem tem acesso. O site não publica PDFs.

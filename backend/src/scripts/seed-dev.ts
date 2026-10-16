@@ -18,11 +18,11 @@ async function main() {
     });
     const escola = await prisma.institution.upsert({
       where: { slug: 'em-carolina-de-jesus' }, update: {},
-      create: { name: 'EM Carolina de Jesus', slug: 'em-carolina-de-jesus', region: 'Regional Centro', city: 'Salvador', state: 'BA', organizationId: org.id },
+      create: { name: 'EM Carolina de Jesus', slug: 'em-carolina-de-jesus', region: 'Nordeste', city: 'Salvador', state: 'BA', organizationId: org.id },
     });
     const outra = await prisma.institution.upsert({
       where: { slug: 'ee-machado-de-assis' }, update: {},
-      create: { name: 'EE Machado de Assis', slug: 'ee-machado-de-assis', region: 'Regional Centro', city: 'Salvador', state: 'BA', organizationId: org.id },
+      create: { name: 'EE Machado de Assis', slug: 'ee-machado-de-assis', region: 'Nordeste', city: 'Salvador', state: 'BA', organizationId: org.id },
     });
 
     const pessoas: { email: string; name: string; inst?: string; role?: MembershipRole; admin?: boolean }[] = [

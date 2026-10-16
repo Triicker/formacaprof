@@ -5,6 +5,7 @@ import { AuditService } from '../audit/audit.service';
 import type { Actor } from '../common/actor';
 import { slugify } from '../common/tokens';
 import { PrismaService } from '../prisma/prisma.service';
+import { REGIOES } from './regioes';
 import { CreateInstitutionDto, ListInstitutionsQuery, UpdateInstitutionDto } from './institutions.dto';
 
 const PUBLIC_FIELDS = {
@@ -12,6 +13,12 @@ const PUBLIC_FIELDS = {
   organizationId: true, createdAt: true, updatedAt: true,
   organization: { select: { id: true, name: true, slug: true } },
 } satisfies Prisma.InstitutionSelect;
+
+/** A UF precisa pertencer à região informada (tabela do IBGE). */
+function assertLocal(region?: string, state?: string) {
+  if (!region || !state) return;
+  if (!REGIOES[region]?.includes(state)) throw new BadRequestException(`A UF ${state} não pertence à região ${region}.`);
+}
 
 @Injectable()
 export class InstitutionsService {
@@ -41,6 +48,7 @@ export class InstitutionsService {
 
   async create(actor: Actor, dto: CreateInstitutionDto) {
     await this.assertOrganization(dto.organizationId);
+    assertLocal(dto.region, dto.state);
     const slug = dto.slug ?? (await this.uniqueSlug(slugify(dto.name)));
     return this.write(async (tx) => {
       const inst = await tx.institution.create({ data: { ...dto, name: dto.name.trim(), slug }, select: PUBLIC_FIELDS });
@@ -51,6 +59,10 @@ export class InstitutionsService {
 
   async update(actor: Actor, id: string, dto: UpdateInstitutionDto) {
     await this.assertOrganization(dto.organizationId);
+    if (dto.region !== undefined || dto.state !== undefined) {
+      const atual = await this.prisma.institution.findUnique({ where: { id }, select: { region: true, state: true } });
+      assertLocal(dto.region ?? atual?.region ?? undefined, dto.state ?? atual?.state ?? undefined);
+    }
     return this.write(async (tx) => {
       const inst = await tx.institution.update({ where: { id }, data: dto, select: PUBLIC_FIELDS });
       await this.audit.record({ actorUserId: actor.userId, institutionId: id, action: 'institution.updated', entityType: 'institution', entityId: id, metadata: { fields: Object.keys(dto) } }, tx);

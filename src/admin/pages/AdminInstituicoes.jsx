@@ -2,16 +2,51 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useToast } from '../../context/ToastContext';
 import { adminApi } from '../adminApi';
+import { carregarMunicipios, NOMES_UF, REGIOES, regiaoDaUf } from '../localidades';
 import { Async, Badge, Field, Filters, Modal, PageHeader, Pager, Table, useAsync, useFilters } from '../ui';
 
-const UFS = 'AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' ');
+/** Região → UF → cidade, sempre a partir das listas oficiais (evita grafias diferentes da mesma cidade). */
+function Localidade({ f, setF }) {
+  const [municipios, setMunicipios] = useState(null);
+  const [erro, setErro] = useState(false);
+  useEffect(() => { carregarMunicipios().then(setMunicipios).catch(() => setErro(true)); }, []);
+  const cidades = f.state ? municipios?.[f.state] ?? [] : [];
+  // Cidade gravada antes das listas (ex.: digitada à mão) continua visível até ser trocada.
+  const cidadeFora = f.city && municipios && f.state && !cidades.includes(f.city);
+
+  return (
+    <div className="adm-form__row">
+      <Field label="Região">
+        <select value={f.region} onChange={(e) => setF((x) => ({ ...x, region: e.target.value, state: '', city: '' }))}>
+          <option value="">Selecione…</option>
+          {Object.keys(REGIOES).map((r) => <option key={r}>{r}</option>)}
+        </select>
+      </Field>
+      <Field label="Estado">
+        <select value={f.state} disabled={!f.region} onChange={(e) => setF((x) => ({ ...x, state: e.target.value, city: '' }))}>
+          <option value="">{f.region ? 'Selecione…' : 'Escolha a região'}</option>
+          {(REGIOES[f.region] ?? []).map((uf) => <option key={uf} value={uf}>{NOMES_UF[uf]} ({uf})</option>)}
+        </select>
+      </Field>
+      <Field label="Cidade" error={erro ? 'Não foi possível carregar a lista de cidades.' : undefined}>
+        <select value={f.city} disabled={!f.state || !municipios} onChange={(e) => setF((x) => ({ ...x, city: e.target.value }))}>
+          <option value="">{!f.state ? 'Escolha o estado' : municipios ? 'Selecione…' : 'Carregando…'}</option>
+          {cidadeFora && <option value={f.city}>{f.city} (não encontrada na lista)</option>}
+          {cidades.map((c) => <option key={c}>{c}</option>)}
+        </select>
+      </Field>
+    </div>
+  );
+}
 
 /** Formulário de criação/edição de instituição (usa POST/PATCH /institutions). */
 export function InstitutionForm({ inicial, onClose, onSaved }) {
   const toast = useToast();
   const [orgs, setOrgs] = useState([]);
   const [f, setF] = useState({
-    name: inicial?.name ?? '', organizationId: inicial?.organizationId ?? '', region: inicial?.region ?? '',
+    name: inicial?.name ?? '', organizationId: inicial?.organizationId ?? '',
+    // Região antiga em texto livre é substituída pela região oficial da UF.
+    region: REGIOES[inicial?.region] ? inicial.region : regiaoDaUf(inicial?.state),
     city: inicial?.city ?? '', state: inicial?.state ?? '', externalId: inicial?.externalId ?? '',
   });
   const [erro, setErro] = useState('');
@@ -45,16 +80,7 @@ export function InstitutionForm({ inicial, onClose, onSaved }) {
             {orgs.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
           </select>
         </Field>
-        <div className="adm-form__row">
-          <Field label="Região"><input value={f.region} onChange={set('region')} maxLength={80} /></Field>
-          <Field label="Cidade"><input value={f.city} onChange={set('city')} maxLength={80} /></Field>
-          <Field label="UF">
-            <select value={f.state} onChange={set('state')}>
-              <option value="">—</option>
-              {UFS.map((u) => <option key={u}>{u}</option>)}
-            </select>
-          </Field>
-        </div>
+        <Localidade f={f} setF={(fn) => { setF(fn); setErro(''); }} />
         <Field label="Código externo" hint="Ex.: código INEP (opcional, único)."><input value={f.externalId} onChange={set('externalId')} maxLength={60} /></Field>
         {erro && <p className="adm-field__error" role="alert" style={{ margin: 0 }}>{erro}</p>}
         <div className="adm-modal__foot">

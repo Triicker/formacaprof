@@ -1,7 +1,8 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString, IsUUID, Length, Matches, Max, Min } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID, Length, Matches, Max, Min } from 'class-validator';
 import { RecordStatus } from '@prisma/client';
+import { NOMES_REGIOES } from './regioes';
 
 const upper = ({ value }: { value: unknown }) => (typeof value === 'string' ? value.trim().toUpperCase() : value);
 
@@ -21,7 +22,8 @@ export class CreateInstitutionDto {
   @ApiPropertyOptional() @IsOptional() @IsUUID()
   organizationId?: string;
 
-  @ApiPropertyOptional({ example: 'Regional Centro' }) @IsOptional() @IsString() @Length(1, 80)
+  @ApiPropertyOptional({ enum: NOMES_REGIOES, description: 'Região do IBGE.' })
+  @IsOptional() @IsIn(NOMES_REGIOES, { message: 'Região inválida. Use: ' + NOMES_REGIOES.join(', ') + '.' })
   region?: string;
 
   @ApiPropertyOptional({ example: 'Salvador' }) @IsOptional() @IsString() @Length(1, 80)

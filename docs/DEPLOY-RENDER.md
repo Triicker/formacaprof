@@ -24,6 +24,12 @@ Tenha em mãos:
    - **Brevo** (plano gratuito): `smtp-relay.brevo.com`, porta `587`. O usuário e a senha ficam em "SMTP & API".
    - **Gmail** com senha de app: `smtp.gmail.com`, porta `587`. O usuário é o e-mail; a senha é a de app gerada na conta Google, com verificação em duas etapas ativa.
    - **Resend**: `smtp.resend.com`, porta `587`. O usuário é `resend` e a senha é a API key. Exige um domínio verificado.
+   - **Só para testar, sem enviar e-mail de verdade: Ethereal** (caixa de teste do Nodemailer).
+     1. Em <https://ethereal.email>, clique em *Create Ethereal Account*. Ele mostra host `smtp.ethereal.email`, porta `587`, usuário e senha.
+     2. Use esses valores nas variáveis `SMTP_*`.
+     3. Nenhum e-mail chega a ninguém. Todos ficam na caixa da conta Ethereal (*Messages*), onde dá para abrir o convite e clicar no link.
+
+     Para passar a enviar de verdade, troque só as variáveis `SMTP_*` e `MAIL_FROM` pelas do provedor real; o código não muda. Alternativa equivalente: a caixa de teste (*Sandbox*) do Mailtrap.
 3. **Um segredo para o proxy (`PROXY_SECRET`).** Gere no seu computador:
    ```bash
    node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"

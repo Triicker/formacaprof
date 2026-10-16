@@ -19,7 +19,7 @@ let pdfAsset: string, videoAsset: string, welcomeAsset: string;
 
 async function grant(institutionId: string, collectionId: string, status = 'active') {
   const admin = await loginAs(ctx, 'admin@etica.br');
-  const r = await admin.put(`/admin/institutions/${institutionId}/collections/${collectionId}/access`, { status });
+  const r = await admin.put(`/admin/institutions/${institutionId}/collections/${collectionId}/access`, { status, confirmImpact: true, justification: 'Teste de alteração de acesso' });
   expect(r.status).toBe(200);
 }
 
@@ -319,14 +319,17 @@ describe('Revogação e despublicação', () => {
 
   it('9b. coleção despublicada vira "em breve" e o conteúdo some, inclusive para quem estava matriculado', async () => {
     const admin = await loginAs(ctx, 'admin@etica.br');
-    expect((await admin.patch(`/admin/collections/${basta.id}`, { status: 'draft' })).status).toBe(200);
+    const semConfirmar = await admin.patch(`/admin/collections/${basta.id}`, { status: 'draft' });
+    expect(semConfirmar.status).toBe(409);
+    expect(semConfirmar.body).toMatchObject({ code: 'IMPACT_CONFIRMATION_REQUIRED', impact: { activeEnrollments: 1, institutionsWithAccess: 1 } });
+    expect((await admin.patch(`/admin/collections/${basta.id}`, { status: 'draft', confirmImpact: true, justification: 'Revisão editorial do conteúdo' })).status).toBe(200);
     const prof = await loginAs(ctx, 'prof.a@a.br');
     expect((await card(prof, 'basta')).state).toBe('coming_soon');
     expect((await prof.get('/collections/basta/modules')).status).toBe(403);
     expect((await prof.get(`/media/${videoAsset}`)).status).toBe(403);
     expect((await admin.put(`/admin/institutions/${B.id}/collections/${basta.id}/access`, { status: 'active' })).status).toBe(400);
 
-    await admin.patch(`/admin/collections/${basta.id}`, { status: 'archived' });
+    await admin.patch(`/admin/collections/${basta.id}`, { status: 'archived', confirmImpact: true, justification: 'Coleção substituída por nova versão' });
     expect(await card(prof, 'basta')).toBeUndefined();
     expect((await prof.get('/collections/basta')).status).toBe(404);
   });

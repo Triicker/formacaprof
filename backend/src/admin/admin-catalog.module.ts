@@ -1,19 +1,13 @@
-import { BadRequestException, Body, Controller, Get, Injectable, Module, NotFoundException, Param, ParseUUIDPipe, Patch, Put } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, Injectable, Module, NotFoundException, Param, ParseUUIDPipe, Put } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDate, IsEnum, IsOptional, ValidateIf } from 'class-validator';
-import { AccessStatus, ContentStatus, RecordStatus } from '@prisma/client';
+import { IsBoolean, IsDate, IsEnum, IsOptional, IsString, Length, ValidateIf } from 'class-validator';
+import { AccessStatus, ContentStatus, EnrollmentStatus, RecordStatus } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
-import { presentCollection } from '../catalog/catalog.service';
-import { MEDIA_REF_SELECT } from '../catalog/media-url';
 import type { Actor } from '../common/actor';
 import { CurrentActor, PlatformAdminOnly } from '../common/decorators';
 import { EntitlementsService } from '../entitlements/entitlements.service';
 import { PrismaService } from '../prisma/prisma.service';
-
-export class UpdateCollectionStatusDto {
-  @ApiProperty({ enum: ContentStatus }) @IsEnum(ContentStatus) status!: ContentStatus;
-}
 
 export class SetInstitutionAccessDto {
   @ApiProperty({ enum: AccessStatus }) @IsEnum(AccessStatus) status!: AccessStatus;
@@ -21,34 +15,18 @@ export class SetInstitutionAccessDto {
   @ApiPropertyOptional({ description: 'Fim do direito (ISO 8601). null remove a data de expiração.', nullable: true })
   @IsOptional() @ValidateIf((_, v) => v !== null) @Type(() => Date) @IsDate()
   expiresAt?: Date | null;
+
+  @ApiPropertyOptional({ description: 'Justificativa (obrigatória ao suspender/revogar com professores matriculados).' })
+  @IsOptional() @IsString() @Length(10, 500) justification?: string;
+
+  @ApiPropertyOptional({ description: 'Confirma ciência do impacto sobre professores matriculados.' })
+  @IsOptional() @IsBoolean() confirmImpact?: boolean;
 }
 
+/** Direito institucional de uso das coleções: só o administrador geral concede, suspende ou revoga. */
 @Injectable()
 export class AdminCatalogService {
   constructor(private readonly prisma: PrismaService, private readonly audit: AuditService, private readonly entitlements: EntitlementsService) {}
-
-  async collections() {
-    const rows = await this.prisma.collection.findMany({
-      orderBy: { displayOrder: 'asc' },
-      select: {
-        id: true, slug: true, title: true, subtitle: true, description: true, status: true, displayOrder: true, themeConfig: true,
-        cover: { select: MEDIA_REF_SELECT }, thumbnail: { select: MEDIA_REF_SELECT },
-        _count: { select: { modules: true, enrollments: true } },
-        institutionAccess: { where: { status: AccessStatus.active }, select: { id: true } },
-      },
-    });
-    return rows.map((c) => ({ ...presentCollection(c), modules: c._count.modules, enrollments: c._count.enrollments, institutionsWithAccess: c.institutionAccess.length }));
-  }
-
-  async setCollectionStatus(actor: Actor, id: string, status: ContentStatus) {
-    const c = await this.prisma.collection.findUnique({ where: { id } });
-    if (!c) throw new NotFoundException('Coleção não encontrada.');
-    return this.prisma.$transaction(async (tx) => {
-      const updated = await tx.collection.update({ where: { id }, data: { status } });
-      await this.audit.record({ actorUserId: actor.userId, action: 'collection.status_changed', entityType: 'collection', entityId: id, metadata: { from: c.status, to: status } }, tx);
-      return { id: updated.id, slug: updated.slug, status: updated.status };
-    });
-  }
 
   async institutionAccessList(institutionId: string) {
     const rows = await this.prisma.institutionCollectionAccess.findMany({
@@ -59,11 +37,15 @@ export class AdminCatalogService {
     return { items: rows.map((r) => ({ ...r, effectiveState: this.entitlements.accessState(r) })) };
   }
 
-  /** Única forma de conceder/suspender/revogar o direito institucional a uma coleção. */
+  /**
+   * Suspender/revogar não apaga matrículas, progresso nem certificados: só bloqueia o acesso.
+   * Com professores matriculados, exige confirmação explícita e justificativa (auditadas).
+   */
   async setInstitutionAccess(actor: Actor, institutionId: string, collectionId: string, dto: SetInstitutionAccessDto) {
-    const [inst, col] = await Promise.all([
+    const [inst, col, anterior] = await Promise.all([
       this.prisma.institution.findUnique({ where: { id: institutionId }, select: { status: true } }),
       this.prisma.collection.findUnique({ where: { id: collectionId }, select: { status: true } }),
+      this.prisma.institutionCollectionAccess.findUnique({ where: { institutionId_collectionId: { institutionId, collectionId } } }),
     ]);
     if (!inst) throw new NotFoundException('Instituição não encontrada.');
     if (!col) throw new NotFoundException('Coleção não encontrada.');
@@ -71,6 +53,14 @@ export class AdminCatalogService {
       if (col.status !== ContentStatus.published) throw new BadRequestException('Somente coleções publicadas podem ser liberadas para instituições.');
       if (inst.status !== RecordStatus.active) throw new BadRequestException('Instituição inativa.');
       if (dto.expiresAt && dto.expiresAt <= new Date()) throw new BadRequestException('A data de expiração deve estar no futuro.');
+    } else {
+      const matriculados = await this.prisma.enrollment.count({ where: { institutionId, collectionId, status: EnrollmentStatus.active } });
+      if (matriculados > 0 && (!dto.confirmImpact || !dto.justification?.trim())) {
+        throw new ConflictException({
+          statusCode: 409, code: 'IMPACT_CONFIRMATION_REQUIRED', impact: { activeEnrollments: matriculados },
+          message: `${matriculados} professor(es) matriculado(s) perderão o acesso (o progresso é preservado). Confirme e informe a justificativa.`,
+        });
+      }
     }
     const now = new Date();
     const data = {
@@ -88,7 +78,10 @@ export class AdminCatalogService {
       });
       await this.audit.record({
         actorUserId: actor.userId, institutionId, action: `collection_access.${dto.status}`, entityType: 'collection', entityId: collectionId,
-        metadata: { expiresAt: row.expiresAt?.toISOString() ?? null },
+        metadata: {
+          from: anterior?.status ?? null, to: dto.status, expiresAt: row.expiresAt?.toISOString() ?? null,
+          ...(dto.justification ? { justification: dto.justification.trim() } : {}),
+        },
       }, tx);
       return { ...row, effectiveState: this.entitlements.accessState(row) };
     });
@@ -102,18 +95,6 @@ export class AdminCatalogService {
 export class AdminCatalogController {
   constructor(private readonly admin: AdminCatalogService) {}
 
-  @Get('collections')
-  @ApiOperation({ summary: 'Todas as coleções (inclusive rascunho/arquivadas) com números' })
-  collections() {
-    return this.admin.collections();
-  }
-
-  @Patch('collections/:id')
-  @ApiOperation({ summary: 'Publica, despublica (draft) ou arquiva uma coleção' })
-  setStatus(@CurrentActor() actor: Actor, @Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateCollectionStatusDto) {
-    return this.admin.setCollectionStatus(actor, id, dto.status);
-  }
-
   @Get('institutions/:id/collection-access')
   @ApiOperation({ summary: 'Direitos de coleção da instituição' })
   access(@Param('id', ParseUUIDPipe) id: string) {
@@ -121,7 +102,7 @@ export class AdminCatalogController {
   }
 
   @Put('institutions/:id/collections/:collectionId/access')
-  @ApiOperation({ summary: 'Concede, suspende ou revoga o direito institucional a uma coleção' })
+  @ApiOperation({ summary: 'Concede, suspende ou revoga o direito institucional (com impacto: confirmImpact + justification)' })
   setAccess(
     @CurrentActor() actor: Actor, @Param('id', ParseUUIDPipe) id: string,
     @Param('collectionId', ParseUUIDPipe) collectionId: string, @Body() dto: SetInstitutionAccessDto,

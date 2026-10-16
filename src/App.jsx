@@ -27,6 +27,10 @@ import AdminInstituicoes from './admin/pages/AdminInstituicoes';
 import AdminInstituicao from './admin/pages/AdminInstituicao';
 import AdminUsuarios from './admin/pages/AdminUsuarios';
 import AdminCoordenadores from './admin/pages/AdminCoordenadores';
+import AdminColecoes from './admin/pages/AdminColecoes';
+import AdminColecao from './admin/pages/AdminColecao';
+import AdminPrevia from './admin/pages/AdminPrevia';
+import AdminMidias from './admin/pages/AdminMidias';
 
 // Rotas de conteúdo: sessão válida + vínculo ativo (ou administrador geral) + contexto institucional definido.
 // O acesso a cada coleção é conferido pelo layout da coleção (estado efetivo vindo da API).
@@ -96,6 +100,10 @@ export default function App() {
         <Route path="instituicoes/:id" element={<AdminInstituicao />} />
         <Route path="usuarios" element={<AdminUsuarios />} />
         <Route path="coordenadores" element={<AdminCoordenadores />} />
+        <Route path="colecoes" element={<AdminColecoes />} />
+        <Route path="colecoes/:id" element={<AdminColecao />} />
+        <Route path="colecoes/:id/previa" element={<AdminPrevia />} />
+        <Route path="midias" element={<AdminMidias />} />
         <Route path="*" element={<ContentState tipo="inexistente" voltarPara="/admin" voltarTexto="Voltar à visão geral" />} />
       </Route>
 

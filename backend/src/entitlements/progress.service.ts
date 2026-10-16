@@ -81,12 +81,19 @@ export class ProgressService {
     return (await this.detail(enrollment, db)).summary;
   }
 
-  /** Mantém enrollments.completed_at coerente com a regra (preenche ao concluir, limpa se deixar de cumprir). */
+  /**
+   * Mantém enrollments.completed_at coerente com a regra (preenche ao concluir, limpa se deixar de cumprir).
+   * Política de versão curricular: com certificado emitido, a conclusão é definitiva e não é desfeita
+   * por mudanças posteriores no conteúdo.
+   */
   async syncCompletion(enrollment: Pick<Enrollment, 'id' | 'collectionId' | 'completedAt'>, db: Db = this.prisma) {
     const s = await this.summary(enrollment, db);
     const done = s.status === 'completed';
     if (done && !enrollment.completedAt) await db.enrollment.update({ where: { id: enrollment.id }, data: { completedAt: new Date() } });
-    if (!done && enrollment.completedAt) await db.enrollment.update({ where: { id: enrollment.id }, data: { completedAt: null } });
+    if (!done && enrollment.completedAt) {
+      const certificado = await db.certificate.findUnique({ where: { enrollmentId: enrollment.id }, select: { revokedAt: true } });
+      if (!certificado || certificado.revokedAt) await db.enrollment.update({ where: { id: enrollment.id }, data: { completedAt: null } });
+    }
     return s;
   }
 }

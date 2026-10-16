@@ -5,6 +5,8 @@ import { SkipThrottle, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler
 import { AccessModule } from './access/access.module';
 import { AdminCatalogModule } from './admin/admin-catalog.module';
 import { AdminInstitutionsModule } from './admin/admin-institutions.module';
+import { ContentAdminModule } from './content/content-admin.module';
+import { MediaAdminModule } from './media/media-admin.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { EnrollmentsModule } from './enrollments/enrollments.module';
 import { EntitlementsModule } from './entitlements/entitlements.module';
@@ -73,6 +75,8 @@ export class AppModule {
         EnrollmentsModule,
         AdminCatalogModule,
         AdminInstitutionsModule,
+        ContentAdminModule,
+        MediaAdminModule,
       ],
       controllers: [HealthController],
       // Ordem importa: limite de requisições antes da verificação de sessão.

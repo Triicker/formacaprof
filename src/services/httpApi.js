@@ -44,7 +44,9 @@ async function req(method, path, body, { silencioso401 = false } = {}) {
       aoExpirarSessao();
     }
     const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
-    throw new ApiError(msg || 'Erro ao comunicar com o servidor.', res.status, data?.code);
+    const erro = new ApiError(msg || 'Erro ao comunicar com o servidor.', res.status, data?.code);
+    erro.detalhes = data;
+    throw erro;
   }
   return data;
 }

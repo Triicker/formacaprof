@@ -16,6 +16,7 @@ import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
 import { SessionGuard } from './auth/session.guard';
 import { Public } from './common/decorators';
+import { rateLimitTrackers } from './common/rate-limit';
 import { APP_CONFIG, AppConfig } from './config/app-config';
 import { InstitutionsModule } from './institutions/institutions.module';
 import { InvitationsModule } from './invitations/invitations.module';
@@ -32,7 +33,7 @@ class HealthController {
   constructor(private readonly prisma: PrismaService) {}
 
   @Public()
-  @SkipThrottle()
+  @SkipThrottle({ default: true, ip: true })
   @Get()
   @ApiOperation({ summary: 'Verificação de saúde (usada pelo Render)' })
   async health() {
@@ -52,13 +53,19 @@ class ConfigModule {
 @Module({})
 export class AppModule {
   static forRoot(config: AppConfig): DynamicModule {
+    const rastreio = rateLimitTrackers(config.sessionCookieName);
     return {
       module: AppModule,
       imports: [
         ConfigModule.forRoot(config),
         ThrottlerModule.forRoot({
-          throttlers: [{ name: 'default', ttl: 60_000, limit: 300 }],
+          // default = por pessoa (sessão, ou e-mail + IP no login); ip = teto por endereço (escola inteira).
+          throttlers: [
+            { name: 'default', ttl: 60_000, limit: 300, getTracker: rastreio.pessoa },
+            { name: 'ip', ttl: 60_000, limit: 3_000, getTracker: rastreio.ip },
+          ],
           skipIf: () => !config.rateLimitEnabled,
+          errorMessage: 'Muitas tentativas em pouco tempo. Aguarde um minuto e tente novamente.',
         }),
         PrismaModule,
         AccessModule,

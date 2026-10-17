@@ -18,7 +18,8 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(200)
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  // 10/min por e-mail + IP (cada professor da escola tem a sua cota); 200/min por IP contra abuso.
+  @Throttle({ default: { limit: 10, ttl: 60_000 }, ip: { limit: 200, ttl: 60_000 } })
   @ApiOperation({ summary: 'Login por e-mail e senha; cria a sessão em cookie HttpOnly' })
   login(@Body() dto: LoginDto, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
     return this.auth.login(dto.email, dto.password, req, res);
@@ -43,7 +44,7 @@ export class AuthController {
   @Public()
   @Post('forgot-password')
   @HttpCode(202)
-  @Throttle({ default: { limit: 5, ttl: QUINZE_MIN } })
+  @Throttle({ default: { limit: 5, ttl: QUINZE_MIN }, ip: { limit: 50, ttl: QUINZE_MIN } })
   @ApiOperation({ summary: 'Envia link de redefinição (resposta igual exista ou não a conta)' })
   async forgot(@Body() dto: ForgotPasswordDto) {
     await this.auth.forgotPassword(dto.email);

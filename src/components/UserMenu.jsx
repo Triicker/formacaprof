@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { API_MODE, api } from '../services/api';
+import { reiniciarTutoriais } from './Tour';
 
 // Pílula "Olá, Prof. Nome" com menu (sair / rever boas-vindas / resetar demo).
 export default function UserMenu({ tone = 'gold' }) {
@@ -44,6 +45,7 @@ export default function UserMenu({ tone = 'gold' }) {
             </button>
           )}
           <button type="button" onClick={() => navigate('/boas-vindas')}>Vídeo de boas-vindas</button>
+          <button type="button" onClick={() => { setAberto(false); if (!reiniciarTutoriais(user.id)) navigate('/inicio'); }}>Ver tutorial novamente</button>
           {API_MODE === 'mock' && <button type="button" onClick={resetar}>Resetar dados de demonstração</button>}
           <button type="button" onClick={async () => { await logout(); navigate('/login'); }}>Sair</button>
         </div>

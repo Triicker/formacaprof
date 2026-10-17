@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import BackButton from '../../components/BackButton';
+import Tour from '../../components/Tour';
 import UserMenu from '../../components/UserMenu';
 import WhatsAppButton from '../../components/WhatsAppButton';
 import { useBasta } from '../../layouts/BastaLayout';
@@ -22,8 +23,16 @@ const TILES = [
   { to: 'feedback', cor: 'green', icone: 'chat', titulo: ['Feedback'], desc: 'Compartilhe suas impressões e contribua com esta formação.' },
 ];
 
+const PASSOS = [
+  { alvo: '.continue-btn', titulo: 'Continuar de onde parou', texto: 'Abre a próxima aula da sua formação, sem precisar procurar.' },
+  { alvo: '.bt--pink', titulo: 'Conheça o projeto', texto: 'Vídeos de apresentação: objetivos, impactos e frentes de atuação do projeto.' },
+  { alvo: '.bt--purple', titulo: 'Materiais pedagógicos', texto: 'Os capítulos por nível de ensino, com os vídeos e os planos de aula para baixar.' },
+  { alvo: '.bt--cyan', titulo: 'Minha formação', texto: 'Seu progresso, as aulas que faltam e o certificado quando você concluir.' },
+  { alvo: '.bt--green', titulo: 'Feedback', texto: 'Conte o que achou da formação. Sua opinião ajuda a melhorar o conteúdo.' },
+];
+
 export default function BastaHome() {
-  const { abrirInstituto, progresso, base } = useBasta();
+  const { abrirInstituto, progresso, base, slug } = useBasta();
 
   return (
     <div className="basta-home">
@@ -58,6 +67,8 @@ export default function BastaHome() {
           <span className="continue-btn__chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 5.5 15.5 12 9 18.5l-1.4-1.4 5.1-5.1-5.1-5.1z" /></svg></span>
         </Link>
       )}
+
+      <Tour id={`colecao-${slug}`} steps={PASSOS} pronto={!!progresso} />
 
       <nav className="basta-tiles" aria-label="Seções do projeto BASTA!">
         {TILES.map((t) => (

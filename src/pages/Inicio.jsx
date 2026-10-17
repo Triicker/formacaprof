@@ -4,12 +4,22 @@ import BrandTitle from '../components/BrandTitle';
 import CollectionCard, { CollectionCardSkeleton } from '../components/CollectionCard';
 import ContentState from '../components/ContentState';
 import MobileTabBar from '../components/MobileTabBar';
+import Tour from '../components/Tour';
 import UserMenu from '../components/UserMenu';
 import WhatsAppButton, { WHATSAPP_URL } from '../components/WhatsAppButton';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { api } from '../services/api';
 import { baseDaColecao, linkContinuar } from '../utils/colecoes';
+
+// Tutorial do primeiro acesso. Alvos ausentes na tela (ex.: barra inferior no desktop) são pulados.
+const PASSOS = [
+  { alvo: '.collection-grid', titulo: 'Suas coleções', texto: 'Aqui ficam as coleções de formação. As que têm cadeado ainda não foram liberadas para a sua escola.' },
+  { alvo: '.collection-card--available', titulo: 'Comece por aqui', texto: 'Esta coleção está liberada para você. Toque nela para assistir às aulas e acompanhar seu progresso.' },
+  { alvo: '.tabbar .tabbar__item:nth-child(2)', titulo: 'Continuar', texto: 'Leva direto para a próxima aula que você ainda não assistiu.' },
+  { alvo: ['.home__header .user-pill', '.tabbar .tabbar__item:last-child'], titulo: 'Sua conta', texto: 'Reveja o vídeo de boas-vindas, abra este tutorial de novo ou saia da plataforma.' },
+  { alvo: ['.home__header .whatsapp-btn', '.tabbar a.tabbar__item'], titulo: 'Precisa de ajuda?', texto: 'Fale com o suporte pelo WhatsApp sempre que tiver uma dúvida.' },
+];
 
 export default function Inicio() {
   const [colecoes, setColecoes] = useState(null);
@@ -88,6 +98,7 @@ export default function Inicio() {
         </section>
       </main>
 
+      <Tour id="inicio" steps={PASSOS} pronto={!!colecoes} />
       <MobileTabBar itens={[
         { to: '/inicio', label: 'Coleções', icone: 'grid', end: true },
         continuar ? { to: continuar, label: 'Continuar', icone: 'resume' } : { onClick: semFormacao, label: 'Continuar', icone: 'resume' },

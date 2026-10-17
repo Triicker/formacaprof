@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { API_MODE, api } from '../services/api';
+import { reiniciarTutoriais } from './Tour';
 import { WHATSAPP_URL } from './WhatsAppButton';
 
 const ICONES = {
@@ -47,6 +48,7 @@ export default function MobileTabBar({ itens, extras = [], tema = 'orange' }) {
     ...(vinculos.some((v) => v.papel === 'coordinator') ? [{ onClick: () => navigate('/coordenacao'), label: 'Painel da coordenação' }] : []),
     { href: WHATSAPP_URL, label: 'Suporte pelo WhatsApp' },
     { onClick: () => navigate('/boas-vindas'), label: 'Vídeo de boas-vindas' },
+    ...(user ? [{ onClick: () => { if (!reiniciarTutoriais(user.id)) navigate('/inicio'); }, label: 'Ver tutorial novamente' }] : []),
     ...(API_MODE === 'mock' ? [{ onClick: resetar, label: 'Resetar dados de demonstração' }] : []),
     { onClick: async () => { await logout(); navigate('/login'); }, label: 'Sair', perigo: true },
   ];

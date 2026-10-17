@@ -245,3 +245,41 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Tutorial guiado (Tour.jsx) ---------- */
+.tour { position: fixed; inset: 0; z-index: 90; }
+.tour__blocker { position: absolute; inset: 0; }
+.tour__spot {
+  position: fixed; border-radius: 18px; border: 3px solid #22d3ee; pointer-events: none;
+  box-shadow: 0 0 0 9999px rgba(3, 8, 20, .72), 0 0 24px rgba(34, 211, 238, .45);
+  transition: left .3s ease, top .3s ease, width .3s ease, height .3s ease;
+}
+.tour__balao {
+  position: fixed; width: min(360px, calc(100vw - 32px)); padding: 20px 20px 14px; border-radius: 18px;
+  background: #fff; color: #1b1f2e; box-shadow: 0 18px 50px rgba(0, 0, 0, .35); transition: left .25s ease, top .25s ease;
+}
+.tour__passo {
+  display: flex; align-items: center; gap: 8px; margin: 0 0 8px; padding-right: 32px;
+  color: #b84a00; font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+.tour__passo svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+.tour__titulo { margin: 0 0 6px; color: #111827; font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; letter-spacing: .01em; line-height: 1.15; }
+.tour__texto { margin: 0 0 16px; color: #4b5563; font-size: .95rem; line-height: 1.45; }
+.tour__acoes { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tour__acoes > span { display: flex; align-items: center; gap: 4px; }
+.tour__pular, .tour__voltar { padding: 8px 6px; border: 0; background: none; color: #4b5563; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+.tour__pular:hover, .tour__voltar:hover { color: #111827; text-decoration: underline; }
+.tour__next {
+  min-height: 44px; padding: 10px 24px; border: 0; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(90deg, #c2410c, #b42318); color: #fff; font: inherit; font-weight: 700; font-size: .95rem;
+}
+.tour__next:hover { filter: brightness(1.08); }
+.tour__fechar {
+  position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border: 0; border-radius: 10px;
+  background: none; color: #4b5563; font-size: 1.5rem; line-height: 1; cursor: pointer;
+}
+.tour__fechar:hover { background: #f3f4f6; }
+.tour button:focus-visible { outline: 3px solid #019ac6; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .tour__spot, .tour__balao { transition: none; }
+}

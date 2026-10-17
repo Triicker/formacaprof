@@ -130,6 +130,10 @@ describe('Relatórios: escopo, filtros e exportação', () => {
     expect(csv.charCodeAt(0)).toBe(0xfeff);
     expect(csv).toContain(`"'=HYPERLINK(""http://x"")"`);
     expect(csv).not.toContain('pb@b.br');
+    // Padrão do Excel em português: ponto e vírgula e datas dd/mm/aaaa hh:mm (horário de Brasília).
+    expect(csv.split('\r\n')[0]).toBe('﻿Nome;E-mail;Instituição;Coleção;Situação da matrícula;Matriculado em;Concluído em;Aulas concluídas;Aulas obrigatórias;Percentual;Certificado');
+    expect(csv).toMatch(/"\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}"/);
+    expect(csv).not.toMatch(/\d{4}-\d{2}-\d{2}T/);
     expect(await ctx.prisma.auditLog.count({ where: { action: 'report.exported', institutionId: A.id } })).toBe(1);
   });
 

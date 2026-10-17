@@ -30,9 +30,14 @@ const ROW_SELECT = {
 const CSV_LIMITE = 50_000;
 const CSV_LOTE = 500;
 
+// CSV no padrão do Excel em português: ponto e vírgula entre colunas e datas no horário de Brasília.
+const SEPARADOR = ';';
+const DATA_BR = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+const dataBr = (d: Date) => DATA_BR.format(d).replace(',', '');
+
 /** Evita injeção de fórmula ao abrir o CSV em planilhas (=, +, -, @). */
 const celula = (v: unknown) => {
-  let s = v == null ? '' : v instanceof Date ? v.toISOString() : String(v);
+  let s = v == null ? '' : v instanceof Date ? dataBr(v) : String(v);
   if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
   return `"${s.replace(/"/g, '""')}"`;
 };
@@ -93,7 +98,7 @@ export class ReportingService {
   /** CSV gerado em lotes (sem carregar tudo na memória de uma vez), com auditoria da exportação. */
   async enrollmentsCsv(actor: Actor, f: EnrollmentReportFilters, escopo: string) {
     const where = this.enrollmentWhere(f);
-    const linhas = ['Nome,E-mail,Instituição,Coleção,Situação da matrícula,Matriculado em,Concluído em,Aulas concluídas,Aulas obrigatórias,Percentual,Certificado'];
+    const linhas = [['Nome', 'E-mail', 'Instituição', 'Coleção', 'Situação da matrícula', 'Matriculado em', 'Concluído em', 'Aulas concluídas', 'Aulas obrigatórias', 'Percentual', 'Certificado'].join(SEPARADOR)];
     let skip = 0;
     while (skip < CSV_LIMITE) {
       const lote = await this.prisma.enrollment.findMany({ where, select: ROW_SELECT, orderBy: this.orderBy(f), skip, take: CSV_LOTE });
@@ -102,7 +107,7 @@ export class ReportingService {
           r.user.name, r.user.email, r.institution.name, r.collection.title, r.status === 'active' ? 'Ativa' : 'Revogada',
           r.enrolledAt, r.completedAt ?? '', r.progress?.requiredCompleted ?? 0, r.progress?.requiredTotal ?? 0, `${r.progress?.percent ?? 0}%`,
           r.certificate && !r.certificate.revokedAt ? r.certificate.verificationCode : '',
-        ].map(celula).join(','));
+        ].map(celula).join(SEPARADOR));
       }
       if (lote.length < CSV_LOTE) break;
       skip += CSV_LOTE;

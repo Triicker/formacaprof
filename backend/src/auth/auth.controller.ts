@@ -5,7 +5,7 @@ import type { Request, Response } from 'express';
 import type { Actor } from '../common/actor';
 import { CurrentActor, Public } from '../common/decorators';
 import { UsersService } from '../users/users.service';
-import { ForgotPasswordDto, LoginDto, ResetPasswordDto } from './auth.dto';
+import { ForgotPasswordDto, LoginDto, QaLoginDto, ResetPasswordDto } from './auth.dto';
 import { AuthService } from './auth.service';
 
 const QUINZE_MIN = 15 * 60_000;
@@ -23,6 +23,22 @@ export class AuthController {
   @ApiOperation({ summary: 'Login por e-mail e senha; cria a sessão em cookie HttpOnly' })
   login(@Body() dto: LoginDto, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
     return this.auth.login(dto.email, dto.password, req, res);
+  }
+
+  @Public()
+  @Get('qa-accounts')
+  @ApiOperation({ summary: 'Contas de teste disponíveis no seletor da tela de login (vazio fora do período de testes)' })
+  qaAccounts() {
+    return this.auth.qaAccounts();
+  }
+
+  @Public()
+  @Post('qa-login')
+  @HttpCode(200)
+  @Throttle({ default: { limit: 30, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Entra numa conta de teste sem senha (só contas de QA, só com o modo de teste ligado)' })
+  qaLogin(@Body() dto: QaLoginDto, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this.auth.qaLogin(dto.email, req, res);
   }
 
   @Post('logout')

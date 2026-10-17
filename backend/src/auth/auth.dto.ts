@@ -19,6 +19,14 @@ export class LoginDto {
   password!: string;
 }
 
+export class QaLoginDto {
+  @ApiProperty({ example: 'prof1.alfa@qa.formacaprof.test' })
+  @Transform(toNormalizedEmail)
+  @IsEmail({}, { message: 'Informe um e-mail válido.' })
+  @MaxLength(254)
+  email!: string;
+}
+
 export class ForgotPasswordDto {
   @ApiProperty()
   @Transform(toNormalizedEmail)

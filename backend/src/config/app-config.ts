@@ -25,6 +25,8 @@ export interface AppConfig {
   swaggerEnabled: boolean;
   /** Pasta dos arquivos protegidos servidos por /media/:id (provider "local"). */
   storageDir: string;
+  /** Seletor de contas de teste na tela de login (só aparece enquanto houver contas de QA ativas). */
+  qaQuickLogin: boolean;
   /** Limites de upload (MB). Vídeo pela API = 0 → desativado (usar link externo ou upload direto ao storage). */
   media: { maxImageMb: number; maxPdfMb: number; maxVideoMb: number; directUpload: 'none' | 'r2' };
   mail: {
@@ -110,6 +112,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     rateLimitEnabled: bool(env, 'RATE_LIMIT_ENABLED', true),
     swaggerEnabled: bool(env, 'SWAGGER_ENABLED', nodeEnv !== 'production'),
     storageDir: resolve(env.STORAGE_DIR || resolve(process.cwd(), 'storage')),
+    qaQuickLogin: env.QA_LOGIN_RAPIDO !== 'nao',
     media: {
       maxImageMb: int(env, 'MEDIA_MAX_IMAGE_MB', 5),
       maxPdfMb: int(env, 'MEDIA_MAX_PDF_MB', 25),

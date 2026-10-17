@@ -12,8 +12,9 @@ import { randomBytes } from 'node:crypto';
 import { MembershipRole, PrismaClient, RecordStatus, UserStatus } from '@prisma/client';
 import { PasswordService } from '../auth/password.service';
 import { loadCatalogContent, seedCatalog } from '../catalog/content-seed';
+import { QA_DOMINIO } from '../common/qa';
 
-const DOMINIO = '@qa.formacaprof.test';
+const DOMINIO = QA_DOMINIO;
 const ESCOLAS = [
   { slug: 'qa-escola-alfa', name: 'Escola QA Alfa (testes)', region: 'Nordeste', state: 'BA', city: 'Salvador', liberarBasta: true },
   { slug: 'qa-escola-beta', name: 'Escola QA Beta (testes)', region: 'Sudeste', state: 'SP', city: 'Campinas', liberarBasta: false },

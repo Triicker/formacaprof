@@ -152,6 +152,12 @@ export const httpApi = {
     limparCaches();
     return paraUsuario(await req('POST', '/auth/login', { email: usuario, password: senha }, { silencioso401: true }));
   },
+  /** Contas de teste para o seletor do login (lista vazia fora do período de testes). */
+  contasDeTeste: async () => (await req('GET', '/auth/qa-accounts', undefined, { silencioso401: true }))?.items ?? [],
+  loginTeste: async (email) => {
+    limparCaches();
+    return paraUsuario(await req('POST', '/auth/qa-login', { email }, { silencioso401: true }));
+  },
   me: async () => {
     try {
       return paraUsuario(await req('GET', '/auth/me', undefined, { silencioso401: true }));

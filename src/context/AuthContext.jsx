@@ -34,6 +34,13 @@ export function AuthProvider({ children }) {
     return u;
   }, []);
 
+  /** Período de testes: entra numa conta de teste escolhida no seletor (sem senha). */
+  const entrarComoTeste = useCallback(async (email) => {
+    const u = await api.loginTeste(email);
+    setUser(u);
+    return u;
+  }, []);
+
   /** Aceite de convite já autentica: a API cria a sessão junto com a conta/vínculo. */
   const aceitarConvite = useCallback(async (dados) => {
     const u = await api.aceitarConvite(dados);
@@ -79,7 +86,7 @@ export function AuthProvider({ children }) {
   }, [user, instituicaoId]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, recarregarUsuario, aceitarConvite, marcarBoasVindasVisto, escolherInstituicao, ...perfil }}>
+    <AuthContext.Provider value={{ user, loading, login, entrarComoTeste, logout, recarregarUsuario, aceitarConvite, marcarBoasVindasVisto, escolherInstituicao, ...perfil }}>
       {children}
     </AuthContext.Provider>
   );

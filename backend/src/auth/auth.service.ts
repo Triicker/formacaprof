@@ -1,10 +1,11 @@
 import {
-  BadRequestException, ForbiddenException, HttpException, HttpStatus, Inject, Injectable, Logger, UnauthorizedException,
+  BadRequestException, ForbiddenException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, UnauthorizedException,
 } from '@nestjs/common';
 import { UserStatus } from '@prisma/client';
 import type { Request, Response } from 'express';
 import { AuditService } from '../audit/audit.service';
 import type { Actor } from '../common/actor';
+import { ehContaDeTeste, QA_DOMINIO } from '../common/qa';
 import { hashToken, newToken, normalizeEmail } from '../common/tokens';
 import { APP_CONFIG, AppConfig } from '../config/app-config';
 import { MailService } from '../mail/mail.service';
@@ -68,6 +69,37 @@ export class AuthService {
       await tx.user.update({ where: { id: user.id }, data: { failedLoginCount: 0, lockedUntil: null, lastLoginAt: new Date() } });
       await this.sessions.create(user.id, req, res, tx);
     });
+    return this.users.profile(user.id);
+  }
+
+  /**
+   * Contas de teste ativas, para o seletor da tela de login. Vazio quando o modo está desligado
+   * (QA_LOGIN_RAPIDO=nao) ou quando o seed:qa foi desativado: aí o seletor some sozinho.
+   */
+  async qaAccounts() {
+    if (!this.config.qaQuickLogin) return { items: [] };
+    const users = await this.prisma.user.findMany({
+      where: { email: { endsWith: QA_DOMINIO }, status: UserStatus.active, platformRoles: { none: {} } },
+      select: { email: true, name: true, memberships: { where: { status: 'active' }, select: { role: true, institution: { select: { name: true } } } } },
+      orderBy: { email: 'asc' },
+    });
+    // Ordem de leitura: por escola, coordenação primeiro, depois pelo e-mail.
+    const items = users.map((u) => ({ email: u.email, name: u.name, role: u.memberships[0]?.role ?? null, institution: u.memberships[0]?.institution.name ?? null }));
+    items.sort((a, b) => (a.institution ?? '').localeCompare(b.institution ?? '') || Number(a.role !== 'coordinator') - Number(b.role !== 'coordinator') || a.email.localeCompare(b.email));
+    return { items };
+  }
+
+  /** Entra numa conta de TESTE sem senha (só domínio de QA, só com o modo ligado, nunca administrador). */
+  async qaLogin(emailRaw: string, req: Request, res: Response) {
+    const email = normalizeEmail(emailRaw);
+    if (!this.config.qaQuickLogin || !ehContaDeTeste(email)) throw new NotFoundException('Conta de teste não encontrada.');
+    const user = await this.prisma.user.findUnique({ where: { email }, include: { platformRoles: { select: { id: true } } } });
+    if (!user || user.status !== UserStatus.active || user.platformRoles.length) throw new NotFoundException('Conta de teste não encontrada.');
+    await this.prisma.$transaction(async (tx) => {
+      await tx.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+      await this.sessions.create(user.id, req, res, tx);
+    });
+    await this.audit.record({ actorUserId: user.id, action: 'auth.qa_login', entityType: 'user', entityId: user.id, metadata: { ip: req.ip ?? null } });
     return this.users.profile(user.id);
   }
 

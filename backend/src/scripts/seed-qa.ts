@@ -84,7 +84,9 @@ async function main() {
         update: { role: p.role, status: RecordStatus.active }, create: { userId: user.id, institutionId, role: p.role },
       });
       if (!p.matricular) {
-        await prisma.enrollment.updateMany({ where: { institutionId, userId: user.id, status: 'active' }, data: { status: 'revoked', revokedAt: new Date() } });
+        // Volta a 'nunca matriculado(a)': só contas de QA; certificados primeiro (progresso e feedback saem em cascata).
+        await prisma.certificate.deleteMany({ where: { enrollment: { institutionId, userId: user.id } } });
+        await prisma.enrollment.deleteMany({ where: { institutionId, userId: user.id } });
         continue;
       }
       const e = await prisma.enrollment.upsert({

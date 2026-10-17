@@ -64,8 +64,21 @@ export default function Tour({ id, steps, pronto = true }) {
   // Primeira visita: espera o conteúdo carregar e a tela assentar.
   useEffect(() => {
     if (!pronto || !user || !user.viuBoasVindas || jaViu(id, user.id)) return undefined;
-    const t = setTimeout(iniciar, 700);
-    return () => clearTimeout(t);
+    // Só abre quando a pessoa fica parada por um instante: um clique ou toque em andamento
+    // adia o tutorial em vez de ser interrompido por ele.
+    let t;
+    const parar = () => {
+      clearTimeout(t);
+      window.removeEventListener('pointerdown', adiar, true);
+      window.removeEventListener('keydown', adiar, true);
+    };
+    // Depois de aberto, os cliques no próprio tutorial não podem reiniciá-lo.
+    const abrir = () => { parar(); iniciar(); };
+    function adiar() { clearTimeout(t); t = setTimeout(abrir, 1200); }
+    t = setTimeout(abrir, 700);
+    window.addEventListener('pointerdown', adiar, true);
+    window.addEventListener('keydown', adiar, true);
+    return parar;
   }, [pronto, user, id, iniciar]);
 
   useEffect(() => {

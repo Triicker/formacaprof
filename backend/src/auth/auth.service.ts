@@ -10,7 +10,7 @@ import { APP_CONFIG, AppConfig } from '../config/app-config';
 import { MailService } from '../mail/mail.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
-import { PasswordService } from './password.service';
+import { assertSenhaSemEspacosNasPontas, PasswordService } from './password.service';
 import { SessionService } from './session.service';
 
 export const CREDENCIAIS_INVALIDAS = 'E-mail ou senha inválidos.';
@@ -97,6 +97,7 @@ export class AuthService {
 
   /** Token de uso único; ao redefinir, todas as sessões abertas do usuário são encerradas. */
   async resetPassword(token: string, password: string): Promise<void> {
+    assertSenhaSemEspacosNasPontas(password);
     const passwordHash = await this.passwords.hash(password);
     await this.prisma.$transaction(async (tx) => {
       const record = await tx.passwordResetToken.findUnique({ where: { tokenHash: hashToken(token) } });

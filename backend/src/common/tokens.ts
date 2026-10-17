@@ -6,7 +6,8 @@ export const newToken = (): string => randomBytes(32).toString('base64url');
 /** Apenas o hash é persistido: um vazamento do banco não revela tokens utilizáveis. */
 export const hashToken = (token: string): string => createHash('sha256').update(token, 'utf8').digest('hex');
 
-export const normalizeEmail = (email: string): string => email.trim().toLowerCase();
+// Remove também caracteres invisíveis que vêm ao copiar e colar o e-mail.
+export const normalizeEmail = (email: string): string => email.replace(/[\u200B-\u200D\u2060\uFEFF]/g, '').trim().toLowerCase();
 
 export function slugify(text: string): string {
   return text

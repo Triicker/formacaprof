@@ -5,7 +5,7 @@ import { Invitation, Prisma, RecordStatus, UserStatus } from '@prisma/client';
 import type { Request, Response } from 'express';
 import { AccessPolicy } from '../access/access-policy.service';
 import { AuditService } from '../audit/audit.service';
-import { PasswordService } from '../auth/password.service';
+import { assertSenhaSemEspacosNasPontas, PasswordService } from '../auth/password.service';
 import { SessionService } from '../auth/session.service';
 import type { Actor } from '../common/actor';
 import { hashToken, newToken, normalizeEmail } from '../common/tokens';
@@ -163,9 +163,13 @@ export class InvitationsService {
       if (existing.passwordHash && !(await this.passwords.verify(existing.passwordHash, dto.password))) {
         throw new UnauthorizedException('Já existe uma conta com este e-mail. Informe a senha atual dessa conta para aceitar o convite.');
       }
-      if (!existing.passwordHash) newPasswordHash = await this.passwords.hash(dto.password);
+      if (!existing.passwordHash) {
+        assertSenhaSemEspacosNasPontas(dto.password);
+        newPasswordHash = await this.passwords.hash(dto.password);
+      }
     } else {
       if (!dto.name?.trim()) throw new BadRequestException('Informe seu nome completo.');
+      assertSenhaSemEspacosNasPontas(dto.password);
       newPasswordHash = await this.passwords.hash(dto.password);
     }
 

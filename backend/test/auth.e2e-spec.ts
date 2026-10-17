@@ -191,3 +191,35 @@ describe('Segredo do proxy', () => {
     }
   });
 });
+
+describe('Senha e e-mail colados (copiar e colar)', () => {
+  it('aceita senha com espaço, quebra de linha ou caractere invisível nas pontas', async () => {
+    await createUser(ctx, { email: 'ana@escola.br' });
+    for (const senha of [`${PASSWORD} `, `${PASSWORD}\n`, `\t${PASSWORD}`, `${PASSWORD}​`, `﻿${PASSWORD}`]) {
+      expect((await client(ctx).post('/auth/login', { email: 'ana@escola.br', password: senha })).status).toBe(200);
+    }
+  });
+
+  it('aceita e-mail colado com caractere invisível e maiúsculas', async () => {
+    await createUser(ctx, { email: 'ana@escola.br' });
+    expect((await client(ctx).post('/auth/login', { email: ' Ana@Escola.br​', password: PASSWORD })).status).toBe(200);
+  });
+
+  it('senha errada continua errada, e cada tentativa conta uma vez só no bloqueio', async () => {
+    const u = await createUser(ctx, { email: 'ana@escola.br' });
+    expect((await client(ctx).post('/auth/login', { email: 'ana@escola.br', password: 'outra-senha ' })).status).toBe(401);
+    expect((await client(ctx).post('/auth/login', { email: 'ana@escola.br', password: `${PASSWORD}x` })).status).toBe(401);
+    expect((await ctx.prisma.user.findUniqueOrThrow({ where: { id: u.id } })).failedLoginCount).toBe(2);
+  });
+
+  it('nova senha não pode começar nem terminar com espaço', async () => {
+    await createUser(ctx, { email: 'ana@escola.br' });
+    await client(ctx).post('/auth/forgot-password', { email: 'ana@escola.br' });
+    await new Promise((r) => setTimeout(r, 50));
+    const token = tokenFromMail(ctx, 'ana@escola.br');
+    const r = await client(ctx).post('/auth/reset-password', { token, password: 'nova-senha-123 ' });
+    expect(r.status).toBe(400);
+    expect(r.body.message).toBe('A senha não pode começar nem terminar com espaço.');
+    expect((await client(ctx).post('/auth/reset-password', { token, password: 'nova-senha-123' })).status).toBe(204);
+  });
+});

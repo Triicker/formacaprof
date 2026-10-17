@@ -8,6 +8,7 @@ import RedefinirSenha from './pages/auth/RedefinirSenha';
 import AceitarConvite from './pages/auth/AceitarConvite';
 import SemVinculo from './pages/SemVinculo';
 import EscolherInstituicao from './pages/EscolherInstituicao';
+import VerificarCertificado from './pages/VerificarCertificado';
 import BoasVindas from './pages/BoasVindas';
 import Inicio from './pages/Inicio';
 import BastaLayout from './layouts/BastaLayout';
@@ -90,6 +91,9 @@ export default function App() {
       <Route path="/recuperar-senha" element={<PublicOnly><RecuperarSenha /></PublicOnly>} />
       <Route path="/redefinir-senha" element={<RedefinirSenha />} />
       <Route path="/convite" element={<AceitarConvite />} />
+      {/* Pública: qualquer pessoa confere um certificado pelo código. */}
+      <Route path="/certificado/verificar" element={<VerificarCertificado />} />
+      <Route path="/certificado/verificar/:codigo" element={<VerificarCertificado />} />
       <Route path="/sem-vinculo" element={<RequireAuth><SemVinculo /></RequireAuth>} />
 
       <Route path="/boas-vindas" element={<Privada><BoasVindas /></Privada>} />

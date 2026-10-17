@@ -167,8 +167,22 @@ export class LearningService {
   async submitFeedback(actor: Actor, enrollmentId: string, dto: FeedbackDto) {
     const e = await this.ownEnrollment(actor, enrollmentId);
     await this.entitlements.assertLearnerAccess(actor.userId, e.institutionId, e.collection);
-    const f = await this.prisma.feedback.create({ data: { enrollmentId: e.id, ...dto, comment: dto.comment?.trim() || null } });
-    return { id: f.id, createdAt: f.createdAt };
+    // Uma avaliação por matrícula: um novo envio substitui a anterior (sem duplicar nos relatórios).
+    const dados = { experience: dto.experience, usefulness: dto.usefulness, navigation: dto.navigation, comment: dto.comment?.trim() || null };
+    const atual = await this.prisma.feedback.findFirst({ where: { enrollmentId: e.id }, orderBy: { createdAt: 'desc' }, select: { id: true } });
+    const f = atual
+      ? await this.prisma.feedback.update({ where: { id: atual.id }, data: dados })
+      : await this.prisma.feedback.create({ data: { enrollmentId: e.id, ...dados } });
+    return { id: f.id, createdAt: f.createdAt, updated: !!atual };
+  }
+
+  /** Avaliação já enviada nesta matrícula (para a tela abrir preenchida), ou null. */
+  async myFeedback(actor: Actor, enrollmentId: string) {
+    const e = await this.ownEnrollment(actor, enrollmentId);
+    return this.prisma.feedback.findFirst({
+      where: { enrollmentId: e.id }, orderBy: { createdAt: 'desc' },
+      select: { experience: true, usefulness: true, navigation: true, comment: true, createdAt: true },
+    });
   }
 
   /** Emite (ou devolve o já emitido) somente se a regra de conclusão for satisfeita agora, no servidor. */

@@ -215,6 +215,7 @@
 /* Feedback */
 .feedback { display: grid; gap: 18px; max-width: 560px; }
 .feedback__lead { margin: 0; font-weight: 700; }
+.feedback__info { margin: 0; padding: 8px 12px; border-radius: 10px; background: rgba(1, 194, 71, .14); color: #d7f8e2; font-size: .85rem; }
 .feedback__q { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; }
 .feedback__q legend, .feedback__label { padding: 0; margin-bottom: 8px; font-size: .88rem; font-weight: 600; line-height: 1.4; }
 .stars { display: flex; gap: 6px; }
@@ -348,6 +349,7 @@
 .cert__date { margin-top: 16px !important; color: #666; }
 .cert__code { font-size: .85rem; color: #444; letter-spacing: .02em; }
 .cert__code--demo { color: #b0128a; font-weight: 700; }
+.cert__verify { margin: 0; font-size: .72rem; color: #666; overflow-wrap: anywhere; }
 .cert__etica { width: 90px; filter: invert(1) hue-rotate(180deg); margin-top: 18px; }
 @media print {
   .cert-page { background: #fff; padding: 0; }

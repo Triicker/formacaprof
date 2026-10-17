@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BastaHeader from '../../components/BastaHeader';
 import SectionTitle from '../../components/SectionTitle';
@@ -31,6 +31,17 @@ export default function Feedback() {
   const [comentario, setComentario] = useState('');
   const [erro, setErro] = useState('');
   const [enviando, setEnviando] = useState(false);
+  const [anterior, setAnterior] = useState(null);
+
+  // Uma avaliação por pessoa: se já avaliou, a tela abre com as respostas e o envio atualiza.
+  useEffect(() => {
+    api.obterFeedback?.(slug).then((f) => {
+      if (!f) return;
+      setAnterior(f);
+      setNotas({ experiencia: f.experiencia, utilidade: f.utilidade, navegacao: f.navegacao });
+      setComentario(f.comentario);
+    }).catch(() => {});
+  }, [slug]);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -51,6 +62,11 @@ export default function Feedback() {
       <SectionTitle color="green">Feedback</SectionTitle>
       <form className="feedback" onSubmit={onSubmit}>
         <p className="feedback__lead">Sua opinião é muito importante!</p>
+        {anterior && (
+          <p className="feedback__info" role="status">
+            Você já avaliou esta formação em {new Date(anterior.enviadoEm).toLocaleDateString('pt-BR')}. Ajuste as respostas e envie para atualizar.
+          </p>
+        )}
         {PERGUNTAS.map((q) => (
           <fieldset key={q.campo} className="feedback__q">
             <legend>{q.texto}</legend>
@@ -63,7 +79,7 @@ export default function Feedback() {
           <textarea className="feedback__text" rows={4} maxLength={1000} value={comentario} onChange={(e) => setComentario(e.target.value)} />
         </label>
         {erro && <p className="form-error" role="alert">{erro}</p>}
-        <button className="pink-btn" disabled={enviando}>➤ {enviando ? 'Enviando…' : 'Enviar avaliação'}</button>
+        <button className="pink-btn" disabled={enviando}>➤ {enviando ? 'Enviando…' : anterior ? 'Atualizar avaliação' : 'Enviar avaliação'}</button>
       </form>
     </div>
   );

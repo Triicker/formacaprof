@@ -36,8 +36,14 @@ export class MeLearningController {
     return this.learning.updateLessonProgress(actor, id, dto, q.institutionId);
   }
 
+  @Get('enrollments/:id/feedback')
+  @ApiOperation({ summary: 'Avaliação já enviada nesta matrícula (ou null)' })
+  myFeedback(@CurrentActor() actor: Actor, @Param('id', ParseUUIDPipe) id: string) {
+    return this.learning.myFeedback(actor, id);
+  }
+
   @Post('enrollments/:id/feedback')
-  @ApiOperation({ summary: 'Avaliação da formação' })
+  @ApiOperation({ summary: 'Avaliação da formação (uma por matrícula; um novo envio substitui a anterior)' })
   feedback(@CurrentActor() actor: Actor, @Param('id', ParseUUIDPipe) id: string, @Body() dto: FeedbackDto) {
     return this.learning.submitFeedback(actor, id, dto);
   }

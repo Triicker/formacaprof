@@ -396,6 +396,20 @@ describe('Feedback e contexto institucional', () => {
     expect((await outro.post(`/me/enrollments/${enrollProfA}/feedback`, { experience: 1, usefulness: 1, navigation: 1 })).status).toBe(404);
   });
 
+  it('uma avaliação por matrícula: o novo envio substitui a anterior e a tela recebe a atual', async () => {
+    const c = await loginAs(ctx, 'prof.a@a.br');
+    expect((await c.get(`/me/enrollments/${enrollProfA}/feedback`)).body).toEqual({});
+    const r1 = await c.post(`/me/enrollments/${enrollProfA}/feedback`, { experience: 3, usefulness: 3, navigation: 3 });
+    const r2 = await c.post(`/me/enrollments/${enrollProfA}/feedback`, { experience: 5, usefulness: 4, navigation: 5, comment: '  Melhorou  ' });
+    expect(r1.body.updated).toBe(false);
+    expect(r2.body.updated).toBe(true);
+    expect(r2.body.id).toBe(r1.body.id);
+    expect(await ctx.prisma.feedback.count({ where: { enrollmentId: enrollProfA } })).toBe(1);
+    expect((await c.get(`/me/enrollments/${enrollProfA}/feedback`)).body).toMatchObject({ experience: 5, usefulness: 4, navigation: 5, comment: 'Melhorou' });
+    const outro = await loginAs(ctx, 'prof.a2@a.br');
+    expect((await outro.get(`/me/enrollments/${enrollProfA}/feedback`)).status).toBe(404);
+  });
+
   it('com vínculos em duas instituições, o contexto ativo é obrigatório e validado', async () => {
     await ctx.prisma.membership.create({ data: { userId: ids.profA, institutionId: B.id, role: 'professor' } });
     const c = await loginAs(ctx, 'prof.a@a.br');

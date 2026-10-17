@@ -47,7 +47,10 @@ export default function Certificado({ slug = 'basta' }) {
         {cert.demonstracao ? (
           <p className="cert__code cert__code--demo">Demonstração — sem validade (não emitido pelo servidor)</p>
         ) : (
-          <p className="cert__code">Código de verificação: <b>{cert.codigo}</b></p>
+          <>
+            <p className="cert__code">Código de verificação: <b>{cert.codigo}</b></p>
+            <p className="cert__verify">Confira a autenticidade em {window.location.host}/certificado/verificar/{cert.codigo}</p>
+          </>
         )}
         <img className="cert__etica" src="/img/logo-etica.png" alt="Ética Editora" />
       </article>

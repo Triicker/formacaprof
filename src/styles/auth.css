@@ -169,3 +169,14 @@
   .auth--fit .auth__footer-logos { width: 196px; }
   .auth--fit .welcome .player { flex: none; min-height: 0; height: clamp(200px, calc(100dvh - 450px), 420px); }
 }
+
+/* Verificação pública de certificado */
+.cert-check { display: grid; gap: 12px; padding: 16px; border-radius: 14px; text-align: left; background: rgba(255, 255, 255, .06); border: 2px solid; }
+.cert-check--ok { border-color: var(--green); }
+.cert-check--off { border-color: #ff5a5a; }
+.cert-check__selo { margin: 0; font-weight: 800; font-size: 1.1rem; text-align: center; }
+.cert-check--ok .cert-check__selo { color: #5ee08f; }
+.cert-check--off .cert-check__selo { color: #ff8a8a; }
+.cert-check dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: .92rem; }
+.cert-check dt { color: var(--muted); }
+.cert-check dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }

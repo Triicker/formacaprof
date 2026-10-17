@@ -238,6 +238,16 @@ export const httpApi = {
     const enrollmentId = await matriculaDe(slug);
     await req('PUT', comContexto(`/me/lessons/${await lessonIdDe(slug, videoId)}/progress`), { enrollmentId, liked: curtido });
   },
+  /** Avaliação já enviada (uma por matrícula), para a tela abrir preenchida; null se ainda não avaliou. */
+  async obterFeedback(slug) {
+    const f = await req('GET', `/me/enrollments/${await matriculaDe(slug)}/feedback`);
+    return f?.experience ? { experiencia: f.experience, utilidade: f.usefulness, navegacao: f.navigation, comentario: f.comment ?? '', enviadoEm: f.createdAt } : null;
+  },
+  /** Verificação pública de um certificado pelo código (não exige login). */
+  async verificarCertificado(codigo) {
+    const c = await req('GET', `/certificates/verify/${encodeURIComponent(codigo.trim())}`, undefined, { silencioso401: true });
+    return { valido: c.valid, codigo: c.verificationCode, nome: c.holderName, colecao: c.collectionTitle, instituicao: c.institutionName, emitidoEm: c.issuedAt, revogadoEm: c.revokedAt };
+  },
   async enviarFeedback(slug, { experiencia, utilidade, navegacao, comentario }) {
     return req('POST', `/me/enrollments/${await matriculaDe(slug)}/feedback`, {
       experience: experiencia, usefulness: utilidade, navigation: navegacao, ...(comentario?.trim() ? { comment: comentario.trim() } : {}),

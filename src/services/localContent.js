@@ -113,6 +113,15 @@ export function createContentApi({ progressFor, persist, saveFeedback, delay = a
       return { ok: true };
     },
 
+    /** Demonstração: a tela de feedback abre vazia (as avaliações ficam só neste navegador). */
+    async obterFeedback() {
+      return null;
+    },
+
+    async verificarCertificado() {
+      throw new ApiError('A verificação de certificados só funciona na plataforma real.', 404, 'NOT_FOUND');
+    },
+
     /** Demonstração: nunca emite certificado válido (não há verificação no servidor). */
     async emitirCertificado(slug) {
       assertBasta(slug);

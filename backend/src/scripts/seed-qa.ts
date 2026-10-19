@@ -20,10 +20,10 @@ const ESCOLAS = [
   { slug: 'qa-escola-beta', name: 'Escola QA Beta (testes)', region: 'Sudeste', state: 'SP', city: 'Campinas', liberarBasta: false },
 ];
 // cenario: o que a conta permite testar.
-const PESSOAS: { email: string; name: string; escola: string; role: MembershipRole; matricular?: boolean; concluidas?: number; cenario: string }[] = [
+const PESSOAS: { email: string; name: string; escola: string; role: MembershipRole; matricular?: boolean; faltam?: number; cenario: string }[] = [
   { email: `coord.alfa${DOMINIO}`, name: 'QA Coordenação Alfa', escola: 'qa-escola-alfa', role: 'coordinator', cenario: 'coordena a Alfa (BASTA liberado): convidar, matricular, revogar, relatórios' },
-  { email: `prof1.alfa${DOMINIO}`, name: 'QA Professora Um', escola: 'qa-escola-alfa', role: 'professor', matricular: true, concluidas: 0, cenario: 'matriculada, sem progresso: assistir do zero até o certificado' },
-  { email: `prof2.alfa${DOMINIO}`, name: 'QA Professor Dois', escola: 'qa-escola-alfa', role: 'professor', matricular: true, concluidas: 31, cenario: 'matriculado, falta 1 aula obrigatória: concluir e emitir certificado rápido' },
+  { email: `prof1.alfa${DOMINIO}`, name: 'QA Professora Um', escola: 'qa-escola-alfa', role: 'professor', matricular: true, cenario: 'matriculada, sem progresso: assistir do zero até o certificado' },
+  { email: `prof2.alfa${DOMINIO}`, name: 'QA Professor Dois', escola: 'qa-escola-alfa', role: 'professor', matricular: true, faltam: 1, cenario: 'matriculado, falta 1 aula obrigatória: concluir e emitir certificado rápido' },
   { email: `prof3.alfa${DOMINIO}`, name: 'QA Professora Três', escola: 'qa-escola-alfa', role: 'professor', cenario: 'vinculada sem matrícula: vê o BASTA bloqueado até a coordenação matricular' },
   { email: `coord.beta${DOMINIO}`, name: 'QA Coordenação Beta', escola: 'qa-escola-beta', role: 'coordinator', cenario: 'coordena a Beta (sem liberação): pedir liberação ao administrador' },
   { email: `prof.beta${DOMINIO}`, name: 'QA Professor Beta', escola: 'qa-escola-beta', role: 'professor', cenario: 'escola sem liberação: tudo bloqueado' },
@@ -97,7 +97,7 @@ async function main() {
       });
       await prisma.certificate.deleteMany({ where: { enrollmentId: e.id } });
       await prisma.lessonProgress.deleteMany({ where: { enrollmentId: e.id } });
-      for (const a of obrigatorias.slice(0, p.concluidas ?? 0)) {
+      for (const a of p.faltam === undefined ? [] : obrigatorias.slice(0, Math.max(0, obrigatorias.length - p.faltam))) {
         await prisma.lessonProgress.create({
           data: { enrollmentId: e.id, lessonId: a.id, status: 'completed', completedAt: new Date(), completionSource: 'manual' },
         });

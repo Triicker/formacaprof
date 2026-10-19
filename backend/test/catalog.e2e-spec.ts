@@ -74,7 +74,7 @@ describe('Catálogo e estados dos cards', () => {
   it('1/3. instituição A com acesso + professor matriculado → BASTA liberado com progresso do servidor', async () => {
     const c = await loginAs(ctx, 'prof.a@a.br');
     const b = await card(c, 'basta');
-    expect(b).toMatchObject({ state: 'available', enrollmentId: enrollProfA, progress: { requiredTotal: 32, requiredCompleted: 0, percent: 0, status: 'not_started' } });
+    expect(b).toMatchObject({ state: 'available', enrollmentId: enrollProfA, progress: { requiredTotal: 39, requiredCompleted: 0, percent: 0, status: 'not_started' } });
     expect(b.progress.next).toMatchObject({ slug: 'anos-iniciais-1', moduleSlug: 'anos-iniciais' });
     expect((await card(c, 'reforco-escolar')).state).toBe('coming_soon');
   });
@@ -115,12 +115,12 @@ describe('Acesso direto por URL e mídias protegidas', () => {
     const c = await loginAs(ctx, 'prof.a@a.br');
     const aula = await c.get(`/lessons/${lessonCap1}`);
     expect(aula.status).toBe(200);
-    expect(aula.body).toMatchObject({ slug: 'anos-iniciais-1', mediaUrl: `/api/v1/media/${videoAsset}`, provisional: true, collection: { slug: 'basta' } });
+    expect(aula.body).toMatchObject({ slug: 'anos-iniciais-1', mediaUrl: `/api/v1/media/${videoAsset}`, provisional: false, collection: { slug: 'basta' } });
     expect(JSON.stringify(aula.body)).not.toMatch(/midiasave/);
 
     const video = await c.get(`/media/${videoAsset}`).redirects(0);
     expect(video.status).toBe(302);
-    expect(video.headers.location).toMatch(/^https:\/\/midiasave-5c064\.web\.app\/video\d+\.mp4$/);
+    expect(video.headers.location).toMatch(/^https:\/\/pub-[0-9a-f]+\.r2\.dev\/basta\/anos-iniciais\/01-[a-z0-9-]+\.mp4$/);
     expect(video.headers['cache-control']).toMatch(/no-store/);
 
     const pdf = await c.get(`/media/${pdfAsset}?download=1`);
@@ -136,7 +136,7 @@ describe('Acesso direto por URL e mídias protegidas', () => {
     const semVinculo = await loginAs(ctx, 'prof.b@b.br');
     expect((await semVinculo.get(`/media/${welcomeAsset}`).redirects(0)).status).toBe(302);
     const w = await semVinculo.get('/platform/welcome-video');
-    expect(w.body).toMatchObject({ url: `/api/v1/media/${welcomeAsset}`, posterUrl: '/img/thumbs/video1.jpg' });
+    expect(w.body).toMatchObject({ url: `/api/v1/media/${welcomeAsset}`, posterUrl: '/img/thumbs/boas-vindas.jpg' });
   });
 
   it('id de mídia inexistente → 404', async () => {
@@ -161,7 +161,7 @@ describe('Progresso', () => {
     const r = await c.put(`/me/lessons/${lessonCap1}/progress`, { completed: true, source: 'player', watchedSeconds: 30 });
     expect(r.status).toBe(200);
     expect(r.body.lesson).toMatchObject({ status: 'completed', completionSource: 'player', watchedSeconds: 30 });
-    expect(r.body.summary).toMatchObject({ requiredTotal: 32, requiredCompleted: 1, percent: 3, status: 'in_progress' });
+    expect(r.body.summary).toMatchObject({ requiredTotal: 39, requiredCompleted: 1, percent: 3, status: 'in_progress' });
 
     // Aula de apresentação não é obrigatória: não altera o percentual.
     const p = await c.put(`/me/lessons/${lessonP1}/progress`, { completed: true, liked: true });
@@ -213,7 +213,7 @@ describe('Progresso', () => {
     await ctx.prisma.lesson.update({ where: { id: lessonCap1 }, data: { status: 'draft' } });
     const c = await loginAs(ctx, 'prof.a@a.br');
     expect((await c.put(`/me/lessons/${lessonCap1}/progress`, { completed: true })).status).toBe(404);
-    expect((await c.get(`/me/enrollments/${enrollProfA}/progress`)).body.summary.requiredTotal).toBe(31);
+    expect((await c.get(`/me/enrollments/${enrollProfA}/progress`)).body.summary.requiredTotal).toBe(38);
   });
 });
 
@@ -277,11 +277,11 @@ describe('Coordenação', () => {
     expect(cols.body.items.find((i: { slug: string }) => i.slug === 'paz-nas-escolas').institutionAccess.state).toBe('none');
 
     const list = await c.get(`/institutions/${A.id}/collections/${basta.id}/enrollments`);
-    expect(list.body.items[0]).toMatchObject({ user: { email: 'prof.a@a.br' }, progress: { requiredCompleted: 1, pending: 31 } });
+    expect(list.body.items[0]).toMatchObject({ user: { email: 'prof.a@a.br' }, progress: { requiredCompleted: 1, pending: 38 } });
     expect(list.body.consolidated).toEqual({ activeEnrollments: 1, completed: 0, averagePercent: 3 });
 
     const ind = await c.get(`/institutions/${A.id}/enrollments/${enrollProfA}/progress`);
-    expect(ind.body.pendingLessons).toHaveLength(31);
+    expect(ind.body.pendingLessons).toHaveLength(38);
     expect(ind.body.pendingLessons.map((l: { slug: string }) => l.slug)).not.toContain('anos-iniciais-1');
   });
 });
@@ -347,7 +347,7 @@ describe('Certificado', () => {
     const c = await loginAs(ctx, 'prof.a@a.br');
     const antes = await c.post(`/me/enrollments/${enrollProfA}/certificate`);
     expect(antes.status).toBe(409);
-    expect(antes.body.message).toMatch(/faltam 32/);
+    expect(antes.body.message).toMatch(/faltam 39/);
 
     for (const l of await requiredLessons()) {
       expect((await c.put(`/me/lessons/${l.id}/progress`, { completed: true })).status).toBe(200);
@@ -357,7 +357,7 @@ describe('Certificado', () => {
 
     const cert = await c.post(`/me/enrollments/${enrollProfA}/certificate`);
     expect(cert.status).toBe(200);
-    expect(cert.body).toMatchObject({ valid: true, collectionSlug: 'basta', institutionName: 'Escola A', requiredLessons: 32 });
+    expect(cert.body).toMatchObject({ valid: true, collectionSlug: 'basta', institutionName: 'Escola A', requiredLessons: 39 });
     expect(cert.body.verificationCode).toMatch(/^FP-[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/);
 
     const de_novo = await c.post(`/me/enrollments/${enrollProfA}/certificate`);
@@ -436,13 +436,16 @@ describe('Seed de conteúdo', () => {
     expect((await ctx.prisma.collection.findUniqueOrThrow({ where: { slug: 'basta' } })).title).toBe('BASTA! De violência contra a mulher');
   });
 
-  it('marca como provisórios os capítulos que reaproveitam vídeos', async () => {
+  it('vídeos definitivos não são provisórios; só o plano de aula segue marcado', async () => {
     const c = await loginAs(ctx, 'prof.a@a.br');
     const mods = (await c.get('/collections/basta/modules')).body;
-    const conheca = mods.find((m: { slug: string }) => m.slug === 'conheca');
+    type L = { provisional: boolean; lessonType: string };
+    for (const m of mods) {
+      expect(m.lessons.filter((l: L) => l.lessonType === 'video').every((l: L) => !l.provisional)).toBe(true);
+    }
     const iniciais = mods.find((m: { slug: string }) => m.slug === 'anos-iniciais');
-    expect(conheca.lessons.every((l: { provisional: boolean }) => !l.provisional)).toBe(true);
-    expect(iniciais.lessons.every((l: { provisional: boolean }) => l.provisional)).toBe(true);
+    expect(iniciais.lessons.filter((l: L) => l.lessonType === 'video')).toHaveLength(8);
+    expect(iniciais.lessons.filter((l: L) => l.lessonType !== 'video').every((l: L) => l.provisional)).toBe(true);
     expect(mods.map((m: { slug: string }) => m.slug)).toEqual(['conheca', 'anos-iniciais', 'anos-finais', 'ensino-medio', 'eja']);
   });
 });

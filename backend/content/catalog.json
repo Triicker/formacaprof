@@ -4,12 +4,14 @@
     {
       "key": "video.1",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video1.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/01-o-maior-clamor-social.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 35330040,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 68,
-        "orientation": "portrait"
+        "durationSeconds": 72,
+        "orientation": "portrait",
+        "r2Key": "institucional/01-o-maior-clamor-social.mp4"
       }
     },
     {
@@ -22,12 +24,14 @@
     {
       "key": "video.2",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video2.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/02-objetivo-principal.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 38716479,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 75,
-        "orientation": "portrait"
+        "durationSeconds": 78,
+        "orientation": "portrait",
+        "r2Key": "institucional/02-objetivo-principal.mp4"
       }
     },
     {
@@ -40,12 +44,14 @@
     {
       "key": "video.3",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video3.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/03-metas-fundamentais.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 37489776,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 72,
-        "orientation": "portrait"
+        "durationSeconds": 76,
+        "orientation": "portrait",
+        "r2Key": "institucional/03-metas-fundamentais.mp4"
       }
     },
     {
@@ -58,12 +64,14 @@
     {
       "key": "video.4",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video4.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/04-ecossistema-basta.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 35852421,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 69,
-        "orientation": "portrait"
+        "durationSeconds": 72,
+        "orientation": "portrait",
+        "r2Key": "institucional/04-ecossistema-basta.mp4"
       }
     },
     {
@@ -76,12 +84,14 @@
     {
       "key": "video.5",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video5.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/05-os-tres-pilares.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 40850037,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 79,
-        "orientation": "portrait"
+        "durationSeconds": 83,
+        "orientation": "portrait",
+        "r2Key": "institucional/05-os-tres-pilares.mp4"
       }
     },
     {
@@ -94,12 +104,14 @@
     {
       "key": "video.6",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video6.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/06-a-base-legal.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 45814581,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 89,
-        "orientation": "portrait"
+        "durationSeconds": 92,
+        "orientation": "portrait",
+        "r2Key": "institucional/06-a-base-legal.mp4"
       }
     },
     {
@@ -112,12 +124,14 @@
     {
       "key": "video.7",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video7.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/07-a-metodologia.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 38265885,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 74,
-        "orientation": "portrait"
+        "durationSeconds": 77,
+        "orientation": "portrait",
+        "r2Key": "institucional/07-a-metodologia.mp4"
       }
     },
     {
@@ -130,12 +144,14 @@
     {
       "key": "video.8",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video8.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/08-professor-mediador.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 34092089,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 65,
-        "orientation": "portrait"
+        "durationSeconds": 69,
+        "orientation": "portrait",
+        "r2Key": "institucional/08-professor-mediador.mp4"
       }
     },
     {
@@ -148,12 +164,14 @@
     {
       "key": "video.9",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video9.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/09-adaptado-a-idade.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 35443530,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 68,
-        "orientation": "portrait"
+        "durationSeconds": 72,
+        "orientation": "portrait",
+        "r2Key": "institucional/09-adaptado-a-idade.mp4"
       }
     },
     {
@@ -166,12 +184,14 @@
     {
       "key": "video.10",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video10.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/10-meninas-e-meninos.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 35824904,
       "visibility": "protected",
       "metadata": {
-        "durationSeconds": 69,
-        "orientation": "portrait"
+        "durationSeconds": 72,
+        "orientation": "portrait",
+        "r2Key": "institucional/10-meninas-e-meninos.mp4"
       }
     },
     {
@@ -184,13 +204,16 @@
     {
       "key": "platform.welcome-video",
       "storageProvider": "external",
-      "externalUrl": "https://midiasave-5c064.web.app/video1.mp4",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/plataforma/boas-vindas.mp4",
       "mimeType": "video/mp4",
+      "fileSize": 12653022,
       "visibility": "protected",
       "metadata": {
         "title": "Boas-vindas",
-        "durationSeconds": 68,
-        "posterKey": "thumb.1"
+        "durationSeconds": 25,
+        "orientation": "portrait",
+        "r2Key": "plataforma/boas-vindas.mp4",
+        "posterKey": "thumb.boas-vindas"
       }
     },
     {
@@ -338,6 +361,884 @@
         "editorial": "placeholder",
         "fileName": "plano-de-aula-eja.pdf"
       }
+    },
+    {
+      "key": "thumb.boas-vindas",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/boas-vindas.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.institucional.11",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/11-a-familia.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 35840387,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 72,
+        "orientation": "portrait",
+        "r2Key": "institucional/11-a-familia.mp4"
+      }
+    },
+    {
+      "key": "video.institucional.12",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/12-rotina-escolar.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 39779184,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 81,
+        "orientation": "portrait",
+        "r2Key": "institucional/12-rotina-escolar.mp4"
+      }
+    },
+    {
+      "key": "video.institucional.13",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/13-o-ciclo.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 41623117,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 84,
+        "orientation": "portrait",
+        "r2Key": "institucional/13-o-ciclo.mp4"
+      }
+    },
+    {
+      "key": "video.institucional.14",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/14-rede-de-protecao.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 66945751,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 135,
+        "orientation": "portrait",
+        "r2Key": "institucional/14-rede-de-protecao.mp4"
+      }
+    },
+    {
+      "key": "video.institucional.15",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/15-siga-o-protocolo.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 38346975,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 78,
+        "orientation": "portrait",
+        "r2Key": "institucional/15-siga-o-protocolo.mp4"
+      }
+    },
+    {
+      "key": "video.institucional.16",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/16-recursos-do-ecossistema.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 44883968,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 91,
+        "orientation": "portrait",
+        "r2Key": "institucional/16-recursos-do-ecossistema.mp4"
+      }
+    },
+    {
+      "key": "video.institucional.17",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/17-bem-vindo-ao-basta.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 66671021,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 134,
+        "orientation": "portrait",
+        "r2Key": "institucional/17-bem-vindo-ao-basta.mp4"
+      }
+    },
+    {
+      "key": "video.anos-iniciais.01",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/01-apresentacao-da-proposta-e-fundamentos.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 41839570,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 84,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/01-apresentacao-da-proposta-e-fundamentos.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.01",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-01.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-iniciais.02",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/02-nem-tudo-e-facil-de-identificar.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 37078959,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 74,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/02-nem-tudo-e-facil-de-identificar.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.02",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-02.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-iniciais.03",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/03-dores-que-parecem-incuraveis.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 39005489,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 78,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/03-dores-que-parecem-incuraveis.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.03",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-03.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-iniciais.04",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/04-ser-menina-e-incrivel.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 32542370,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 65,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/04-ser-menina-e-incrivel.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.04",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-04.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-iniciais.05",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/05-o-que-e-ser-menino.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 35306006,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 71,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/05-o-que-e-ser-menino.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.05",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-05.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-iniciais.06",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/06-quando-o-medo-mora-dentro-de-casa.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 33908189,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 68,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/06-quando-o-medo-mora-dentro-de-casa.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.06",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-06.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-iniciais.07",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/07-quando-o-amor-cura.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 34649747,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 70,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/07-quando-o-amor-cura.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.07",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-07.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-iniciais.08",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/08-celebrando-a-beleza-de-ser-negra-e-indigena.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 34949694,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 70,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-iniciais/08-celebrando-a-beleza-de-ser-negra-e-indigena.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-iniciais.08",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-iniciais-08.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.01",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/01-apresentacao-da-proposta-e-fundamentos.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 35986289,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 72,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/01-apresentacao-da-proposta-e-fundamentos.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.01",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-01.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.02",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/02-o-que-sao-relacoes-toxicas-ou-abusivas.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 34819253,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 70,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/02-o-que-sao-relacoes-toxicas-ou-abusivas.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.02",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-02.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.03",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/03-a-sombra-do-abuso.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 35335423,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 71,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/03-a-sombra-do-abuso.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.03",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-03.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.04",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/04-harmonia-nas-relacoes.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 34529646,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 69,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/04-harmonia-nas-relacoes.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.04",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-04.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.05",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/05-a-jornada-das-meninas-fragmentadas.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 35694073,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 72,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/05-a-jornada-das-meninas-fragmentadas.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.05",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-05.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.06",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/06-a-arte-de-se-amar.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 33476105,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 67,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/06-a-arte-de-se-amar.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.06",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-06.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.07",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/07-desvendando-os-padroes-do-abusador.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 31763563,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 64,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/07-desvendando-os-padroes-do-abusador.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.07",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-07.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.anos-finais.08",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/08-genero-e-sexo.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 35234105,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 71,
+        "orientation": "portrait",
+        "r2Key": "basta/anos-finais/08-genero-e-sexo.mp4"
+      }
+    },
+    {
+      "key": "thumb.anos-finais.08",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/anos-finais-08.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.01",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/01-apresentacao-da-formacao-e-marcos-legais.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 54890040,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 110,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/01-apresentacao-da-formacao-e-marcos-legais.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.01",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-01.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.02",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/02-as-diversas-faces-da-violencia.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 49719624,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 100,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/02-as-diversas-faces-da-violencia.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.02",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-02.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.03",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/03-caracterizacao-do-feminicidio.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 43991590,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 88,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/03-caracterizacao-do-feminicidio.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.03",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-03.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.04",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/04-o-que-e-ser-homem.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 44745649,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 90,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/04-o-que-e-ser-homem.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.04",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-04.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.05",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/05-o-que-e-ser-mulher.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 41843028,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 84,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/05-o-que-e-ser-mulher.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.05",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-05.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.06",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/06-filhas-de-abusadores.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 40406943,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 81,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/06-filhas-de-abusadores.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.06",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-06.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.07",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/07-aprendendo-a-honrar-seus-sentimentos.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 32321000,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 65,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/07-aprendendo-a-honrar-seus-sentimentos.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.07",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-07.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.08",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/08-a-diversidade-de-ser-mulher.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 34887547,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 70,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/08-a-diversidade-de-ser-mulher.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.08",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-08.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.ensino-medio.09",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/09-projeto-transdisciplinar-e-orientacoes-pedagogicas-finais.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 48098529,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 97,
+        "orientation": "portrait",
+        "r2Key": "basta/ensino-medio/09-projeto-transdisciplinar-e-orientacoes-pedagogicas-finais.mp4"
+      }
+    },
+    {
+      "key": "thumb.ensino-medio.09",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/ensino-medio-09.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.01",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/01-apresentacao-da-proposta-e-fundamentos.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 26232401,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 53,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/01-apresentacao-da-proposta-e-fundamentos.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.01",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-01.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.02",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/02-de-onde-vem-nossos-passos.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 24950727,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 50,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/02-de-onde-vem-nossos-passos.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.02",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-02.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.03",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/03-tipos-de-violencia.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 23982316,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 48,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/03-tipos-de-violencia.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.03",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-03.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.04",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/04-o-ciclo-da-violencia.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 25247645,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 51,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/04-o-ciclo-da-violencia.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.04",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-04.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.05",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/05-crencas-limitantes-e-autoestima.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 26070572,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 52,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/05-crencas-limitantes-e-autoestima.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.05",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-05.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.06",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/06-lei-maria-da-penha-na-pratica.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 23324260,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 47,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/06-lei-maria-da-penha-na-pratica.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.06",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-06.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.07",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/07-direitos-sociais.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 23559808,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 48,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/07-direitos-sociais.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.07",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-07.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.08",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/08-autonomia-financeira.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 26615727,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 54,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/08-autonomia-financeira.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.08",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-08.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.09",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/09-criando-filhos-sem-violencia.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 26169494,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 53,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/09-criando-filhos-sem-violencia.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.09",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-09.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.10",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/10-comunicacao-nao-violenta-cnv-no-dia-a-dia.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 28316100,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 57,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/10-comunicacao-nao-violenta-cnv-no-dia-a-dia.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.10",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-10.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.11",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/11-gestao-de-emocoes.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 25861722,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 52,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/11-gestao-de-emocoes.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.11",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-11.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.12",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/12-o-aplicativo-basta.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 27326969,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 55,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/12-o-aplicativo-basta.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.12",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-12.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.13",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/13-projeto-de-vida.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 29214636,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 59,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/13-projeto-de-vida.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.13",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-13.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
+    },
+    {
+      "key": "video.eja.14",
+      "storageProvider": "external",
+      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/14-atividades-de-revisao-pratica.mp4",
+      "mimeType": "video/mp4",
+      "fileSize": 35230127,
+      "visibility": "protected",
+      "metadata": {
+        "durationSeconds": 71,
+        "orientation": "portrait",
+        "r2Key": "basta/eja/14-atividades-de-revisao-pratica.mp4"
+      }
+    },
+    {
+      "key": "thumb.eja.14",
+      "storageProvider": "static",
+      "storageKey": "/img/thumbs/basta/eja-14.jpg",
+      "mimeType": "image/jpeg",
+      "visibility": "public"
     }
   ],
   "collections": [
@@ -377,7 +1278,7 @@
               "lessonType": "video",
               "media": "video.1",
               "thumbnail": "thumb.1",
-              "durationSeconds": 68,
+              "durationSeconds": 72,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 1
@@ -388,7 +1289,7 @@
               "lessonType": "video",
               "media": "video.2",
               "thumbnail": "thumb.2",
-              "durationSeconds": 75,
+              "durationSeconds": 78,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 2
@@ -399,7 +1300,7 @@
               "lessonType": "video",
               "media": "video.3",
               "thumbnail": "thumb.3",
-              "durationSeconds": 72,
+              "durationSeconds": 76,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 3
@@ -410,7 +1311,7 @@
               "lessonType": "video",
               "media": "video.4",
               "thumbnail": "thumb.4",
-              "durationSeconds": 69,
+              "durationSeconds": 72,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 4
@@ -421,7 +1322,7 @@
               "lessonType": "video",
               "media": "video.5",
               "thumbnail": "thumb.5",
-              "durationSeconds": 79,
+              "durationSeconds": 83,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 5
@@ -432,7 +1333,7 @@
               "lessonType": "video",
               "media": "video.6",
               "thumbnail": "thumb.6",
-              "durationSeconds": 89,
+              "durationSeconds": 92,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 6
@@ -443,7 +1344,7 @@
               "lessonType": "video",
               "media": "video.7",
               "thumbnail": "thumb.7",
-              "durationSeconds": 74,
+              "durationSeconds": 77,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 7
@@ -454,7 +1355,7 @@
               "lessonType": "video",
               "media": "video.8",
               "thumbnail": "thumb.8",
-              "durationSeconds": 65,
+              "durationSeconds": 69,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 8
@@ -465,7 +1366,7 @@
               "lessonType": "video",
               "media": "video.9",
               "thumbnail": "thumb.9",
-              "durationSeconds": 68,
+              "durationSeconds": 72,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 9
@@ -476,7 +1377,7 @@
               "lessonType": "video",
               "media": "video.10",
               "thumbnail": "thumb.10",
-              "durationSeconds": 69,
+              "durationSeconds": 72,
               "requiredForCompletion": false,
               "status": "published",
               "displayOrder": 10
@@ -494,115 +1395,91 @@
           "lessons": [
             {
               "slug": "anos-iniciais-1",
-              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "title": "Apresentação da proposta e fundamentos",
               "lessonType": "video",
-              "media": "video.1",
-              "thumbnail": "thumb.1",
-              "durationSeconds": 68,
+              "media": "video.anos-iniciais.01",
+              "thumbnail": "thumb.anos-iniciais.01",
+              "durationSeconds": 84,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 1,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 1
             },
             {
               "slug": "anos-iniciais-2",
-              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
               "lessonType": "video",
-              "media": "video.2",
-              "thumbnail": "thumb.2",
-              "durationSeconds": 75,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 2,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-iniciais-3",
-              "title": "Capítulo 3 – Ser sensível é normal",
-              "lessonType": "video",
-              "media": "video.3",
-              "thumbnail": "thumb.3",
-              "durationSeconds": 72,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 3,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-iniciais-4",
-              "title": "Capítulo 4 – E quem é o normal?",
-              "lessonType": "video",
-              "media": "video.4",
-              "thumbnail": "thumb.4",
-              "durationSeconds": 69,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 4,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-iniciais-5",
-              "title": "Capítulo 5 – O silêncio também fala",
-              "lessonType": "video",
-              "media": "video.5",
-              "thumbnail": "thumb.5",
-              "durationSeconds": 79,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 5,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-iniciais-6",
-              "title": "Capítulo 6 – Rede de apoio",
-              "lessonType": "video",
-              "media": "video.6",
-              "thumbnail": "thumb.6",
-              "durationSeconds": 89,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 6,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-iniciais-7",
-              "title": "Capítulo 7 – Construindo respeito",
-              "lessonType": "video",
-              "media": "video.7",
-              "thumbnail": "thumb.7",
+              "media": "video.anos-iniciais.02",
+              "thumbnail": "thumb.anos-iniciais.02",
               "durationSeconds": 74,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 7,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 2
             },
             {
-              "slug": "anos-iniciais-8",
-              "title": "Capítulo 8 – Basta! Um novo começo",
+              "slug": "anos-iniciais-3",
+              "title": "Capítulo 2 – Dores que parecem incuráveis",
               "lessonType": "video",
-              "media": "video.8",
-              "thumbnail": "thumb.8",
+              "media": "video.anos-iniciais.03",
+              "thumbnail": "thumb.anos-iniciais.03",
+              "durationSeconds": 78,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 3
+            },
+            {
+              "slug": "anos-iniciais-4",
+              "title": "Capítulo 3 – Ser menina é incrível",
+              "lessonType": "video",
+              "media": "video.anos-iniciais.04",
+              "thumbnail": "thumb.anos-iniciais.04",
               "durationSeconds": 65,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 8,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 4
+            },
+            {
+              "slug": "anos-iniciais-5",
+              "title": "Capítulo 4 – O que é ser menino?",
+              "lessonType": "video",
+              "media": "video.anos-iniciais.05",
+              "thumbnail": "thumb.anos-iniciais.05",
+              "durationSeconds": 71,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 5
+            },
+            {
+              "slug": "anos-iniciais-6",
+              "title": "Capítulo 5 – Quando o medo mora dentro de casa",
+              "lessonType": "video",
+              "media": "video.anos-iniciais.06",
+              "thumbnail": "thumb.anos-iniciais.06",
+              "durationSeconds": 68,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 6
+            },
+            {
+              "slug": "anos-iniciais-7",
+              "title": "Capítulo 6 – Quando o amor cura",
+              "lessonType": "video",
+              "media": "video.anos-iniciais.07",
+              "thumbnail": "thumb.anos-iniciais.07",
+              "durationSeconds": 70,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 7
+            },
+            {
+              "slug": "anos-iniciais-8",
+              "title": "Capítulo 7 – Celebrando a beleza de ser negra e indígena",
+              "lessonType": "video",
+              "media": "video.anos-iniciais.08",
+              "thumbnail": "thumb.anos-iniciais.08",
+              "durationSeconds": 70,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 8
             },
             {
               "slug": "plano-de-aula",
@@ -629,115 +1506,97 @@
           "lessons": [
             {
               "slug": "anos-finais-1",
-              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "title": "Apresentação da proposta e fundamentos",
               "lessonType": "video",
-              "media": "video.4",
-              "thumbnail": "thumb.4",
-              "durationSeconds": 69,
+              "media": "video.anos-finais.01",
+              "thumbnail": "thumb.anos-finais.01",
+              "durationSeconds": 72,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 1,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 1
             },
             {
               "slug": "anos-finais-2",
-              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "title": "Capítulo 1 – O que são relações tóxicas ou abusivas?",
               "lessonType": "video",
-              "media": "video.5",
-              "thumbnail": "thumb.5",
-              "durationSeconds": 79,
+              "media": "video.anos-finais.02",
+              "thumbnail": "thumb.anos-finais.02",
+              "durationSeconds": 70,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 2,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 2
             },
             {
               "slug": "anos-finais-3",
-              "title": "Capítulo 3 – Ser sensível é normal",
+              "title": "Capítulo 2 – A sombra do abuso",
               "lessonType": "video",
-              "media": "video.6",
-              "thumbnail": "thumb.6",
-              "durationSeconds": 89,
+              "media": "video.anos-finais.03",
+              "thumbnail": "thumb.anos-finais.03",
+              "durationSeconds": 71,
               "requiredForCompletion": true,
               "status": "published",
               "displayOrder": 3,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "description": "Desvendando os desafios enfrentados por mulheres."
             },
             {
               "slug": "anos-finais-4",
-              "title": "Capítulo 4 – E quem é o normal?",
+              "title": "Capítulo 3 – Harmonia nas relações",
               "lessonType": "video",
-              "media": "video.7",
-              "thumbnail": "thumb.7",
-              "durationSeconds": 74,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 4,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-finais-5",
-              "title": "Capítulo 5 – O silêncio também fala",
-              "lessonType": "video",
-              "media": "video.8",
-              "thumbnail": "thumb.8",
-              "durationSeconds": 65,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 5,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-finais-6",
-              "title": "Capítulo 6 – Rede de apoio",
-              "lessonType": "video",
-              "media": "video.9",
-              "thumbnail": "thumb.9",
-              "durationSeconds": 68,
-              "requiredForCompletion": true,
-              "status": "published",
-              "displayOrder": 6,
-              "metadata": {
-                "editorial": "placeholder"
-              }
-            },
-            {
-              "slug": "anos-finais-7",
-              "title": "Capítulo 7 – Construindo respeito",
-              "lessonType": "video",
-              "media": "video.10",
-              "thumbnail": "thumb.10",
+              "media": "video.anos-finais.04",
+              "thumbnail": "thumb.anos-finais.04",
               "durationSeconds": 69,
               "requiredForCompletion": true,
               "status": "published",
+              "displayOrder": 4,
+              "description": "Estratégias para evitar conflitos."
+            },
+            {
+              "slug": "anos-finais-5",
+              "title": "Capítulo 4 – A jornada das meninas fragmentadas",
+              "lessonType": "video",
+              "media": "video.anos-finais.05",
+              "thumbnail": "thumb.anos-finais.05",
+              "durationSeconds": 72,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 5,
+              "description": "Desafios e resiliência."
+            },
+            {
+              "slug": "anos-finais-6",
+              "title": "Capítulo 5 – A arte de se amar",
+              "lessonType": "video",
+              "media": "video.anos-finais.06",
+              "thumbnail": "thumb.anos-finais.06",
+              "durationSeconds": 67,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 6,
+              "description": "Uma jornada de autodescoberta e aceitação."
+            },
+            {
+              "slug": "anos-finais-7",
+              "title": "Capítulo 6 – Desvendando os padrões do abusador",
+              "lessonType": "video",
+              "media": "video.anos-finais.07",
+              "thumbnail": "thumb.anos-finais.07",
+              "durationSeconds": 64,
+              "requiredForCompletion": true,
+              "status": "published",
               "displayOrder": 7,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "description": "Uma análise crítica."
             },
             {
               "slug": "anos-finais-8",
-              "title": "Capítulo 8 – Basta! Um novo começo",
+              "title": "Capítulo 7 – Gênero e sexo",
               "lessonType": "video",
-              "media": "video.1",
-              "thumbnail": "thumb.1",
-              "durationSeconds": 68,
+              "media": "video.anos-finais.08",
+              "thumbnail": "thumb.anos-finais.08",
+              "durationSeconds": 71,
               "requiredForCompletion": true,
               "status": "published",
               "displayOrder": 8,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "description": "Explorando identidades."
             },
             {
               "slug": "plano-de-aula",
@@ -764,115 +1623,103 @@
           "lessons": [
             {
               "slug": "ensino-medio-1",
-              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "title": "Apresentação da formação e marcos legais",
               "lessonType": "video",
-              "media": "video.7",
-              "thumbnail": "thumb.7",
-              "durationSeconds": 74,
+              "media": "video.ensino-medio.01",
+              "thumbnail": "thumb.ensino-medio.01",
+              "durationSeconds": 110,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 1,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 1
             },
             {
               "slug": "ensino-medio-2",
-              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "title": "Capítulo 1 – As diversas faces da violência",
               "lessonType": "video",
-              "media": "video.8",
-              "thumbnail": "thumb.8",
-              "durationSeconds": 65,
+              "media": "video.ensino-medio.02",
+              "thumbnail": "thumb.ensino-medio.02",
+              "durationSeconds": 100,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 2,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 2
             },
             {
               "slug": "ensino-medio-3",
-              "title": "Capítulo 3 – Ser sensível é normal",
+              "title": "Capítulo 2 – Caracterização do feminicídio",
               "lessonType": "video",
-              "media": "video.9",
-              "thumbnail": "thumb.9",
-              "durationSeconds": 68,
+              "media": "video.ensino-medio.03",
+              "thumbnail": "thumb.ensino-medio.03",
+              "durationSeconds": 88,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 3,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 3
             },
             {
               "slug": "ensino-medio-4",
-              "title": "Capítulo 4 – E quem é o normal?",
+              "title": "Capítulo 3 – O que é ser homem?",
               "lessonType": "video",
-              "media": "video.10",
-              "thumbnail": "thumb.10",
-              "durationSeconds": 69,
+              "media": "video.ensino-medio.04",
+              "thumbnail": "thumb.ensino-medio.04",
+              "durationSeconds": 90,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 4,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 4
             },
             {
               "slug": "ensino-medio-5",
-              "title": "Capítulo 5 – O silêncio também fala",
+              "title": "Capítulo 4 – O que é ser mulher?",
               "lessonType": "video",
-              "media": "video.1",
-              "thumbnail": "thumb.1",
-              "durationSeconds": 68,
+              "media": "video.ensino-medio.05",
+              "thumbnail": "thumb.ensino-medio.05",
+              "durationSeconds": 84,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 5,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 5
             },
             {
               "slug": "ensino-medio-6",
-              "title": "Capítulo 6 – Rede de apoio",
+              "title": "Capítulo 5 – Filhas de abusadores",
               "lessonType": "video",
-              "media": "video.2",
-              "thumbnail": "thumb.2",
-              "durationSeconds": 75,
+              "media": "video.ensino-medio.06",
+              "thumbnail": "thumb.ensino-medio.06",
+              "durationSeconds": 81,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 6,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 6
             },
             {
               "slug": "ensino-medio-7",
-              "title": "Capítulo 7 – Construindo respeito",
+              "title": "Capítulo 6 – Aprendendo a honrar seus sentimentos",
               "lessonType": "video",
-              "media": "video.3",
-              "thumbnail": "thumb.3",
-              "durationSeconds": 72,
+              "media": "video.ensino-medio.07",
+              "thumbnail": "thumb.ensino-medio.07",
+              "durationSeconds": 65,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 7,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 7
             },
             {
               "slug": "ensino-medio-8",
-              "title": "Capítulo 8 – Basta! Um novo começo",
+              "title": "Capítulo 7 – A diversidade de ser mulher",
               "lessonType": "video",
-              "media": "video.4",
-              "thumbnail": "thumb.4",
-              "durationSeconds": 69,
+              "media": "video.ensino-medio.08",
+              "thumbnail": "thumb.ensino-medio.08",
+              "durationSeconds": 70,
               "requiredForCompletion": true,
               "status": "published",
               "displayOrder": 8,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "description": "Uma abordagem multidimensional."
+            },
+            {
+              "slug": "ensino-medio-9",
+              "title": "Projeto transdisciplinar e orientações pedagógicas finais",
+              "lessonType": "video",
+              "media": "video.ensino-medio.09",
+              "thumbnail": "thumb.ensino-medio.09",
+              "durationSeconds": 97,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 9
             },
             {
               "slug": "plano-de-aula",
@@ -899,115 +1746,164 @@
           "lessons": [
             {
               "slug": "eja-1",
-              "title": "Capítulo 1 – Nem tudo é fácil de identificar",
+              "title": "Apresentação da proposta e fundamentos",
               "lessonType": "video",
-              "media": "video.10",
-              "thumbnail": "thumb.10",
-              "durationSeconds": 69,
+              "media": "video.eja.01",
+              "thumbnail": "thumb.eja.01",
+              "durationSeconds": 53,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 1,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 1
             },
             {
               "slug": "eja-2",
-              "title": "Capítulo 2 – Dores que parecem incuráveis",
+              "title": "Capítulo 1 – De onde vêm nossos passos?",
               "lessonType": "video",
-              "media": "video.1",
-              "thumbnail": "thumb.1",
-              "durationSeconds": 68,
+              "media": "video.eja.02",
+              "thumbnail": "thumb.eja.02",
+              "durationSeconds": 50,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 2,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 2
             },
             {
               "slug": "eja-3",
-              "title": "Capítulo 3 – Ser sensível é normal",
+              "title": "Capítulo 2 – Tipos de violência",
               "lessonType": "video",
-              "media": "video.2",
-              "thumbnail": "thumb.2",
-              "durationSeconds": 75,
+              "media": "video.eja.03",
+              "thumbnail": "thumb.eja.03",
+              "durationSeconds": 48,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 3,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 3
             },
             {
               "slug": "eja-4",
-              "title": "Capítulo 4 – E quem é o normal?",
+              "title": "Capítulo 3 – O ciclo da violência",
               "lessonType": "video",
-              "media": "video.3",
-              "thumbnail": "thumb.3",
-              "durationSeconds": 72,
+              "media": "video.eja.04",
+              "thumbnail": "thumb.eja.04",
+              "durationSeconds": 51,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 4,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 4
             },
             {
               "slug": "eja-5",
-              "title": "Capítulo 5 – O silêncio também fala",
+              "title": "Capítulo 4 – Crenças limitantes e autoestima",
               "lessonType": "video",
-              "media": "video.4",
-              "thumbnail": "thumb.4",
-              "durationSeconds": 69,
+              "media": "video.eja.05",
+              "thumbnail": "thumb.eja.05",
+              "durationSeconds": 52,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 5,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 5
             },
             {
               "slug": "eja-6",
-              "title": "Capítulo 6 – Rede de apoio",
+              "title": "Capítulo 5 – Lei Maria da Penha na prática",
               "lessonType": "video",
-              "media": "video.5",
-              "thumbnail": "thumb.5",
-              "durationSeconds": 79,
+              "media": "video.eja.06",
+              "thumbnail": "thumb.eja.06",
+              "durationSeconds": 47,
               "requiredForCompletion": true,
               "status": "published",
-              "displayOrder": 6,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "displayOrder": 6
             },
             {
               "slug": "eja-7",
-              "title": "Capítulo 7 – Construindo respeito",
+              "title": "Capítulo 6 – Direitos sociais",
               "lessonType": "video",
-              "media": "video.6",
-              "thumbnail": "thumb.6",
-              "durationSeconds": 89,
+              "media": "video.eja.07",
+              "thumbnail": "thumb.eja.07",
+              "durationSeconds": 48,
               "requiredForCompletion": true,
               "status": "published",
               "displayOrder": 7,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "description": "O papel do CRAS, CREAS e DEAM."
             },
             {
               "slug": "eja-8",
-              "title": "Capítulo 8 – Basta! Um novo começo",
+              "title": "Capítulo 7 – Autonomia financeira",
               "lessonType": "video",
-              "media": "video.7",
-              "thumbnail": "thumb.7",
-              "durationSeconds": 74,
+              "media": "video.eja.08",
+              "thumbnail": "thumb.eja.08",
+              "durationSeconds": 54,
               "requiredForCompletion": true,
               "status": "published",
               "displayOrder": 8,
-              "metadata": {
-                "editorial": "placeholder"
-              }
+              "description": "Do controle à independência."
+            },
+            {
+              "slug": "eja-9",
+              "title": "Capítulo 8 – Criando filhos sem violência",
+              "lessonType": "video",
+              "media": "video.eja.09",
+              "thumbnail": "thumb.eja.09",
+              "durationSeconds": 53,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 9,
+              "description": "Quebrando o ciclo para o futuro."
+            },
+            {
+              "slug": "eja-10",
+              "title": "Capítulo 9 – Comunicação não violenta (CNV) no dia a dia",
+              "lessonType": "video",
+              "media": "video.eja.10",
+              "thumbnail": "thumb.eja.10",
+              "durationSeconds": 57,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 10
+            },
+            {
+              "slug": "eja-11",
+              "title": "Capítulo 10 – Gestão de emoções",
+              "lessonType": "video",
+              "media": "video.eja.11",
+              "thumbnail": "thumb.eja.11",
+              "durationSeconds": 52,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 11,
+              "description": "TCC e PNL aplicadas a conflitos."
+            },
+            {
+              "slug": "eja-12",
+              "title": "Capítulo 11 – O aplicativo BASTA!",
+              "lessonType": "video",
+              "media": "video.eja.12",
+              "thumbnail": "thumb.eja.12",
+              "durationSeconds": 55,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 12,
+              "description": "Segurança na palma da mão."
+            },
+            {
+              "slug": "eja-13",
+              "title": "Capítulo 12 – Projeto de vida",
+              "lessonType": "video",
+              "media": "video.eja.13",
+              "thumbnail": "thumb.eja.13",
+              "durationSeconds": 59,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 13,
+              "description": "Construindo o futuro com respeito."
+            },
+            {
+              "slug": "eja-14",
+              "title": "Atividades de revisão prática",
+              "lessonType": "video",
+              "media": "video.eja.14",
+              "thumbnail": "thumb.eja.14",
+              "durationSeconds": 71,
+              "requiredForCompletion": true,
+              "status": "published",
+              "displayOrder": 14,
+              "description": "Glossário BASTA! e BNCC."
             },
             {
               "slug": "plano-de-aula",

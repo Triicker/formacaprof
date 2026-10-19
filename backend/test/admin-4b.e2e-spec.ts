@@ -135,7 +135,7 @@ describe('17. Edição de curso sem invalidar dados históricos', () => {
 
     // Qualquer atualização de progresso reavalia a conclusão: com certificado ela é mantida, sem certificado não.
     const p1 = await prof.put(`/me/lessons/${req[0].id}/progress`, { liked: true });
-    expect(p1.body.summary).toMatchObject({ requiredTotal: 33, requiredCompleted: 32, status: 'in_progress' });
+    expect(p1.body.summary).toMatchObject({ requiredTotal: 40, requiredCompleted: 39, status: 'in_progress' });
     expect((await ctx.prisma.enrollment.findUniqueOrThrow({ where: { id: certificada.id } })).completedAt).not.toBeNull();
     const prof2 = await loginAs(ctx, 'prof2@a.br');
     await prof2.put(`/me/lessons/${req[0].id}/progress`, { liked: true });
@@ -143,8 +143,8 @@ describe('17. Edição de curso sem invalidar dados históricos', () => {
 
     const verif = await request(ctx.app.getHttpServer()).get(`${API}/certificates/verify/${cert.verificationCode}`);
     expect(verif.body).toMatchObject({ valid: true, holderName: 'prof' });
-    expect((await prof.get(`/me/certificates/${cert.id}`)).body).toMatchObject({ requiredLessons: 32, valid: true });
-    expect(await ctx.prisma.lessonProgress.count({ where: { enrollmentId: { in: [certificada.id, semCert.id] } } })).toBe(64);
+    expect((await prof.get(`/me/certificates/${cert.id}`)).body).toMatchObject({ requiredLessons: 39, valid: true });
+    expect(await ctx.prisma.lessonProgress.count({ where: { enrollmentId: { in: [certificada.id, semCert.id] } } })).toBe(78);
   });
 });
 

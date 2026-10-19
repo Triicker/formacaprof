@@ -21,7 +21,8 @@
     "start:local": "node --env-file=.env dist/src/main.js",
     "start:migrate": "prisma migrate deploy && node dist/src/main.js",
     "seed:content": "node --env-file-if-exists=.env dist/src/scripts/seed-content.js",
-    "seed:qa": "node --env-file-if-exists=.env dist/src/scripts/seed-qa.js"
+    "seed:qa": "node --env-file-if-exists=.env dist/src/scripts/seed-qa.js",
+    "midia:r2": "node --env-file-if-exists=.env dist/src/scripts/midia-r2.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.2.7",

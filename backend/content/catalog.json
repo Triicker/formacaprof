@@ -4,7 +4,7 @@
     {
       "key": "video.1",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/01-o-maior-clamor-social.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/01-o-maior-clamor-social.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35330040,
       "visibility": "protected",
@@ -24,7 +24,7 @@
     {
       "key": "video.2",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/02-objetivo-principal.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/02-objetivo-principal.mp4",
       "mimeType": "video/mp4",
       "fileSize": 38716479,
       "visibility": "protected",
@@ -44,7 +44,7 @@
     {
       "key": "video.3",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/03-metas-fundamentais.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/03-metas-fundamentais.mp4",
       "mimeType": "video/mp4",
       "fileSize": 37489776,
       "visibility": "protected",
@@ -64,7 +64,7 @@
     {
       "key": "video.4",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/04-ecossistema-basta.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/04-ecossistema-basta.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35852421,
       "visibility": "protected",
@@ -84,7 +84,7 @@
     {
       "key": "video.5",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/05-os-tres-pilares.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/05-os-tres-pilares.mp4",
       "mimeType": "video/mp4",
       "fileSize": 40850037,
       "visibility": "protected",
@@ -104,7 +104,7 @@
     {
       "key": "video.6",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/06-a-base-legal.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/06-a-base-legal.mp4",
       "mimeType": "video/mp4",
       "fileSize": 45814581,
       "visibility": "protected",
@@ -124,7 +124,7 @@
     {
       "key": "video.7",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/07-a-metodologia.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/07-a-metodologia.mp4",
       "mimeType": "video/mp4",
       "fileSize": 38265885,
       "visibility": "protected",
@@ -144,7 +144,7 @@
     {
       "key": "video.8",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/08-professor-mediador.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/08-professor-mediador.mp4",
       "mimeType": "video/mp4",
       "fileSize": 34092089,
       "visibility": "protected",
@@ -164,7 +164,7 @@
     {
       "key": "video.9",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/09-adaptado-a-idade.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/09-adaptado-a-idade.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35443530,
       "visibility": "protected",
@@ -184,7 +184,7 @@
     {
       "key": "video.10",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/10-meninas-e-meninos.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/10-meninas-e-meninos.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35824904,
       "visibility": "protected",
@@ -204,7 +204,7 @@
     {
       "key": "platform.welcome-video",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/plataforma/boas-vindas.mp4",
+      "externalUrl": "https://videos.basta.app.br/plataforma/boas-vindas.mp4",
       "mimeType": "video/mp4",
       "fileSize": 12653022,
       "visibility": "protected",
@@ -372,7 +372,7 @@
     {
       "key": "video.institucional.11",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/11-a-familia.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/11-a-familia.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35840387,
       "visibility": "protected",
@@ -385,7 +385,7 @@
     {
       "key": "video.institucional.12",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/12-rotina-escolar.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/12-rotina-escolar.mp4",
       "mimeType": "video/mp4",
       "fileSize": 39779184,
       "visibility": "protected",
@@ -398,7 +398,7 @@
     {
       "key": "video.institucional.13",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/13-o-ciclo.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/13-o-ciclo.mp4",
       "mimeType": "video/mp4",
       "fileSize": 41623117,
       "visibility": "protected",
@@ -411,7 +411,7 @@
     {
       "key": "video.institucional.14",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/14-rede-de-protecao.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/14-rede-de-protecao.mp4",
       "mimeType": "video/mp4",
       "fileSize": 66945751,
       "visibility": "protected",
@@ -424,7 +424,7 @@
     {
       "key": "video.institucional.15",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/15-siga-o-protocolo.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/15-siga-o-protocolo.mp4",
       "mimeType": "video/mp4",
       "fileSize": 38346975,
       "visibility": "protected",
@@ -437,7 +437,7 @@
     {
       "key": "video.institucional.16",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/16-recursos-do-ecossistema.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/16-recursos-do-ecossistema.mp4",
       "mimeType": "video/mp4",
       "fileSize": 44883968,
       "visibility": "protected",
@@ -450,7 +450,7 @@
     {
       "key": "video.institucional.17",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/institucional/17-bem-vindo-ao-basta.mp4",
+      "externalUrl": "https://videos.basta.app.br/institucional/17-bem-vindo-ao-basta.mp4",
       "mimeType": "video/mp4",
       "fileSize": 66671021,
       "visibility": "protected",
@@ -463,7 +463,7 @@
     {
       "key": "video.anos-iniciais.01",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/01-apresentacao-da-proposta-e-fundamentos.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/01-apresentacao-da-proposta-e-fundamentos.mp4",
       "mimeType": "video/mp4",
       "fileSize": 41839570,
       "visibility": "protected",
@@ -483,7 +483,7 @@
     {
       "key": "video.anos-iniciais.02",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/02-nem-tudo-e-facil-de-identificar.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/02-nem-tudo-e-facil-de-identificar.mp4",
       "mimeType": "video/mp4",
       "fileSize": 37078959,
       "visibility": "protected",
@@ -503,7 +503,7 @@
     {
       "key": "video.anos-iniciais.03",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/03-dores-que-parecem-incuraveis.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/03-dores-que-parecem-incuraveis.mp4",
       "mimeType": "video/mp4",
       "fileSize": 39005489,
       "visibility": "protected",
@@ -523,7 +523,7 @@
     {
       "key": "video.anos-iniciais.04",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/04-ser-menina-e-incrivel.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/04-ser-menina-e-incrivel.mp4",
       "mimeType": "video/mp4",
       "fileSize": 32542370,
       "visibility": "protected",
@@ -543,7 +543,7 @@
     {
       "key": "video.anos-iniciais.05",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/05-o-que-e-ser-menino.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/05-o-que-e-ser-menino.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35306006,
       "visibility": "protected",
@@ -563,7 +563,7 @@
     {
       "key": "video.anos-iniciais.06",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/06-quando-o-medo-mora-dentro-de-casa.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/06-quando-o-medo-mora-dentro-de-casa.mp4",
       "mimeType": "video/mp4",
       "fileSize": 33908189,
       "visibility": "protected",
@@ -583,7 +583,7 @@
     {
       "key": "video.anos-iniciais.07",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/07-quando-o-amor-cura.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/07-quando-o-amor-cura.mp4",
       "mimeType": "video/mp4",
       "fileSize": 34649747,
       "visibility": "protected",
@@ -603,7 +603,7 @@
     {
       "key": "video.anos-iniciais.08",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-iniciais/08-celebrando-a-beleza-de-ser-negra-e-indigena.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-iniciais/08-celebrando-a-beleza-de-ser-negra-e-indigena.mp4",
       "mimeType": "video/mp4",
       "fileSize": 34949694,
       "visibility": "protected",
@@ -623,7 +623,7 @@
     {
       "key": "video.anos-finais.01",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/01-apresentacao-da-proposta-e-fundamentos.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/01-apresentacao-da-proposta-e-fundamentos.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35986289,
       "visibility": "protected",
@@ -643,7 +643,7 @@
     {
       "key": "video.anos-finais.02",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/02-o-que-sao-relacoes-toxicas-ou-abusivas.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/02-o-que-sao-relacoes-toxicas-ou-abusivas.mp4",
       "mimeType": "video/mp4",
       "fileSize": 34819253,
       "visibility": "protected",
@@ -663,7 +663,7 @@
     {
       "key": "video.anos-finais.03",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/03-a-sombra-do-abuso.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/03-a-sombra-do-abuso.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35335423,
       "visibility": "protected",
@@ -683,7 +683,7 @@
     {
       "key": "video.anos-finais.04",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/04-harmonia-nas-relacoes.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/04-harmonia-nas-relacoes.mp4",
       "mimeType": "video/mp4",
       "fileSize": 34529646,
       "visibility": "protected",
@@ -703,7 +703,7 @@
     {
       "key": "video.anos-finais.05",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/05-a-jornada-das-meninas-fragmentadas.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/05-a-jornada-das-meninas-fragmentadas.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35694073,
       "visibility": "protected",
@@ -723,7 +723,7 @@
     {
       "key": "video.anos-finais.06",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/06-a-arte-de-se-amar.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/06-a-arte-de-se-amar.mp4",
       "mimeType": "video/mp4",
       "fileSize": 33476105,
       "visibility": "protected",
@@ -743,7 +743,7 @@
     {
       "key": "video.anos-finais.07",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/07-desvendando-os-padroes-do-abusador.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/07-desvendando-os-padroes-do-abusador.mp4",
       "mimeType": "video/mp4",
       "fileSize": 31763563,
       "visibility": "protected",
@@ -763,7 +763,7 @@
     {
       "key": "video.anos-finais.08",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/anos-finais/08-genero-e-sexo.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/anos-finais/08-genero-e-sexo.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35234105,
       "visibility": "protected",
@@ -783,7 +783,7 @@
     {
       "key": "video.ensino-medio.01",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/01-apresentacao-da-formacao-e-marcos-legais.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/01-apresentacao-da-formacao-e-marcos-legais.mp4",
       "mimeType": "video/mp4",
       "fileSize": 54890040,
       "visibility": "protected",
@@ -803,7 +803,7 @@
     {
       "key": "video.ensino-medio.02",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/02-as-diversas-faces-da-violencia.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/02-as-diversas-faces-da-violencia.mp4",
       "mimeType": "video/mp4",
       "fileSize": 49719624,
       "visibility": "protected",
@@ -823,7 +823,7 @@
     {
       "key": "video.ensino-medio.03",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/03-caracterizacao-do-feminicidio.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/03-caracterizacao-do-feminicidio.mp4",
       "mimeType": "video/mp4",
       "fileSize": 43991590,
       "visibility": "protected",
@@ -843,7 +843,7 @@
     {
       "key": "video.ensino-medio.04",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/04-o-que-e-ser-homem.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/04-o-que-e-ser-homem.mp4",
       "mimeType": "video/mp4",
       "fileSize": 44745649,
       "visibility": "protected",
@@ -863,7 +863,7 @@
     {
       "key": "video.ensino-medio.05",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/05-o-que-e-ser-mulher.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/05-o-que-e-ser-mulher.mp4",
       "mimeType": "video/mp4",
       "fileSize": 41843028,
       "visibility": "protected",
@@ -883,7 +883,7 @@
     {
       "key": "video.ensino-medio.06",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/06-filhas-de-abusadores.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/06-filhas-de-abusadores.mp4",
       "mimeType": "video/mp4",
       "fileSize": 40406943,
       "visibility": "protected",
@@ -903,7 +903,7 @@
     {
       "key": "video.ensino-medio.07",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/07-aprendendo-a-honrar-seus-sentimentos.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/07-aprendendo-a-honrar-seus-sentimentos.mp4",
       "mimeType": "video/mp4",
       "fileSize": 32321000,
       "visibility": "protected",
@@ -923,7 +923,7 @@
     {
       "key": "video.ensino-medio.08",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/08-a-diversidade-de-ser-mulher.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/08-a-diversidade-de-ser-mulher.mp4",
       "mimeType": "video/mp4",
       "fileSize": 34887547,
       "visibility": "protected",
@@ -943,7 +943,7 @@
     {
       "key": "video.ensino-medio.09",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/ensino-medio/09-projeto-transdisciplinar-e-orientacoes-pedagogicas-finais.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/ensino-medio/09-projeto-transdisciplinar-e-orientacoes-pedagogicas-finais.mp4",
       "mimeType": "video/mp4",
       "fileSize": 48098529,
       "visibility": "protected",
@@ -963,7 +963,7 @@
     {
       "key": "video.eja.01",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/01-apresentacao-da-proposta-e-fundamentos.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/01-apresentacao-da-proposta-e-fundamentos.mp4",
       "mimeType": "video/mp4",
       "fileSize": 26232401,
       "visibility": "protected",
@@ -983,7 +983,7 @@
     {
       "key": "video.eja.02",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/02-de-onde-vem-nossos-passos.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/02-de-onde-vem-nossos-passos.mp4",
       "mimeType": "video/mp4",
       "fileSize": 24950727,
       "visibility": "protected",
@@ -1003,7 +1003,7 @@
     {
       "key": "video.eja.03",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/03-tipos-de-violencia.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/03-tipos-de-violencia.mp4",
       "mimeType": "video/mp4",
       "fileSize": 23982316,
       "visibility": "protected",
@@ -1023,7 +1023,7 @@
     {
       "key": "video.eja.04",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/04-o-ciclo-da-violencia.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/04-o-ciclo-da-violencia.mp4",
       "mimeType": "video/mp4",
       "fileSize": 25247645,
       "visibility": "protected",
@@ -1043,7 +1043,7 @@
     {
       "key": "video.eja.05",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/05-crencas-limitantes-e-autoestima.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/05-crencas-limitantes-e-autoestima.mp4",
       "mimeType": "video/mp4",
       "fileSize": 26070572,
       "visibility": "protected",
@@ -1063,7 +1063,7 @@
     {
       "key": "video.eja.06",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/06-lei-maria-da-penha-na-pratica.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/06-lei-maria-da-penha-na-pratica.mp4",
       "mimeType": "video/mp4",
       "fileSize": 23324260,
       "visibility": "protected",
@@ -1083,7 +1083,7 @@
     {
       "key": "video.eja.07",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/07-direitos-sociais.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/07-direitos-sociais.mp4",
       "mimeType": "video/mp4",
       "fileSize": 23559808,
       "visibility": "protected",
@@ -1103,7 +1103,7 @@
     {
       "key": "video.eja.08",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/08-autonomia-financeira.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/08-autonomia-financeira.mp4",
       "mimeType": "video/mp4",
       "fileSize": 26615727,
       "visibility": "protected",
@@ -1123,7 +1123,7 @@
     {
       "key": "video.eja.09",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/09-criando-filhos-sem-violencia.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/09-criando-filhos-sem-violencia.mp4",
       "mimeType": "video/mp4",
       "fileSize": 26169494,
       "visibility": "protected",
@@ -1143,7 +1143,7 @@
     {
       "key": "video.eja.10",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/10-comunicacao-nao-violenta-cnv-no-dia-a-dia.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/10-comunicacao-nao-violenta-cnv-no-dia-a-dia.mp4",
       "mimeType": "video/mp4",
       "fileSize": 28316100,
       "visibility": "protected",
@@ -1163,7 +1163,7 @@
     {
       "key": "video.eja.11",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/11-gestao-de-emocoes.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/11-gestao-de-emocoes.mp4",
       "mimeType": "video/mp4",
       "fileSize": 25861722,
       "visibility": "protected",
@@ -1183,7 +1183,7 @@
     {
       "key": "video.eja.12",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/12-o-aplicativo-basta.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/12-o-aplicativo-basta.mp4",
       "mimeType": "video/mp4",
       "fileSize": 27326969,
       "visibility": "protected",
@@ -1203,7 +1203,7 @@
     {
       "key": "video.eja.13",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/13-projeto-de-vida.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/13-projeto-de-vida.mp4",
       "mimeType": "video/mp4",
       "fileSize": 29214636,
       "visibility": "protected",
@@ -1223,7 +1223,7 @@
     {
       "key": "video.eja.14",
       "storageProvider": "external",
-      "externalUrl": "https://pub-2f11b26542ff4f27b279b863078713e9.r2.dev/basta/eja/14-atividades-de-revisao-pratica.mp4",
+      "externalUrl": "https://videos.basta.app.br/basta/eja/14-atividades-de-revisao-pratica.mp4",
       "mimeType": "video/mp4",
       "fileSize": 35230127,
       "visibility": "protected",

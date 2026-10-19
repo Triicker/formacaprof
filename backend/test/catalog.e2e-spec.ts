@@ -120,7 +120,7 @@ describe('Acesso direto por URL e mídias protegidas', () => {
 
     const video = await c.get(`/media/${videoAsset}`).redirects(0);
     expect(video.status).toBe(302);
-    expect(video.headers.location).toMatch(/^https:\/\/pub-[0-9a-f]+\.r2\.dev\/basta\/anos-iniciais\/01-[a-z0-9-]+\.mp4$/);
+    expect(video.headers.location).toMatch(/^https:\/\/videos\.basta\.app\.br\/basta\/anos-iniciais\/01-[a-z0-9-]+\.mp4$/);
     expect(video.headers['cache-control']).toMatch(/no-store/);
 
     const pdf = await c.get(`/media/${pdfAsset}?download=1`);

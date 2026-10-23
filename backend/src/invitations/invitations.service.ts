@@ -14,7 +14,6 @@ import { APP_CONFIG, AppConfig } from '../config/app-config';
 import { MailService } from '../mail/mail.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
-import { ehContaDeTeste } from '../common/qa';
 import { AcceptInvitationDto, CreateInvitationDto, ListInvitationsQuery } from './invitations.dto';
 
 export const CONVITE_INVALIDO = 'Convite inválido, expirado ou já utilizado.';
@@ -55,10 +54,6 @@ export class InvitationsService {
     if (institution.status !== RecordStatus.active) throw new BadRequestException('Instituição inativa não pode receber convites.');
 
     const email = normalizeEmail(dto.email);
-    // Contas de teste (seletor público de login) não podem disparar convites para pessoas reais.
-    if (ehContaDeTeste(actor.email) && !email.endsWith('.test')) {
-      throw new BadRequestException('Contas de teste só podem convidar e-mails de teste (terminados em .test).');
-    }
     const jaVinculado = await this.prisma.membership.findFirst({
       where: { institutionId, status: RecordStatus.active, user: { email } }, select: { id: true },
     });

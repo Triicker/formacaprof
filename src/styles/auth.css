@@ -180,9 +180,3 @@
 .cert-check dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: .92rem; }
 .cert-check dt { color: var(--muted); }
 .cert-check dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
-
-/* Seletor de contas de teste (só aparece no período de testes) */
-.qa-login { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 14px; border: 2px dashed var(--orange); background: rgba(255, 128, 0, .08); }
-.qa-login__label { font-size: .85rem; font-weight: 700; color: var(--yellow); text-align: left; }
-.qa-login__select { width: 100%; min-height: 46px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--field-border); background: var(--field); color: var(--text); font: inherit; font-size: .92rem; }
-.qa-login__ou { margin: 2px 0 0; font-size: .8rem; color: var(--muted); }
